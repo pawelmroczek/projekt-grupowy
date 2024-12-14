@@ -6,10 +6,10 @@ services:
       - 'MYSQL_DATABASE=${MYSQL_DATABASE_NAME}'
       - 'MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}'
     ports:
-      - '3306'
+      - '3306:3306'
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 5s
+      interval: 6s
       timeout: 5s
       retries: 3
   app:
@@ -20,8 +20,10 @@ services:
       - 'SPRING_DATASOURCE_PASSWORD=${MYSQL_ROOT_PASSWORD}'
       - 'SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/${MYSQL_DATABASE_NAME}'
       - 'SPRING_JPA_HIBERNATE_DDL_AUTO=update'
+      - 'JWT_KEY=${JWT_KEY}'
+      - 'JWT_EXPIRATION_TIME=${JWT_EXPIRATION_TIME}'
     ports:
-      - '8080'
+      - '8080:8080'
     depends_on:
       db:
         condition: service_healthy
