@@ -34,7 +34,7 @@ export default function App() {
               </TouchableOpacity>
               <View className="pt-2 flex-row gap-2">
                 <Text className=" text-sm font-pregular ">lub</Text>
-                <Text className=" text-sm font-pmedium ">Zarejestruj się</Text>
+                <Text className=" text-sm font-pmedium underline">Zarejestruj się</Text>
               </View>
             </View>
           </View>
