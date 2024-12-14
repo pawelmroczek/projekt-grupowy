@@ -16,7 +16,6 @@ services:
     container_name: 'fashion-app'
     build: .
     environment:
-      - 'SPRING_DATASOURCE_USERNAME=root'
       - 'SPRING_DATASOURCE_PASSWORD=${MYSQL_ROOT_PASSWORD}'
       - 'SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/${MYSQL_DATABASE_NAME}'
       - 'SPRING_JPA_HIBERNATE_DDL_AUTO=update'

@@ -1,3 +1,5 @@
-FROM openjdk:17-jdk-alpine
-COPY target/fashionassistant-0.0.1-SNAPSHOT.jar fashion-app.jar
-ENTRYPOINT ["java","-jar","/fashion-app.jar"]
+FROM maven:3.9.9-amazoncorretto-17-alpine
+COPY . /fashion
+WORKDIR /fashion
+RUN mvn package -DskipTests
+ENTRYPOINT ["java","-jar","/fashion/target/fashion-app.jar"]
