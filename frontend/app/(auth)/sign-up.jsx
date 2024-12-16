@@ -19,7 +19,7 @@ import { router } from "expo-router";
 
 const SignUp = () => {
   const [form, setForm] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -33,7 +33,24 @@ const SignUp = () => {
   };
 
   const handleRegister = () => {
-    console.log(form);
+    console.log(JSON.stringify(form));
+    
+    fetch("http://localhost:8080/fashion/user/signUp", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form)
+    })
+      .then((response) => response)
+      .then((data) => {
+        console.log("Success:", data);
+        // Handle successful registration, e.g., navigate to another screen
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // Handle registration error
+      });
   };
 
   return (
@@ -72,8 +89,8 @@ const SignUp = () => {
                 <FormField
                   title="Imię"
                   placeholder="Wprowadź swoje imię"
-                  value={form.name}
-                  handleChangeText={(e) => setForm({ ...form, name: e })}
+                  value={form.username}
+                  handleChangeText={(e) => setForm({ ...form, username: e })}
                   onFocus={() => handleFocus(0)} // Dodaj obsługę focus
                 />
                 <FormField

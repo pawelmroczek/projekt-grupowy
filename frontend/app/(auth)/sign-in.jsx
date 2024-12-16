@@ -14,7 +14,24 @@ const SignIn = () => {
   });
 
   const handleLogin = () => {
-    console.log(form);
+    console.log(JSON.stringify(form));
+    
+    fetch("http://localhost:8080/fashion/user/signIn", {
+      method: "POST",
+      headers: {
+      "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form)
+    })
+      .then((response) => response)
+      .then((data) => {
+      console.log("Success:", data);
+      // Handle successful login, e.g., navigate to another screen
+      })
+      .catch((error) => {
+      console.error("Error:", error);
+      // Handle login error
+      });
   };
 
   return (
