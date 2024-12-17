@@ -6,32 +6,31 @@ import logo from "../../assets/logo.png";
 import FormField from "../../components/common/FormField";
 import authBackground from "../../assets/backgrounds/authBackground.png";
 import { router } from "expo-router";
+import { loginUser } from "../../lib/authorization";
+import { CircleX } from "lucide-react-native";
 
 const SignIn = () => {
+  const [loginStatus, setLoginStatus] = useState(false);
+  const [error, setError] = useState(null);
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
-  const handleLogin = () => {
-    console.log(JSON.stringify(form));
-    
-    fetch("http://localhost:8080/fashion/users/signIn", {
-      method: "POST",
-      headers: {
-      "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form)
-    })
-      .then((response) => response)
-      .then((data) => {
-      console.log(data);
-      // Handle successful login, e.g., navigate to another screen
-      })
-      .catch((error) => {
-      console.error("Error:", error);
-      // Handle login error
-      });
+  const handleSubmit = async () => {
+    setError(null);
+    setLoginStatus(true);
+    const data = await loginUser(form.email, form.password);
+    const token = data.message.token ? data.message.token : null;
+    //symulacja ładowania
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setLoginStatus(false);
+    if (token) {
+      router.push("/home");
+    } else {
+      // setError(data.message.message);
+      setError("Nieprawidłowe dane logowania");
+    }
   };
 
   return (
@@ -60,13 +59,23 @@ const SignIn = () => {
         <View className="items-center mt-5 py-3.5 rounded-xl w-full flex-row justify-center bg-primary-100">
           <TouchableOpacity
             onPress={() => {
-              handleLogin();
+              handleSubmit();
             }}
           >
             <Text className="text-white text-xl font-pregular">
-              ZALOGUJ SIĘ
+              {loginStatus ? "Logowanie..." : "ZALOGUJ SIĘ"}
             </Text>
           </TouchableOpacity>
+        </View>
+        <View className="items-center gap-1  w-full mt-5 flex-row justify-center">
+          {error ? (
+            <>
+              <CircleX color={"rgb(185 28 28)"} />
+              <Text className=" text-sm text-red-700 font-plight mr-2 ">
+                {error}
+              </Text>
+            </>
+          ) : ""}
         </View>
         <View className="items-center w-full mt-5 flex-row justify-center">
           <Text className=" text-base font-pregular mr-2 ">
