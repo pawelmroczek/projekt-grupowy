@@ -34,22 +34,22 @@ const SignUp = () => {
 
   const handleRegister = () => {
     console.log(JSON.stringify(form));
-    
-    fetch("http://localhost:8080/fashion/user/signUp", {
+
+    fetch("http://localhost:8080/fashion/users/signUp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     })
       .then((response) => response)
       .then((data) => {
-        console.log("Success:", data);
-        // Handle successful registration, e.g., navigate to another screen
+        console.log(data);
+        // Handle successful login, e.g., navigate to another screen
       })
       .catch((error) => {
         console.error("Error:", error);
-        // Handle registration error
+        // Handle login error
       });
   };
 

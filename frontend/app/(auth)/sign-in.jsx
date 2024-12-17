@@ -16,7 +16,7 @@ const SignIn = () => {
   const handleLogin = () => {
     console.log(JSON.stringify(form));
     
-    fetch("http://localhost:8080/fashion/user/signIn", {
+    fetch("http://localhost:8080/fashion/users/signIn", {
       method: "POST",
       headers: {
       "Content-Type": "application/json",
@@ -25,7 +25,7 @@ const SignIn = () => {
     })
       .then((response) => response)
       .then((data) => {
-      console.log("Success:", data);
+      console.log(data);
       // Handle successful login, e.g., navigate to another screen
       })
       .catch((error) => {
