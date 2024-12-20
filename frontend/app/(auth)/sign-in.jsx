@@ -74,7 +74,7 @@ const SignIn = () => {
           <Text className=" text-base font-pregular mr-2 ">
             Nie masz konta?
           </Text>
-          <Link to="/sign-up">Zarejestruj się</Link>
+          <Link href="/sign-up">Zarejestruj się</Link>
         </View>
         <View className="items-center w-full mt-5 flex-row justify-center">
           <TouchableOpacity>
