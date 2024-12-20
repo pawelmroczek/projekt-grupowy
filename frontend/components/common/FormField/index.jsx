@@ -26,7 +26,7 @@ const FormField = ({
           secureTextEntry={
             (title === "Hasło" || title === "Powtórz hasło") && !showPassword
           }
-          autoCapitalize={title === "Imię" ? "words" : "none"}
+          autoCapitalize={"none"}
           {...props}
         />
         {(title === "Hasło" || title === "Powtórz hasło") && (

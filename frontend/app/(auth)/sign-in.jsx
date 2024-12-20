@@ -8,6 +8,8 @@ import authBackground from "../../assets/backgrounds/authBackground.png";
 import { router } from "expo-router";
 import { loginUser } from "../../lib/authorization";
 import { CircleX } from "lucide-react-native";
+import ErrorText from "../../components/common/ErrorText";
+import Link from "../../components/common/Link";
 
 const SignIn = () => {
   const [loginStatus, setLoginStatus] = useState(false);
@@ -28,8 +30,8 @@ const SignIn = () => {
     if (token) {
       router.push("/home");
     } else {
-      // setError(data.message.message);
-      setError("Nieprawidłowe dane logowania");
+      setError(data.message.message);
+      // setError("Nieprawidłowe dane logowania");
     }
   };
 
@@ -67,29 +69,12 @@ const SignIn = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <View className="items-center gap-1  w-full mt-5 flex-row justify-center">
-          {error ? (
-            <>
-              <CircleX color={"rgb(185 28 28)"} />
-              <Text className=" text-sm text-red-700 font-plight mr-2 ">
-                {error}
-              </Text>
-            </>
-          ) : ""}
-        </View>
+        <ErrorText icon={<CircleX color={"rgb(185 28 28)"} />} error={error} />
         <View className="items-center w-full mt-5 flex-row justify-center">
           <Text className=" text-base font-pregular mr-2 ">
             Nie masz konta?
           </Text>
-          <TouchableOpacity
-            onPress={() => {
-              router.push("/sign-up");
-            }}
-          >
-            <Text className=" text-base font-pmedium underline">
-              Zarejestruj się
-            </Text>
-          </TouchableOpacity>
+          <Link to="/sign-up">Zarejestruj się</Link>
         </View>
         <View className="items-center w-full mt-5 flex-row justify-center">
           <TouchableOpacity>
