@@ -19,19 +19,42 @@ const SignIn = () => {
     password: "",
   });
 
+  function validateForm()
+  {
+    // Walidacja e-mail
+    if (!form.email) {
+      setError("Adres e-mail jest wymagany.");
+      return 1;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setError("Podaj poprawny adres e-mail.");
+      return 1;
+    }
+
+    // Walidacja hasła
+    if (!form.password) {
+      setError("Hasło jest wymagane.");
+      return 1;
+    }
+    return 0;
+    
+  }
+
   const handleSubmit = async () => {
     setError(null);
-    setLoginStatus(true);
-    const data = await loginUser(form.email, form.password);
-    const token = data.message.token ? data.message.token : null;
-    //symulacja ładowania
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setLoginStatus(false);
-    if (token) {
-      router.push("/home");
-    } else {
-      setError(data.message.message);
-      // setError("Nieprawidłowe dane logowania");
+    validate = validateForm();
+    if(validate == 0){
+      setLoginStatus(true);
+      const data = await loginUser(form.email, form.password);
+      const token = data.message.token ? data.message.token : null;
+      //symulacja ładowania
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setLoginStatus(false);
+      if (token) {
+        router.push("/home");
+      } else {
+        setError(data.message.message);
+        // setError("Nieprawidłowe dane logowania");
+      }
     }
   };
 

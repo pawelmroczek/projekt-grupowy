@@ -16,8 +16,11 @@ import logo from "../../assets/logo.png";
 import FormField from "../../components/common/FormField";
 import authBackground from "../../assets/backgrounds/authBackground.png";
 import { router } from "expo-router";
+import { CircleX } from "lucide-react-native";
+import ErrorText from "../../components/common/ErrorText";
 
 const SignUp = () => {
+  const [error, setError] = useState(null);
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -32,25 +35,58 @@ const SignUp = () => {
     scrollViewRef.current?.scrollTo({ y: yOffset, animated: true });
   };
 
-  const handleRegister = () => {
-    console.log(JSON.stringify(form));
+  function validateForm()
+  {
+    // Walidacja username
+    if (!form.username) {
+      setError("Imię jest wymagane.");
+      return 1;
+    }
 
-    fetch("http://localhost:8080/fashion/users/signUp", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    })
-      .then((response) => response)
-      .then((data) => {
-        console.log(data);
-        // Handle successful login, e.g., navigate to another screen
+    // Walidacja e-mail
+    if (!form.email) {
+      setError("Adres e-mail jest wymagany.");
+      return 1;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setError("Podaj poprawny adres e-mail.");
+      return 1;
+    }
+
+    // Walidacja hasła
+    if (!form.password) {
+      setError("Hasło jest wymagane.");
+      return 1;
+    } else if (form.password.length < 8) {
+      setError("Hasło musi mieć co najmniej 8 znaków.");
+      return 1;
+    }
+
+    return 0;
+  }
+
+  const handleRegister = () => {
+    validate = validateForm();
+    if(validate == 0)
+    {
+      console.log(JSON.stringify(form));
+
+      fetch("http://localhost:8080/fashion/users/signUp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
       })
-      .catch((error) => {
-        console.error("Error:", error);
-        // Handle login error
-      });
+        .then((response) => response)
+        .then((data) => {
+          console.log(data);
+          // Handle successful login, e.g., navigate to another screen
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          // Handle login error
+        });
+      }
   };
 
   return (
@@ -123,7 +159,7 @@ const SignUp = () => {
                   </Text>
                 </TouchableOpacity>
               </View>
-
+              <ErrorText icon={<CircleX color={"rgb(185 28 28)"} />} error={error} />
               <View className="items-center w-full mt-5 flex-row justify-center">
                 <Text className=" text-base font-pregular mr-2 ">
                   Masz już konto?
