@@ -2,6 +2,19 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { Eye, EyeClosed } from "lucide-react-native";
 
+/**
+ * FormField component displays a form field.
+ *
+ * @param {object} props - Component props
+ * @param {React.ReactNode} props.title - Title of the form field.
+ * @param {React.ReactNode} props.value - Value of the form field.
+ * @param {React.ReactNode} props.placeholder - Placeholder of the form field.
+ * @param {React.ReactNode} props.handleChangeText - Function to handle text change.
+ * @param {React.ReactNode} props.otherStyles - Additional styles for the form field.
+ * 
+ */
+
+
 const FormField = ({
   title,
   value,

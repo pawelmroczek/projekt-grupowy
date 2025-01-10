@@ -6,7 +6,7 @@ import logo from "../../assets/logo.png";
 import FormField from "../../components/common/FormField";
 import authBackground from "../../assets/backgrounds/authBackground.png";
 import { router } from "expo-router";
-import { loginUser } from "../../lib/authorization";
+import { loginUser } from "../../lib/authorization/authorization";
 import { CircleX } from "lucide-react-native";
 import ErrorText from "../../components/common/ErrorText";
 import Link from "../../components/common/Link";

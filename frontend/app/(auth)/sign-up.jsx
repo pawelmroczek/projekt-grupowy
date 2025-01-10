@@ -18,6 +18,7 @@ import authBackground from "../../assets/backgrounds/authBackground.png";
 import { router } from "expo-router";
 import { CircleX } from "lucide-react-native";
 import ErrorText from "../../components/common/ErrorText";
+import { registerUser } from "../../lib/authorization/authorization";
 
 const SignUp = () => {
   const [error, setError] = useState(null);
@@ -35,8 +36,7 @@ const SignUp = () => {
     scrollViewRef.current?.scrollTo({ y: yOffset, animated: true });
   };
 
-  function validateForm()
-  {
+  function validateForm() {
     // Walidacja username
     if (!form.username) {
       setError("Imię jest wymagane.");
@@ -66,27 +66,9 @@ const SignUp = () => {
 
   const handleRegister = () => {
     validate = validateForm();
-    if(validate == 0)
-    {
-      console.log(JSON.stringify(form));
-
-      fetch("http://localhost:8080/fashion/users/signUp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      })
-        .then((response) => response)
-        .then((data) => {
-          console.log(data);
-          // Handle successful login, e.g., navigate to another screen
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          // Handle login error
-        });
-      }
+    if (validate == 0) {
+      const response = registerUser(form);
+    }
   };
 
   return (
@@ -159,7 +141,10 @@ const SignUp = () => {
                   </Text>
                 </TouchableOpacity>
               </View>
-              <ErrorText icon={<CircleX color={"rgb(185 28 28)"} />} error={error} />
+              <ErrorText
+                icon={<CircleX color={"rgb(185 28 28)"} />}
+                error={error}
+              />
               <View className="items-center w-full mt-5 flex-row justify-center">
                 <Text className=" text-base font-pregular mr-2 ">
                   Masz już konto?
