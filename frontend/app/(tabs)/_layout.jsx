@@ -40,7 +40,7 @@ const TabsLayout = () => {
             title: "Home",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              TabIcon({icon: <House size={24} color={color} />, name: "Home",focused})
+              TabIcon({icon: <House size={24} color={color} />, name: "Odkrywaj",focused})
             ),
             tabBarLabel: "",
           }}
@@ -51,7 +51,7 @@ const TabsLayout = () => {
             title: "Wardrobe",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              TabIcon({icon: <Shirt size={24} color={color} />, name: "Wardrobe", focused})
+              TabIcon({icon: <Shirt size={24} color={color} />, name: "Garderoba", focused})
             ),
             tabBarLabel: "",
           }}
@@ -62,7 +62,7 @@ const TabsLayout = () => {
             title: "Laundry",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              TabIcon({icon: <WashingMachine size={24} color={color} />, name: "Laundry",focused})
+              TabIcon({icon: <WashingMachine size={24} color={color} />, name: "Pralnia",focused})
             ),
             tabBarLabel: "",
           }}
@@ -73,7 +73,7 @@ const TabsLayout = () => {
             title: "Profile",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              TabIcon({icon: <CircleUserRound size={24} color={color} />, name: "Profile", focused})
+              TabIcon({icon: <CircleUserRound size={24} color={color} />, name: "Profil", focused})
             ),
             tabBarLabel: "",
           }}
