@@ -9,7 +9,7 @@ export const loginUser = async (email, password) => {
     // !!!!!! UWAGA !!!!!!
     //tu zamiast localhost podajecie adres IP swojego komputera
 
-    const data = await fetch("http://localhost:8080/fashion/users/signIn", {
+    const data = await fetch("http://192.168.0.51:8080/fashion/users/signIn", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,7 +33,7 @@ export const loginUser = async (email, password) => {
 
 export const registerUser = async (form) => {
   try {
-    const data = await fetch("http://localhost:8080/fashion/users/signUp", {
+    const data = await fetch("http://192.168.0.51:8080/fashion/users/signUp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

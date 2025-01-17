@@ -23,7 +23,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("fashion/users/**")
+                                .requestMatchers("fashion/users/**", "fashion/pictures/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()

@@ -21,6 +21,12 @@ expo-env.d.ts
 *.key
 *.mobileprovision
 
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
 # Metro
 .metro-health-check*
 
