@@ -28,6 +28,8 @@ public class User implements UserDetails {
     private String email;
     @Column(name = "password")
     private String password;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Clothes> clothes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

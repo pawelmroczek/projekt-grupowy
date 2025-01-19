@@ -18,11 +18,11 @@ public class Picture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    @Column(name = "Name")
-    private String Name;
+    @Column(name = "name")
+    private String name;
     @Column(name = "url")
     private String url;
-    @Column(name = "userId")
-    private int userId;
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "clothesId")
+    private Clothes clothes;
 }

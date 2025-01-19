@@ -1,5 +1,6 @@
 package com.fashionassistant.configs;
 
+import com.fashionassistant.exceptions.NotFoundException;
 import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +24,7 @@ public class AppConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return email -> userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException());
+        return email -> userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Bean
