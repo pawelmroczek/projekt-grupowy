@@ -56,3 +56,25 @@ export const registerUser = async (form) => {
     // };
   }
 };
+
+export const clothesSending = async (FormData) => {
+  try {
+    console.log("Rozpoczynam wysyłanie...");
+    const response = await fetch("http://192.168.0.51:8080/fashion/pictures/upload", {
+        method: "POST",
+        headers: {
+            //"Authorization": `${token}`,
+            "Content-Type": "multipart/form-data",
+        },
+        body: formData,
+    });
+    console.log("Odpowiedź serwera:", response.data);
+    if (!response.ok) {
+        throw new Error(`HTTP status ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Błąd:', error);
+  }
+}
