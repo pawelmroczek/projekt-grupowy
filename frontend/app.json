@@ -14,7 +14,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Potrzebujemy dostępu do kamery, aby zrobić zdjęcia.",
+        "NSPhotoLibraryUsageDescription": "Potrzebujemy dostępu do galerii, aby wybrać zdjęcie."
+      }
     },
     "android": {
       "adaptiveIcon": {
