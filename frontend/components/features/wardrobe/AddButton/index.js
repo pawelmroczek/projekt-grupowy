@@ -1,11 +1,11 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { Plus } from "lucide-react-native";
+import { Link, Plus } from "lucide-react-native";
 
-export default function AddButton() {
+export default function AddButton({onPress}) {
   return (
-    <View className="absolute shadow-sm bg-secondary-300 px-2 py-2 bottom-5 right-4 rounded-full">
-      <Plus size={50} color="white" />
-    </View>
+    <TouchableOpacity onPress={onPress} className="absolute shadow-sm bg-secondary-300 px-3 py-3 bottom-5 right-4 rounded-full">
+      <Plus size={35} color="white" />
+    </TouchableOpacity>
   );
 }
