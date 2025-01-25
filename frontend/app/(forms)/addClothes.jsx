@@ -20,6 +20,7 @@ import {
   Camera,
   Shirt,
   CirclePlus,
+  ImagePlus,
 } from "lucide-react-native";
 import {
   selectImageFromLibrary,
@@ -79,35 +80,19 @@ export default function index() {
         </View>
 
         <View className="flex-1 w-full p-5">
-          <FormField
-            value={form.name}
-            handleChangeText={(e) => setForm({ ...form, name: e })}
-            title="Nazwa ubrania"
-            placeholder="np. niebieski sweter"
-            otherStyles={"mt-4"}
-          />
-          <Text className="text-base mb-1.5 mt-4 text-text-primary font-pmedium">
-            {"Typ:"}
-          </Text>
-          <View className="rounded-2xl border-2 border-primary-100 focus:border-secondary-200 flex  justify-center flex-row items-center ">
-            <SelectForm
-              typeOptions={typeOptions}
-              onSelect={(selectedItem, index) => {
-                setForm({ ...form, type: selectedItem.title });
-              }}
-            />
-          </View>
-          <View className="flex justify-center items-center p-5 mt-5">
+          <View className="flex justify-center items-center p-3 ">
             {/* Wyświetlanie zdjęcia */}
             {imageUri ? (
               <Image
                 source={{ uri: imageUri }}
-                className="w-36 h-36 rounded-lg mb-5"
+                className="w-36 h-36 rounded-full "
               />
             ) : (
-              <Shirt size={60} />
+              <View className="bg-gray-300 w-36 h-36 flex items-center justify-center rounded-full">
+                <ImagePlus size={80} color={"#9a9ca0"}  />
+              </View>
             )}
-            <View className="items-center mt-5 py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4">
+            <View className="items-center py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4">
               {/* Przycisk "Dodaj z galerii" */}
               <TouchableOpacity
                 onPress={async () => {
@@ -139,6 +124,25 @@ export default function index() {
               </TouchableOpacity>
             </View>
           </View>
+          <FormField
+            value={form.name}
+            handleChangeText={(e) => setForm({ ...form, name: e })}
+            title="Nazwa ubrania"
+            placeholder="np. niebieski sweter"
+            
+          />
+          <Text className="text-base mb-1.5 mt-4 text-text-primary font-pmedium">
+            {"Typ:"}
+          </Text>
+          <View className="rounded-2xl border-2 border-primary-100 focus:border-secondary-200 flex  justify-center flex-row items-center ">
+            <SelectForm
+              typeOptions={typeOptions}
+              onSelect={(selectedItem, index) => {
+                setForm({ ...form, type: selectedItem.title });
+              }}
+            />
+          </View>
+
           <View className="items-center py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4">
             <TouchableOpacity
               onPress={() => {
