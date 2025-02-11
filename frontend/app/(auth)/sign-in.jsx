@@ -49,6 +49,7 @@ const SignIn = () => {
       //symulacja ładowania
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setLoginStatus(false);
+      
       if (token) {
         router.push("/home");
       } else {

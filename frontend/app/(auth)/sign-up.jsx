@@ -68,6 +68,9 @@ const SignUp = () => {
     validate = validateForm();
     if (validate == 0) {
       const response = registerUser(form);
+      // console.log("Kocham Barcelone");
+      router.push("/sign-in");
+
     }
   };
 

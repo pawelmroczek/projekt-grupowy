@@ -30,7 +30,6 @@ import { clothesSending } from "../../lib/authorization/authorization";
 import { router } from "expo-router";
 import SelectForm from "../../components/common/SelectForm";
 
-const FormData = global.FormData;
 
 export default function index() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -49,24 +48,27 @@ export default function index() {
   ];
 
   const handleSubmit = async () => {
-    if (!imageUri) {
-      Alert.alert("Wybierz zdjęcie");
-      return;
-    } else if (!form.name) {
-      Alert.alert("Podaj nazwe");
-      return;
-    } else if (!form.type) {
-      Alert.alert("Podaj typ");
-      return;
+    // if (!imageUri) {
+    //   Alert.alert("Wybierz zdjęcie");
+    //   return;
+    // } else if (!form.name) {
+    //   Alert.alert("Podaj nazwe");
+    //   return;
+    // } else if (!form.type) {
+    //   Alert.alert("Podaj typ");
+    //   return;
+    // }
+
+    // console.log(form);
+    // console.log(imageUri);
+
+    const formData = {
+      name: form.name,
+      type: form.type,
+      file: imageUri,
     }
 
-    const formData = new FormData();
-    formData.append("name", form.name);
-    formData.append("type", form.type);
-    formData.append("file", {
-      uri: imageUri,
-      name: "photo.png",
-    });
+    console.log(formData);
 
     const serverresponse = clothesSending(formData);
   };
