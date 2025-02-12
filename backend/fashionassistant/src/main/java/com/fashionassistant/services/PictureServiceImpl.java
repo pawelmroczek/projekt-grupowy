@@ -32,7 +32,7 @@ public class PictureServiceImpl implements PictureService {
     }
 
     private String saveFileToServer(MultipartFile file) throws IOException {
-        String uploadDirectory = "/fashion/uploads/";
+        String uploadDirectory = "/app/uploads/";
         String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
         Path filePath = Paths.get(uploadDirectory + fileName);
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);

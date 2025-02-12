@@ -34,6 +34,8 @@ import SelectForm from "../../components/common/SelectForm";
 export default function index() {
   const [modalVisible, setModalVisible] = useState(false);
   const [imageUri, setImageUri] = useState(false);
+  const [imageName, setImageName] = useState(false);
+  const [imageType, setImageType] = useState(false);
   const [form, setForm] = useState({
     name: "",
     type: "",
@@ -62,15 +64,19 @@ export default function index() {
     // console.log(form);
     // console.log(imageUri);
 
-    const formData = {
-      name: form.name,
-      type: form.type,
-      file: imageUri,
-    }
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("type", form.type);
+    formData.append("file", {
+      uri: imageUri,
+      name: imageName,
+      type: imageType
+    });
 
     console.log(formData);
 
     const serverresponse = clothesSending(formData);
+    router.push("/wardrobe");
   };
 
   return (
@@ -98,8 +104,10 @@ export default function index() {
               {/* Przycisk "Dodaj z galerii" */}
               <TouchableOpacity
                 onPress={async () => {
-                  const imageUriResult = await selectImageFromLibrary(); // Czekamy na wynik
-                  setImageUri(imageUriResult); // Ustawiamy URI obrazu
+                  const imageResult = await selectImageFromLibrary(); // Czekamy na wynik
+                  setImageUri(imageResult.uri);
+                  setImageName(imageResult.fileName);
+                  setImageType(imageResult.type);
                 }}
                 className="px-3 py-2 rounded-lg items-center border-2 border-secondary-100"
               >
@@ -109,8 +117,10 @@ export default function index() {
               {/* Przycisk "Zrób zdjęcie" */}
               <TouchableOpacity
                 onPress={async () => {
-                  const imageUriResult = await captureImage(); // Czekamy na wynik
-                  setImageUri(imageUriResult); // Ustawiamy URI obrazu
+                  const imageResult = await captureImage(); // Czekamy na wynik
+                  setImageUri(imageResult.uri);
+                  setImageName(imageResult.fileName);
+                  setImageType(imageResult.type);
                 }}
                 className="px-3 py-2 rounded-lg items-center border-2 border-secondary-200"
               >

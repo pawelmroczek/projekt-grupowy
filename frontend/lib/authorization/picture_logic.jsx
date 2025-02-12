@@ -15,7 +15,7 @@ export const selectImageFromLibrary = async () => {
     });
   
     if (!result.canceled) {
-      return result.assets[0].uri; // Zapisujemy URI wybranego zdjęcia
+      return result.assets[0];
     }
     return null;
 };
@@ -32,7 +32,7 @@ export const captureImage = async () => {
         });
     
         if (!result.canceled) {
-            return result.assets[0].uri; // Ustawiamy URI zdjęcia
+            return result.assets[0];
         }
     }
     catch(error)

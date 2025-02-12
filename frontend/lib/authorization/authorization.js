@@ -1,4 +1,4 @@
-const ipAddress = "http://192.168.1.84:8080"
+const ipAddress = "http://192.168.0.51:8080"
 
 export const loginUser = async (email, password) => {
   const body = {
@@ -75,8 +75,8 @@ export const clothesSending = async (formData) => {
     if (!response.ok) {
         throw new Error(`HTTP status ${response.status}`);
     }
-    // const data = await response.json();
-    return data;
+    //const data = await response.json();
+    return 1;
   } catch (error) {
     console.error('Błąd:', error);
   }
