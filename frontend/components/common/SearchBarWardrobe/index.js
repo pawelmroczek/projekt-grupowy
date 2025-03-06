@@ -1,6 +1,7 @@
-import { View, TextInput, TouchableOpacity, ScrollView, Text} from "react-native";
+import { View, TextInput, TouchableOpacity, ScrollView, Text, Modal} from "react-native";
 import React from "react";
 import { useState } from "react";
+import { router } from "expo-router";
 
 import{
     Search,
@@ -10,9 +11,8 @@ import{
 }
 from "lucide-react-native";
 
-const SearchBarWardrobe = ({}) => {
+const SearchBarWardrobe = ({displayMode, onDisplayPress}) => {
     const [searchMode, setSearchMode] = useState(false);
-    const [displayMode, setDisplayMode] = useState(false);
     const [searchText, setSearchText] = useState('');
     const categories = ["Boots", "Sandals", "Pumps", "Flats", "Sneakers", "Loafers", "Oxfords", "Slippers"];
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -36,9 +36,11 @@ const SearchBarWardrobe = ({}) => {
                     </View>
                 ) : (
                     <>
+                    <TouchableOpacity onPress={() => onDisplayPress(!displayMode)}>
                     <LayoutGrid className="text-black" size={30}/>
+                    </TouchableOpacity>
                     <View className="flex-row gap-4">
-                        <TouchableOpacity onPress={() => setDisplayMode(!displayMode)}>
+                        <TouchableOpacity onPress={() => router.push("/filterClothes")}>
                             <SlidersHorizontal className="text-black" size={30}/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => setSearchMode(true)}>
@@ -48,7 +50,7 @@ const SearchBarWardrobe = ({}) => {
                     </>
                 )}
             </View>
-            <View className="mt-24">
+            <View className="mt-24 mb-2">
                 {searchMode ? (null) :(
                     <ScrollView 
                         horizontal 
