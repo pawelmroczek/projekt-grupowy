@@ -1,29 +1,14 @@
 import React, { useState } from "react";
 import {
   View,
-  Text,
-  TouchableOpacity,
   Modal,
-  Image,
   SafeAreaView,
 } from "react-native";
-import FormField from "../../components/common/FormField";
-import SelectDropdown from "react-native-select-dropdown";
-import {
-  ArrowUp,
-  ArrowDown,
-  Images,
-  Trash2,
-  Camera,
-  Shirt,
-} from "lucide-react-native";
-import {
-  selectImageFromLibrary,
-  captureImage,
-} from "../../lib/authorization/picture_logic";
 import { clothesSending } from "../../lib/authorization/authorization";
 import AddButton from "../../components/features/wardrobe/AddButton";
 import { router } from "expo-router";
+import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
+import TypeBarWardrobe from "../../components/common/TypeBarWardrobe";
 
 const FormData = global.FormData;
 
@@ -68,6 +53,7 @@ const Wardrobe = () => {
 
   return (
     <>
+      <SearchBarWardrobe></SearchBarWardrobe>
       <SafeAreaView>
         <View className="flex-1 bg-gray-100">
           {/* Modal */}
@@ -77,7 +63,6 @@ const Wardrobe = () => {
             transparent={true}
             onRequestClose={() => setModalVisible(false)}
           >
-            
           </Modal>
         </View>
       </SafeAreaView>
