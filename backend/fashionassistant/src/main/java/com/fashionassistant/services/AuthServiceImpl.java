@@ -21,13 +21,17 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Token logIn(UserAuth userAuth) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        userAuth.email(), userAuth.password()
-                )
-        );
         User user = userRepository.findByEmail(userAuth.email())
                 .orElseThrow(() -> new BadRequestException("User not found"));
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            userAuth.email(), userAuth.password()
+                    )
+            );
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
         return new Token(jwtService.generateToken(user));
     }
 

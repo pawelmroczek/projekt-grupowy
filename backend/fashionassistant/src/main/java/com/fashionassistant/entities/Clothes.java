@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "clothes")
 @Getter
@@ -21,9 +23,17 @@ public class Clothes {
     private String name;
     @Column(name = "type")
     private String type;
+    @Column(name = "color")
+    private String color;
+    @Column(name = "size")
+    private String size;
+    @Column(name = "createdAt")
+    private LocalDate createdAt;
+    @Column(name = "clean")
+    private boolean clean;
     @OneToOne(mappedBy = "clothes", cascade = CascadeType.ALL)
     private Picture picture;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
 }

@@ -1,7 +1,6 @@
 package com.fashionassistant.rest;
 
 import com.fashionassistant.entities.Token;
-import com.fashionassistant.entities.User;
 import com.fashionassistant.entities.UserAuth;
 import com.fashionassistant.entities.UserCreate;
 import com.fashionassistant.services.AuthService;
@@ -25,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/signUp")
-    public User signUp(@RequestBody UserCreate user) {
+    public Token signUp(@RequestBody UserCreate user) {
         return userService.signUp(user);
     }
 }

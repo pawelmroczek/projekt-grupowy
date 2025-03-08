@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class User implements UserDetails {
     private String email;
     @Column(name = "password")
     private String password;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Clothes> clothes;
 
     @Override
@@ -54,5 +55,12 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void addClothes(Clothes newClothes) {
+        if (clothes == null) {
+            clothes = new ArrayList<>();
+        }
+        clothes.add(newClothes);
     }
 }

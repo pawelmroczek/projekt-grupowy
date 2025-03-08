@@ -22,7 +22,8 @@ public class Picture {
     private String name;
     @Column(name = "url")
     private String url;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "clothesId")
     private Clothes clothes;
 }

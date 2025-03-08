@@ -1,5 +1,6 @@
 package com.fashionassistant.services;
 
+import com.fashionassistant.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -26,11 +27,11 @@ public class JwtServiceImpl implements JwtService {
         return extractClaims(token, Claims::getSubject);
     }
 
-    private String generateToken(Map<String, Object> claims, UserDetails userDetails) {
+    private String generateToken(Map<String, Object> claims, User user) {
         return Jwts
                 .builder()
                 .claims(claims)
-                .subject(userDetails.getUsername())
+                .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + jwtExpirationTime))
                 .signWith(getSignToKey())
@@ -38,9 +39,9 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        return generateToken(claims, userDetails);
+        return generateToken(claims, user);
     }
 
     private boolean isTokenExpired(String token) {
