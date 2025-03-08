@@ -8,7 +8,6 @@ import { clothesSending } from "../../lib/authorization/authorization";
 import AddButton from "../../components/features/wardrobe/AddButton";
 import { router } from "expo-router";
 import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
-import TypeBarWardrobe from "../../components/common/TypeBarWardrobe";
 
 const FormData = global.FormData;
 
