@@ -21,6 +21,7 @@ import ErrorText from "../../components/common/ErrorText";
 import { registerUser } from "../../lib/authorization/authorization";
 
 const SignUp = () => {
+  const [registryStatus, setRegistryStatus] = useState(false);
   const [error, setError] = useState(null);
   const [form, setForm] = useState({
     username: "",
@@ -64,13 +65,21 @@ const SignUp = () => {
     return 0;
   }
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     validate = validateForm();
-    if (validate == 0) {
-      const response = registerUser(form);
-      // console.log("Kocham Barcelone");
-      router.push("/sign-in");
-
+    if (validate === 0) {
+      setRegistryStatus(true)
+      const response = await registerUser(form); 
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setRegistryStatus(false);
+      
+      if (response.success) {
+        console.log("✅ Sukces:", response.message);
+        router.push("/sign-in"); 
+      } else {
+        console.log("❌ Błąd:", response.message);
+        setError(response.message); 
+      }
     }
   };
 
@@ -140,7 +149,7 @@ const SignUp = () => {
                   }}
                 >
                   <Text className="text-white text-xl font-pregular">
-                    ZAREJESTRUJ SIĘ
+                   {registryStatus ? "Rejestracja..." : "ZAREJESTRUJ SIĘ"}
                   </Text>
                 </TouchableOpacity>
               </View>

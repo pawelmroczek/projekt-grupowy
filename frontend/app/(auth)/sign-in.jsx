@@ -53,8 +53,8 @@ const SignIn = () => {
       if (token) {
         router.push("/home");
       } else {
+        console.log("❌ Błąd:",data.message.message);
         setError(data.message.message);
-        // setError("Nieprawidłowe dane logowania");
       }
     }
   };

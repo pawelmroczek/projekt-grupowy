@@ -1,4 +1,4 @@
-const ipAddress = "http://192.168.0.51:8080"
+const ipAddress = "http://192.168.0.15:8080"
 
 export const loginUser = async (email, password) => {
   const body = {
@@ -19,16 +19,32 @@ export const loginUser = async (email, password) => {
       body: JSON.stringify(body),
     });
     const response = await data.json();
-    return {
-      status: "success",
-      message: response,
-    };
+
+    if (response.token){
+      return {
+        status: "success",
+        message: response,
+      };
+    }else{
+      if (response.message == "Bad credentials"){
+        information = "Błędne hasło"
+      }
+      else{
+        information = "Nie istnieje użytkownik o podanym adresie email"
+      }
+      return {
+        status: "error",
+        message: {
+           message: information,
+        },
+      };
+    }
   } catch (error) {
-    // console.error("Error:", error);
+
     return {
       status: "error",
       message: {
-        message: "Błąd logowania",
+        message: "Błąd połączenia z serwerem. Spróbuj ponownie później.",
       },
     };
   }
@@ -36,27 +52,33 @@ export const loginUser = async (email, password) => {
 
 export const registerUser = async (form) => {
   try {
-    const data = await fetch(ipAddress+"/fashion/users/signUp", {
+    const response = await fetch(ipAddress + "/fashion/users/signUp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(form),
     });
-    // console.log("rejestracja",response);
-    // const response = data.json();
-    // if (response.status === "success") {
-    //   return {
-    //     status: "success",
-    //     message: response,
-    //   };
-    // }
-  } catch(error) {
-    // console.log("Error:", error);
-    // return {
-    //   status: "error",
-    //   message: "Błąd rejestracji",
-    // };
+
+    const data = await response.json(); 
+
+    if (response.ok) {
+      return {
+        success: true,
+        message: "Rejestracja zakończona sukcesem!",
+        data, 
+      };
+    } else {
+      return {
+        success: false,
+        message: data?.message || "Błąd rejestracji",
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: "Błąd połączenia z serwerem. Spróbuj ponownie później.",
+    };
   }
 };
 
