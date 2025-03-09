@@ -4,7 +4,8 @@ import {
   Image,
   Text,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  StyleSheet
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 
@@ -12,7 +13,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { X, Pencil } from "lucide-react-native";  
 
 
-const clotheDetails = () => {
+const clothDetails = () => {
   const cloth = useLocalSearchParams();
   return (
     <>
@@ -26,7 +27,7 @@ const clotheDetails = () => {
                 </TouchableOpacity>
             </View>
             <ScrollView className="mt-20">
-            <Image source={{ uri: cloth.picture }} className="w-full" />
+            <Image source={{ uri: cloth.picture }} style={[styles.image]}/>
             <View className="flex-1">
         {/* Zaokrąglona biała sekcja */}
         <View className="bg-white -mt-8 rounded-t-3xl p-5 flex-1">
@@ -41,4 +42,15 @@ const clotheDetails = () => {
     </>
   );
 };
-export default clotheDetails;
+
+const styles = StyleSheet.create({
+  image: {
+    width: "100%",
+    height: undefined,
+    aspectRatio: 1,
+    borderRadius: 8,
+    resizeMode: "cover",
+  }
+});
+
+export default clothDetails;
