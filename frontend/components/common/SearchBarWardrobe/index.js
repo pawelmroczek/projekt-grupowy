@@ -1,6 +1,7 @@
-import { View, TextInput, TouchableOpacity, ScrollView, Text} from "react-native";
+import { View, TextInput, TouchableOpacity, ScrollView, Text, Modal} from "react-native";
 import React from "react";
 import { useState } from "react";
+import { router } from "expo-router";
 
 import{
     Search,
@@ -10,11 +11,17 @@ import{
 }
 from "lucide-react-native";
 
-const SearchBarWardrobe = ({}) => {
+const SearchBarWardrobe = ({displayMode, onDisplayPress}) => {
     const [searchMode, setSearchMode] = useState(false);
-    const [displayMode, setDisplayMode] = useState(false);
     const [searchText, setSearchText] = useState('');
-    const categories = ["Boots", "Sandals", "Pumps", "Flats", "Sneakers", "Loafers", "Oxfords", "Slippers"];
+    const typeOptions = [
+        { title: "Koszulka" },
+        { title: "Spodnie" },
+        { title: "Bluza" },
+        { title: "Koszula" },
+        { title: "Sweter" },
+        { title: "Inne" },
+      ];
     const [selectedCategory, setSelectedCategory] = useState(null);
 
     return (
@@ -36,9 +43,11 @@ const SearchBarWardrobe = ({}) => {
                     </View>
                 ) : (
                     <>
+                    <TouchableOpacity onPress={() => onDisplayPress(!displayMode)}>
                     <LayoutGrid className="text-black" size={30}/>
+                    </TouchableOpacity>
                     <View className="flex-row gap-4">
-                        <TouchableOpacity onPress={() => setDisplayMode(!displayMode)}>
+                        <TouchableOpacity onPress={() => router.push("/filterClothes")}>
                             <SlidersHorizontal className="text-black" size={30}/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => setSearchMode(true)}>
@@ -48,7 +57,7 @@ const SearchBarWardrobe = ({}) => {
                     </>
                 )}
             </View>
-            <View className="mt-24">
+            <View className="mt-24 mb-2">
                 {searchMode ? (null) :(
                     <ScrollView 
                         horizontal 
@@ -56,14 +65,14 @@ const SearchBarWardrobe = ({}) => {
                         contentContainerStyle={{ paddingHorizontal: 10 }}
                     >
                         <View className="flex-row gap-2">
-                            {categories.map((cat) => (
+                            {typeOptions.map((cat) => (
                                 <TouchableOpacity
-                                    key={cat}
-                                    className={`px-4 py-2 rounded-full ${selectedCategory === cat ? "bg-black" : "bg-gray-200"}`}
-                                    onPress={() => setSelectedCategory(selectedCategory === cat ? null : cat)}
+                                    key={cat.title}
+                                    className={`px-4 py-2 rounded-full ${selectedCategory === cat.title ? "bg-black" : "bg-gray-200"}`}
+                                    onPress={() => setSelectedCategory(selectedCategory === cat.title ? null : cat.title)}
                                 >
-                                    <Text className={`text-base ${selectedCategory === cat ? "text-white font-extrabold" : "text-black font-semibold"}`}>
-                                        {cat}
+                                    <Text className={`text-base ${selectedCategory === cat.title ? "text-white font-extrabold" : "text-black font-semibold"}`}>
+                                        {cat.title}
                                     </Text>
                                 </TouchableOpacity>
                             ))}

@@ -5,7 +5,7 @@ const formsLayout = () => {
   return (
     <Stack >
       <Stack.Screen name="addClothes" options={{ headerShown: false }} />
-      
+      <Stack.Screen name="filterClothes" options={{ headerShown: false }} />
     </Stack>
   );
 };

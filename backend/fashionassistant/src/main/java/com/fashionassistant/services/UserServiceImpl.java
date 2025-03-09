@@ -1,8 +1,6 @@
 package com.fashionassistant.services;
 
-import com.fashionassistant.entities.Clothes;
-import com.fashionassistant.entities.User;
-import com.fashionassistant.entities.UserCreate;
+import com.fashionassistant.entities.*;
 import com.fashionassistant.exceptions.BadRequestException;
 import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +14,10 @@ import java.util.ArrayList;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
 
     @Override
-    public User signUp(UserCreate userCreate) {
+    public Token signUp(UserCreate userCreate) {
         throwIfUserExists(userCreate);
         User user = new User(
                 0,
@@ -27,7 +26,8 @@ public class UserServiceImpl implements UserService {
                 passwordEncoder.encode(userCreate.password()),
                 new ArrayList<Clothes>()
         );
-        return userRepository.save(user);
+        user = userRepository.save(user);
+        return authService.logIn(new UserAuth(userCreate.email(), userCreate.password()));
     }
 
     private void throwIfUserExists(UserCreate userCreate) {
