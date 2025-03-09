@@ -1,4 +1,6 @@
-const ipAddress = "http://192.168.0.51:8080"
+const ipAddress = "http://192.168.1.27:8080"
+const ipAddressNginx = "http://192.168.1.27:8888"
+
 
 export const loginUser = async (email, password) => {
   const body = {
@@ -60,13 +62,14 @@ export const registerUser = async (form) => {
   }
 };
 
-export const clothesSending = async (formData) => {
+export const clothesSending = async (formData, token) => {
   try {
     console.log("Rozpoczynam wysyłanie...");
+    console.log(token);
     const response = await fetch(ipAddress+"/fashion/clothes", {
         method: "POST",
         headers: {
-            // "Authorization": `${token}`,
+            "Authentication": `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
         },
         body: formData,
@@ -77,6 +80,33 @@ export const clothesSending = async (formData) => {
     }
     //const data = await response.json();
     return 1;
+  } catch (error) {
+    console.error('Błąd:', error);
+  }
+}
+
+export const getClothes = async (token) => {
+  try {
+    console.log("Rozpoczynam get clothes...");
+    console.log(token);
+    const response = await fetch(ipAddress+"/fashion/clothes", {
+        method: "GET",
+        headers: {
+            "Authentication": `Bearer ${token}`
+        }
+    });
+    console.log("Odpowiedź serwera:", response);
+    if (!response.ok) {
+        throw new Error(`HTTP status ${response.status}`);
+    }
+    const data = await response.json();
+    console.log("Odpowiedź serwera:", data);    
+
+    data.forEach((element) => {
+      const parts = element.picture.split("images-server:80");
+      element.picture = ipAddressNginx + parts[1];
+    });
+    return data;
   } catch (error) {
     console.error('Błąd:', error);
   }

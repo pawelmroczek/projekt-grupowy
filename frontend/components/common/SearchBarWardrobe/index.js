@@ -14,7 +14,14 @@ from "lucide-react-native";
 const SearchBarWardrobe = ({displayMode, onDisplayPress}) => {
     const [searchMode, setSearchMode] = useState(false);
     const [searchText, setSearchText] = useState('');
-    const categories = ["Boots", "Sandals", "Pumps", "Flats", "Sneakers", "Loafers", "Oxfords", "Slippers"];
+    const typeOptions = [
+        { title: "Koszulka" },
+        { title: "Spodnie" },
+        { title: "Bluza" },
+        { title: "Koszula" },
+        { title: "Sweter" },
+        { title: "Inne" },
+      ];
     const [selectedCategory, setSelectedCategory] = useState(null);
 
     return (
@@ -58,14 +65,14 @@ const SearchBarWardrobe = ({displayMode, onDisplayPress}) => {
                         contentContainerStyle={{ paddingHorizontal: 10 }}
                     >
                         <View className="flex-row gap-2">
-                            {categories.map((cat) => (
+                            {typeOptions.map((cat) => (
                                 <TouchableOpacity
-                                    key={cat}
-                                    className={`px-4 py-2 rounded-full ${selectedCategory === cat ? "bg-black" : "bg-gray-200"}`}
-                                    onPress={() => setSelectedCategory(selectedCategory === cat ? null : cat)}
+                                    key={cat.title}
+                                    className={`px-4 py-2 rounded-full ${selectedCategory === cat.title ? "bg-black" : "bg-gray-200"}`}
+                                    onPress={() => setSelectedCategory(selectedCategory === cat.title ? null : cat.title)}
                                 >
-                                    <Text className={`text-base ${selectedCategory === cat ? "text-white font-extrabold" : "text-black font-semibold"}`}>
-                                        {cat}
+                                    <Text className={`text-base ${selectedCategory === cat.title ? "text-white font-extrabold" : "text-black font-semibold"}`}>
+                                        {cat.title}
                                     </Text>
                                 </TouchableOpacity>
                             ))}

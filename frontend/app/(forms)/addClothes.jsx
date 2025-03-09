@@ -1,7 +1,7 @@
 import React from "react";
 import InitialBackground from "../../components/common/InitialBackground";
 import authBackground from "../../assets/backgrounds/authBackground.png";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -29,7 +29,7 @@ import {
 import { clothesSending } from "../../lib/authorization/authorization";
 import { router } from "expo-router";
 import SelectForm from "../../components/common/SelectForm";
-
+import { TokenContext } from "../TokenContext";
 
 export default function index() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -48,6 +48,8 @@ export default function index() {
     { title: "Sweter" },
     { title: "Inne" },
   ];
+
+  const { token, setToken } = useContext(TokenContext);
 
   const handleSubmit = async () => {
     // if (!imageUri) {
@@ -72,10 +74,11 @@ export default function index() {
       name: imageName,
       type: imageType
     });
-
-    console.log(formData);
-
-    const serverresponse = clothesSending(formData);
+    formData.append("size", "S");
+    formData.append("color", "red");
+    formData.append("clean", "true");
+    //console.log(formData);
+    const serverresponse = await clothesSending(formData, token);
     router.push("/wardrobe");
   };
 

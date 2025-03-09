@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
   FlatList,
@@ -10,62 +11,46 @@ import {
 import AddButton from "../../components/features/wardrobe/AddButton";
 import { router } from "expo-router";
 import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
+import { getClothes } from "../../lib/authorization/authorization";
+import { TokenContext } from "../TokenContext";
 
 const FormData = global.FormData;
 
 const Wardrobe = () => {
   const [displayMode, setDisplayMode] = useState(false);
+  const [clothes, setClothes] = useState([]);
   
-  const clothes = [
-    {
-      id: 1,
-      title: "T-shirt",
-      image: require("../../assets/image.png"),
-    },
-    {
-      id: 2,
-      title: "Jeans",
-      image: require("../../assets/image.png"),
-    },
-    {
-      id: 3,
-      title: "Shirt",
-      image: require("../../assets/image.png"),
-    },
-    {
-      id: 4,
-      title: "Dress",
-      image: require("../../assets/image.png"),
-    },
-    {
-      id: 5,
-      title: "Sweater",
-      image: require("../../assets/image.png"),
-    },
-    {
-      id: 6,
-      title: "Jacket",
-      image: require("../../assets/image.png"),
-    },
-    {
-      id: 7,
-      title: "Shorts",
-      image: require("../../assets/image.png"),
-    },
-    {
-      id: 8,
-      title: "Skirt",
-      image: require("../../assets/image.png"),
-    },
-  ];
+  const { token, setToken } = useContext(TokenContext);
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchClothes = async () => {
+        const clothesData = await getClothes(token);
+        console.log("Pobrane dane:", clothesData);
+        if (clothesData) {
+          setClothes(clothesData);
+        }
+      };
+      fetchClothes();
+  
+      return () => {
+        // Opcjonalnie kod do czyszczenia, jeśli ekran opuścisz
+        setClothes([]);
+      };
+    }, [])
+  );
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={[styles.item, displayMode ? styles.single : styles.double]}
-      onPress={() => router.push(`/clothes/${item.id}`)}
+      onPress={() => router.push({
+        pathname: "/clothDetails",
+        params: { "name": item.name, "picture": item.picture, "id": item.id, "type": item.type, "color": item.color, "size": item.size, "clean": item.clean}
+      })
+    }
     >
-      <Image source={item.image} style={[styles.image]} />
-      <Text style={styles.title}>{item.title}</Text>
+      <Image source={{ uri: item.picture }} style={[styles.image]} />
+      <Text style={styles.title}>{item.name}</Text>
     </TouchableOpacity>
   );
 
@@ -114,9 +99,11 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    resizeMode: "resize",
+    height: undefined,
+    aspectRatio: 1,
     borderRadius: 8,
-  },
+    resizeMode: "cover",
+  },  
   title: {
     marginTop: 8,
     fontSize: 16,

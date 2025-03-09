@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import InitialBackground from "../../components/common/InitialBackground";
 
 import logo from "../../assets/logo.png";
@@ -10,6 +10,7 @@ import { loginUser } from "../../lib/authorization/authorization";
 import { CircleX } from "lucide-react-native";
 import ErrorText from "../../components/common/ErrorText";
 import Link from "../../components/common/Link";
+import { TokenContext } from "../TokenContext";
 
 const SignIn = () => {
   const [loginStatus, setLoginStatus] = useState(false);
@@ -18,6 +19,8 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+
+  const { token, setToken } = useContext(TokenContext);
 
   function validateForm()
   {
@@ -51,6 +54,7 @@ const SignIn = () => {
       setLoginStatus(false);
       
       if (token) {
+        setToken(token);
         router.push("/home");
       } else {
         setError(data.message.message);
