@@ -11,9 +11,8 @@ import { Eye, EyeClosed } from "lucide-react-native";
  * @param {React.ReactNode} props.placeholder - Placeholder of the form field.
  * @param {React.ReactNode} props.handleChangeText - Function to handle text change.
  * @param {React.ReactNode} props.otherStyles - Additional styles for the form field.
- * 
+ *
  */
-
 
 const FormField = ({
   title,
@@ -21,15 +20,21 @@ const FormField = ({
   placeholder,
   handleChangeText,
   otherStyles,
+  borderColor,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
-
   return (
     <View className={`space-y-2 ${otherStyles}`}>
       <Text className="text-base text-text-primary font-pmedium">{title}:</Text>
-      <View className="w-full rounded-2xl border-2 border-primary-100 focus:border-secondary-200 flex flex-row items-center px-4">
+      <View
+        className={`w-full rounded-2xl border-2 flex flex-row items-center px-4 ${
+          borderColor == "secondary"
+            ? "border-secondary-200 focus:border-secondary-300"
+            : "border-primary-100 focus:border-secondary-200"
+        }`}
+      >
         <TextInput
           className={`flex-1 h-16 text-text-secondary font-psemibold text-base `}
           value={value}
