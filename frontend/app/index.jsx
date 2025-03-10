@@ -25,7 +25,7 @@ export default function App() {
         </Text>
         <TouchableOpacity
           onPress={() => router.push("/sign-in")}
-          //onPress={() => router.push("/addClothes")}
+          // onPress={() => router.push("/addClothes")}
           className="bg-primary-100 p-2 px-8 rounded-md mt-4"
         >
           <Text className="text-white text-xl font-pregular ">ZALOGUJ SIĘ</Text>

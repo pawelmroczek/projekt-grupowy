@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import React, { useState } from "react";
 
-export default function ColorSelector() {
+export default function ColorSelector({selectColor, setSelectedColor}) {
   const colors = [
     { name: "red", hex: "#FF0000" },
     { name: "black", hex: "#000000" },
@@ -19,7 +19,6 @@ export default function ColorSelector() {
     { name: "gold", hex: "#FFD700" },
     { name: "other", hex: "#FFFFFF" },
   ];
-  const [selectColor, setColor] = useState(null);
 
   return (
     <ScrollView
@@ -37,7 +36,7 @@ export default function ColorSelector() {
                 : "bg-white-200 border-gray-200 "
             }`}
             onPress={() =>
-              setColor(selectColor === color.name ? null : color.name)
+              setSelectedColor(selectColor === color.name ? null : color.name)
             }
           >
             <View style={{backgroundColor:color.hex}} className="h-12 w-12 rounded-lg">
