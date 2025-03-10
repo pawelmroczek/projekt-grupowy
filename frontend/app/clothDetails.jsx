@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext} from "react";
 import {
   View,
   Image,
@@ -10,17 +10,27 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 
 import { X, Pencil } from "lucide-react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { clothesDeleting } from "../lib/authorization/authorization";
+import { TokenContext } from "./TokenContext";
 
 const clothDetails = () => {
   const cloth = useLocalSearchParams();
+  const { token, setToken } = useContext(TokenContext);
 
-  console.log(cloth);
+  const handleDelete = async (id) => {
+    console.log("Usuwam ubranie o id:", id);
+    const serverresponse = await clothesDeleting(id, token);
+    router.push("/wardrobe");
+  };
+
   return (
     <>
       <View className="relative">
         <View className=" w-full flex-row items-center justify-between p-4 bg-white shadow-md pt-14 px-6">
-          <TouchableOpacity onPress={() => router.back()}>
+          <TouchableOpacity onPress={() => router.push({
+                  pathname: "/addClothes",
+                  params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "size": cloth.size, "clean": cloth.clean}
+                })}>
             <Pencil className="text-black" size={30} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => router.back()}>
@@ -40,11 +50,12 @@ const clothDetails = () => {
               <Text className="text-base text-gray-600">
                 Kolor: {cloth.color}
               </Text>
-              <View className="items-center space-y-3   py-3.5 rounded-xl w-full flex justify-center bg-white-100  ">
+              <View className="items-center space-y-3   py-3.5 rounded-xl w-full flex justify-center bg-white-100 pb-40">
                 <TouchableOpacity
-                  onPress={() => {
-                    
-                  }}
+                  onPress={() => router.push({
+                    pathname: "/addClothes",
+                    params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "size": cloth.size, "clean": cloth.clean}
+                })}
                   className="px-4  w-full flex items-center py-2 border text-black border-primary-100 rounded-lg"
                 >
                   <Text className="text-black text-xl font-pregular">
@@ -53,7 +64,7 @@ const clothDetails = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    // usun
+                    handleDelete(cloth.id);
                   }}
                   className="px-4 py-2 w-full flex items-center bg-red-500 rounded-lg"
                 >

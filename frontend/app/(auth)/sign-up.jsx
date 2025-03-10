@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext} from "react";
 import InitialBackground from "../../components/common/InitialBackground";
 
 import logo from "../../assets/logo.png";
@@ -19,10 +19,12 @@ import { router } from "expo-router";
 import { CircleX } from "lucide-react-native";
 import ErrorText from "../../components/common/ErrorText";
 import { registerUser } from "../../lib/authorization/authorization";
+import { TokenContext } from "../TokenContext";
 
 const SignUp = () => {
   const [registryStatus, setRegistryStatus] = useState(false);
   const [error, setError] = useState(null);
+  const { token, setToken } = useContext(TokenContext);
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -69,13 +71,15 @@ const SignUp = () => {
     validate = validateForm();
     if (validate === 0) {
       setRegistryStatus(true)
-      const response = await registerUser(form); 
+      const response = await registerUser(form);
+      const token = response.message.token ? response.message.token : null; 
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setRegistryStatus(false);
       
       if (response.success) {
-        console.log("✅ Sukces:", response.message);
-        router.push("/sign-in"); 
+        console.log("✅ Sukces:");
+        setToken(token);
+        router.push("/home"); 
       } else {
         console.log("❌ Błąd:", response.message);
         setError(response.message); 

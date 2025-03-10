@@ -1,38 +1,21 @@
 import React from "react";
-import InitialBackground from "../../components/common/InitialBackground";
-import authBackground from "../../assets/backgrounds/authBackground.png";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   Modal,
-  Image,
   SafeAreaView,
   ScrollView,
 } from "react-native";
 import FormField from "../../components/common/FormField";
-import SelectDropdown from "react-native-select-dropdown";
 import {
-  ArrowUp,
-  ArrowDown,
-  Images,
-  Trash2,
-  Camera,
-  Shirt,
-  CirclePlus,
-  ImagePlus,
+  Shirt
 } from "lucide-react-native";
-import {
-  selectImageFromLibrary,
-  captureImage,
-} from "../../lib/authorization/picture_logic";
-import { clothesSending } from "../../lib/authorization/authorization";
-import { router } from "expo-router";
-import SelectForm from "../../components/common/SelectForm";
+import { clothesSending, clothesEditing } from "../../lib/authorization/authorization";
+import { router, useLocalSearchParams} from "expo-router";
 
 import AddPhoto from "../../components/features/wardrobe/AddPhoto";
-import CategorySelector from "../../components/common/CategorySelector";
 import ColorSelector from "../../components/features/wardrobe/ColorSelector";
 import { TokenContext } from "../TokenContext";
 import VerticalSelector from "../../components/common/VerticalSelector";
@@ -65,11 +48,33 @@ export default function index() {
   const [selectedColor, setSelectedColor] = useState("idle");
   const [selectedSize, setSelectedSize] = useState("idle");
   const [selectedType, setSelectedType] = useState("idle");
+  const [cleanStatus, setCleanStatus] = useState(true);
+  const [editing, setEditing] = useState(false);
+
+  const params = useLocalSearchParams();
+  useEffect(() => {
+    console.log(params);
+    if (Object.keys(params).length > 0) {
+      setEditing(true);
+      setForm({
+      name: params.name,
+      type: params.type,
+      });
+      setSelectedColor(params.color);
+      setSelectedSize(params.size);
+      setSelectedType(params.type);
+      setImageUri(params.picture);
+      setImageName(".jpg");
+      setImageType("image/jpeg");
+      setCleanStatus(params.clean);
+      console.log("Wczytano parametry");
+    }
+  }, []);
 
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append("name", form.name);
-    formData.append("type", "type");
+    formData.append("type", selectedType);
     formData.append("file", {
       uri: imageUri,
       name: imageName,
@@ -77,10 +82,20 @@ export default function index() {
     });
     formData.append("size", selectedSize);
     formData.append("color", selectedColor);
-    formData.append("clean", "true");
+    formData.append("clean", cleanStatus);
     console.log(formData);
-    const serverresponse = await clothesSending(formData, token);
-    router.push("/wardrobe");
+    console.log(editing);
+    if(editing){
+      formData.append("id", params.id);
+      console.log("Wysyłam formularz");
+      const serverresponse = await clothesEditing(formData, token);
+      router.push("/wardrobe");
+    }
+    else{
+      console.log("Wysyłam formularz");
+      const serverresponse = await clothesSending(formData, token);
+      router.push("/wardrobe");
+    }
   };
 
   return (
@@ -146,7 +161,7 @@ export default function index() {
                 className="px-4 py-2 bg-primary-100 rounded-lg"
               >
                 <Text className="text-white text-xl font-pregular">
-                  {"DODAJ"}
+                  {editing ? "ZAPISZ" : "DODAJ"}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
