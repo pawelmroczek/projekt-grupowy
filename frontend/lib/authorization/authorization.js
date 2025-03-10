@@ -1,5 +1,5 @@
 
-const ip =  "http://192.168.0.15"
+const ip =  "http://localhost"
 const ipAddress = ip + ":8080"
 const ipAddressNginx = ip + ":8888"
 
