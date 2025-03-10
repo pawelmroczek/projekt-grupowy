@@ -72,7 +72,7 @@ export default function index() {
 
     const formData = new FormData();
     formData.append("name", form.name);
-    formData.append("type", form.type);
+    formData.append("type", "type");
     formData.append("file", {
       uri: imageUri,
       name: imageName,

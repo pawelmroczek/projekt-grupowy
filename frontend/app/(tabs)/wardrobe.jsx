@@ -6,7 +6,7 @@ import {
   Image,
   Text,
   TouchableOpacity,
-  StyleSheet,
+  StyleSheet
 } from "react-native";
 import AddButton from "../../components/features/wardrobe/AddButton";
 import { router } from "expo-router";
