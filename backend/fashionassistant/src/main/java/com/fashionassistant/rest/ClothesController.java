@@ -2,6 +2,7 @@ package com.fashionassistant.rest;
 
 import com.fashionassistant.entities.ClothesCreate;
 import com.fashionassistant.entities.ClothesGet;
+import com.fashionassistant.entities.ClothesUpdate;
 import com.fashionassistant.services.ClothesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -22,5 +23,15 @@ public class ClothesController {
     @GetMapping
     public List<ClothesGet> getAllClothes() {
         return clothesService.getClothes();
+    }
+
+    @PutMapping
+    public ClothesGet updateClothes(@ModelAttribute ClothesUpdate clothes) {
+        return clothesService.updateClothes(clothes);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteClothes(@PathVariable int id) {
+        clothesService.deleteClothesById(id);
     }
 }

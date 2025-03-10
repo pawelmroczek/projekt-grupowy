@@ -1,6 +1,7 @@
 package com.fashionassistant.services;
 
 import com.fashionassistant.entities.*;
+import com.fashionassistant.exceptions.BadRequestException;
 import com.fashionassistant.repositories.ClothesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,46 @@ public class ClothesServiceImpl implements ClothesService {
                     singleClothes.getUser().getEmail()));
         });
         return clothesGets;
+    }
+
+    @Override
+    public ClothesGet updateClothes(ClothesUpdate clothesRequest) {
+        MultipartFile file = clothesRequest.file();
+        User user = authService.getCurrentUser();
+        Picture picture = pictureService.savePicture(file);
+        Clothes clothes = clothesRepository.findById(clothesRequest.id())
+                .orElseThrow(() -> new BadRequestException("Clothes not found"));
+        if (clothes.getUser().getId() == user.getId()) {
+            int pictureId = clothes.getPicture().getId();
+            clothes.setPicture(null);
+            pictureService.deleteById(pictureId);
+            clothes.setName(clothesRequest.name());
+            clothes.setColor(clothesRequest.color());
+            clothes.setSize(clothesRequest.size());
+            clothes.setClean(clothesRequest.clean());
+            clothes.setPicture(picture);
+            picture.setClothes(clothes);
+            Clothes clothesNew = clothesRepository.save(clothes);
+            return new ClothesGet(clothesNew.getId(), clothesNew.getName(), clothesNew.getType(),
+                    clothesNew.getColor(), clothesNew.getSize(), clothesNew.getCreatedAt(),
+                    clothesNew.isClean(), clothesNew.getPicture().getUrl(), clothesNew.getUser().getEmail());
+        }
+        throw new BadRequestException("Clothes not found");
+    }
+
+    @Override
+    public void deleteClothesById(int id) {
+        Clothes clothes = clothesRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Clothes not found"));
+        User user = authService.getCurrentUser();
+        if (clothes.getUser().getId() == user.getId()) {
+            int pictureId = clothes.getPicture().getId();
+            clothes.setPicture(null);
+            pictureService.deleteById(pictureId);
+            clothes.setUser(null);
+            user.getClothes().remove(clothes);
+            clothesRepository.deleteById(id);
+        }
     }
 
     @Override

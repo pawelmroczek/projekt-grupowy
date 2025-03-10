@@ -31,6 +31,11 @@ public class PictureServiceImpl implements PictureService {
         return picture;
     }
 
+    @Override
+    public void deleteById(int id) {
+        pictureRepository.deleteById(id);
+    }
+
     private String saveFileToServer(MultipartFile file) throws IOException {
         String uploadDirectory = "/app/uploads/";
         String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();

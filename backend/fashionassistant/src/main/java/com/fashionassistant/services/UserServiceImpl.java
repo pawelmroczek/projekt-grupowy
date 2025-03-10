@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
                 passwordEncoder.encode(userCreate.password()),
                 new ArrayList<Clothes>()
         );
-        user = userRepository.save(user);
+        userRepository.save(user);
         return authService.logIn(new UserAuth(userCreate.email(), userCreate.password()));
     }
 
