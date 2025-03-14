@@ -12,7 +12,7 @@ import AddButton from "../../components/features/wardrobe/AddButton";
 import { router } from "expo-router";
 import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
 
-import { getClothes } from "../../lib/authorization/authorization";
+import { getClothes } from "../../lib/authorization/clothes";
 import { TokenContext } from "../TokenContext";
 
 const FormData = global.FormData;
@@ -27,7 +27,7 @@ const Wardrobe = () => {
     React.useCallback(() => {
       const fetchClothes = async () => {
         const clothesData = await getClothes(token);
-        console.log("Pobrane dane:", clothesData);
+        //console.log("Pobrane dane:", clothesData);
         if (clothesData) {
           setClothes(clothesData);
         }

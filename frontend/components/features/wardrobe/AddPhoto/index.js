@@ -41,7 +41,7 @@ export default function AddPhoto({
           onPress={async () => {
             const imageResult = await captureImage(); // Czekamy na wynik
             setImageUri(imageResult.uri);
-            setImageName(imageResult.fileName);
+            setImageName("photo.jpg");
             setImageType(imageResult.type);
           }}
           className="px-3 py-2 rounded-lg items-center border border-secondary-300"
