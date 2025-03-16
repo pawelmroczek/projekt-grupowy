@@ -1,7 +1,6 @@
 
-const ip =  "http://192.168.0.51"
-const ipAddress = ip + ":8080"
-const ipAddressNginx = ip + ":8888"
+import { ipAddress, ipAddressNginx } from "../ipAddress";
+
 
 export const loginUser = async (email, password) => {
   const body = {
