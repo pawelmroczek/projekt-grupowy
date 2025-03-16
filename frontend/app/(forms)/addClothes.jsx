@@ -12,7 +12,7 @@ import FormField from "../../components/common/FormField";
 import {
   Shirt
 } from "lucide-react-native";
-import { clothesSending, clothesEditing } from "../../lib/authorization/authorization";
+import { clothesSending, clothesEditing } from "../../lib/authorization/clothes";
 import { router, useLocalSearchParams} from "expo-router";
 
 import AddPhoto from "../../components/features/wardrobe/AddPhoto";
@@ -67,7 +67,7 @@ export default function index() {
       setImageName(".jpg");
       setImageType("image/jpeg");
       setCleanStatus(params.clean);
-      console.log("Wczytano parametry");
+      //console.log("Wczytano parametry");
     }
   }, []);
 
@@ -83,16 +83,19 @@ export default function index() {
     formData.append("size", selectedSize);
     formData.append("color", selectedColor);
     formData.append("clean", cleanStatus);
-    console.log(formData);
-    console.log(editing);
+    //console.log(formData);
+    console.log(formData.get("file").uri);
+    console.log(formData.get("file").name);
+    console.log(formData.get("file").type);
+    //console.log(editing);
     if(editing){
       formData.append("id", params.id);
-      console.log("Wysyłam formularz");
+      //console.log("Wysyłam formularz");
       const serverresponse = await clothesEditing(formData, token);
       router.push("/wardrobe");
     }
     else{
-      console.log("Wysyłam formularz");
+      //console.log("Wysyłam formularz");
       const serverresponse = await clothesSending(formData, token);
       router.push("/wardrobe");
     }
@@ -155,7 +158,7 @@ export default function index() {
             <View className="items-center   py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4 ">
               <TouchableOpacity
                 onPress={() => {
-                  console.log("submit");
+                  //console.log("submit");
                   handleSubmit();
                 }}
                 className="px-4 py-2 bg-primary-100 rounded-lg"

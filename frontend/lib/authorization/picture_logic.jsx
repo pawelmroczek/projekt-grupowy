@@ -6,18 +6,24 @@ export const selectImageFromLibrary = async () => {
       Alert.alert("Brak dostępu do galerii", "Proszę przyznać aplikacji dostęp do galerii.");
       return;
     }
-  
+    try{
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 1,
+      quality: 0.5,
     });
   
     if (!result.canceled) {
       return result.assets[0];
     }
     return null;
+  }
+  catch(error)
+  {
+      alert("Error uploading image form library: " + error.message);
+      console.log("Error uploading image form library: " + error.message);
+  }
 };
 
 // Funkcja do robienia zdjęcia za pomocą aparatu
@@ -28,7 +34,7 @@ export const captureImage = async () => {
             cameraType: ImagePicker.CameraType.back,
             allowsEditing: true,
             aspect: [1,1],
-            quality: 1,
+            quality: 0.5,
         });
     
         if (!result.canceled) {
@@ -38,6 +44,7 @@ export const captureImage = async () => {
     catch(error)
     {
         alert("Error uploading image form camera: " + error.message);
+        console.log("Error uploading image form camera: " + error.message);
     }
     return null;
 };
