@@ -3,6 +3,7 @@ package com.fashionassistant.services;
 import com.fashionassistant.entities.*;
 import com.fashionassistant.exceptions.BadRequestException;
 import com.fashionassistant.repositories.ClothesRepository;
+import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ public class ClothesServiceImpl implements ClothesService {
     private final ClothesRepository clothesRepository;
     private final PictureService pictureService;
     private final AuthService authService;
+    private final UserRepository userRepository;
 
     @Override
     public List<ClothesGet> getClothes() {
@@ -24,11 +26,7 @@ public class ClothesServiceImpl implements ClothesService {
         List<ClothesGet> clothesGets = new ArrayList<>();
         List<Clothes> clothes = clothesRepository.findClothesByUserId(user.getId());
         clothes.forEach(singleClothes -> {
-            clothesGets.add(new ClothesGet(singleClothes.getId(), singleClothes.getName(),
-                    singleClothes.getType(), singleClothes.getColor(),
-                    singleClothes.getSize(), singleClothes.getCreatedAt(),
-                    singleClothes.isClean(), singleClothes.getPicture().getUrl(),
-                    singleClothes.getUser().getEmail()));
+            clothesGets.add(new ClothesGet(singleClothes));
         });
         return clothesGets;
     }
@@ -51,9 +49,7 @@ public class ClothesServiceImpl implements ClothesService {
             clothes.setPicture(picture);
             picture.setClothes(clothes);
             Clothes clothesNew = clothesRepository.save(clothes);
-            return new ClothesGet(clothesNew.getId(), clothesNew.getName(), clothesNew.getType(),
-                    clothesNew.getColor(), clothesNew.getSize(), clothesNew.getCreatedAt(),
-                    clothesNew.isClean(), clothesNew.getPicture().getUrl(), clothesNew.getUser().getEmail());
+            return new ClothesGet(clothesNew);
         }
         throw new BadRequestException("Clothes not found");
     }
@@ -63,12 +59,13 @@ public class ClothesServiceImpl implements ClothesService {
         Clothes clothes = clothesRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Clothes not found"));
         User user = authService.getCurrentUser();
+        user = userRepository.findById(user.getId())
+                .orElseThrow(() -> new BadRequestException("User not found"));
         if (clothes.getUser().getId() == user.getId()) {
-            int pictureId = clothes.getPicture().getId();
-            clothes.setPicture(null);
-            pictureService.deleteById(pictureId);
+            pictureService.deleteById(clothes.getPicture().getId());
             clothes.setUser(null);
             user.getClothes().remove(clothes);
+            System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
             clothesRepository.deleteById(id);
         }
     }
@@ -92,9 +89,7 @@ public class ClothesServiceImpl implements ClothesService {
         picture.setClothes(clothes);
         user.addClothes(clothes);
         Clothes addedClothes = clothesRepository.save(clothes);
-        return new ClothesGet(addedClothes.getId(), addedClothes.getName(), addedClothes.getType(),
-                addedClothes.getColor(), addedClothes.getSize(), addedClothes.getCreatedAt(),
-                addedClothes.isClean(), addedClothes.getPicture().getUrl(), addedClothes.getUser().getEmail());
+        return new ClothesGet(addedClothes);
     }
 
 }
