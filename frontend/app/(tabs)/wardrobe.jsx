@@ -12,7 +12,7 @@ import AddButton from "../../components/features/wardrobe/AddButton";
 import { router } from "expo-router";
 import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
 
-import { getClothes } from "../../lib/authorization/clothes";
+import { getClothes } from "../../lib/clothes/clothes";
 import { TokenContext } from "../TokenContext";
 
 const FormData = global.FormData;

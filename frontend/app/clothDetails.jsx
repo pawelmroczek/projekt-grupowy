@@ -10,7 +10,7 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 
 import { X, Pencil } from "lucide-react-native";
-import { clothesDeleting } from "../lib/authorization/clothes";
+import { clothesDeleting } from "../lib/clothes/clothes";
 import { TokenContext } from "./TokenContext";
 
 const clothDetails = () => {

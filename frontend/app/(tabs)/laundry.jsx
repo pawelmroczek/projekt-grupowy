@@ -4,6 +4,7 @@ import WardrobeStatus from "../../components/features/laundry/WardrobeStatus";
 import PlanLaundryButton from "../../components/features/laundry/PlanLaundryButton";
 import LaundryHistory from "../../components/features/laundry/LaundryHistory";
 import SuggestedLaundry from "../../components/features/laundry/SuggestedLaundry";
+import MakeLaundryButton from "../../components/features/laundry/MakeLaundryButton";
 
 const Laundry = () => {
   return (
@@ -13,6 +14,7 @@ const Laundry = () => {
         <PlanLaundryButton />
         <WardrobeStatus />
         <LaundryHistory />
+        <MakeLaundryButton />
       </View>
     </SafeAreaView>
   );

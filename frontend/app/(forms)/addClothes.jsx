@@ -12,7 +12,7 @@ import FormField from "../../components/common/FormField";
 import {
   Shirt
 } from "lucide-react-native";
-import { clothesSending, clothesEditing } from "../../lib/authorization/clothes";
+import { clothesSending, clothesEditing } from "../../lib/clothes/clothes";
 import { router, useLocalSearchParams} from "expo-router";
 
 import AddPhoto from "../../components/features/wardrobe/AddPhoto";
