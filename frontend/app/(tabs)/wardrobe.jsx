@@ -27,7 +27,7 @@ const Wardrobe = () => {
     React.useCallback(() => {
       const fetchClothes = async () => {
         const clothesData = await getClothes(token);
-        //console.log("Pobrane dane:", clothesData);
+        console.log("Pobrane dane ubrań:", clothesData);
         if (clothesData) {
           setClothes(clothesData);
         }
