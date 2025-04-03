@@ -14,16 +14,18 @@ import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
 
 import { getClothes } from "../../lib/clothes/clothes";
 import { TokenContext } from "../TokenContext";
+import { useLocalSearchParams } from "expo-router";
+import  { useMemo } from "react";
 
 const FormData = global.FormData;
 
 const Wardrobe = () => {
+  const filters = useLocalSearchParams();
   const [displayMode, setDisplayMode] = useState(false);
   //const [clothes, setClothes] = useState([]);
   
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
-
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
