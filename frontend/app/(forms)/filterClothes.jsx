@@ -1,14 +1,23 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { router } from "expo-router";
 import { X } from "lucide-react-native";
+import { useLocalSearchParams } from "expo-router";
+import { useEffect } from "react";  
 
 const FilterClothes = () => {
+    const params = useLocalSearchParams(); // Pobieramy parametry z routera
+
+    // Inicjalizujemy filters na podstawie parametrów lub domyślnych wartości
     const [filters, setFilters] = useState({
-        sortBy: "Newest",
-        size: [],
-        cleanliness: "all"
+        sortBy: params.sortBy || "Newest",
+        size: params.size ? params.size.split(",") : [],
+        cleanliness: params.cleanliness || "all",
     });
+    
+    useEffect(() => {  
+        console.log(filters);
+    }, [filters]);
 
     const toggleSort = (option) => {
         setFilters(prev => ({ ...prev, sortBy: prev.sortBy === option ? null : option }));

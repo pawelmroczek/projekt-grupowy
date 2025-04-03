@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
@@ -15,17 +15,50 @@ import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
 import { getClothes } from "../../lib/clothes/clothes";
 import { TokenContext } from "../TokenContext";
 import { useLocalSearchParams } from "expo-router";
-import  { useMemo } from "react";
+import { useMemo } from "react";
 
 const FormData = global.FormData;
 
 const Wardrobe = () => {
-  const filters = useLocalSearchParams();
+  const rawFilters = useLocalSearchParams();
+  const filters = useMemo(() => rawFilters, [JSON.stringify(rawFilters)]);
+
   const [displayMode, setDisplayMode] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   //const [clothes, setClothes] = useState([]);
   
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
+
+  const filteredClothes = useMemo(() => {
+    console.log("Filtering clothes...");
+    let result = clothes;
+    result = selectedCategory ? result.filter((item) => item.type === selectedCategory) : result;
+    result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+    if (Object.keys(filters).length === 0) {
+      return result;
+    }
+  
+    result = filters.cleanliness === "all" 
+      ? result 
+      : result.filter((item) => item.clean === (filters.cleanliness === "clean"));
+  
+    result = filters.size.length > 0 ? result.filter((item) => filters.size.includes(item.size)) : result;
+  
+    if (filters.sortBy) {
+      result = [...result]; // Tworzymy kopię, aby uniknąć mutacji
+      if (filters.sortBy === "Newest") {
+        result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      } else if (filters.sortBy === "Oldest") {
+        result.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      } else if (filters.sortBy === "Alphabetically") {
+        result.sort((a, b) => a.name.localeCompare(b.name));
+      }
+    }
+  
+    return result;
+  }, [filters, clothes, selectedCategory]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -43,9 +76,9 @@ const Wardrobe = () => {
 
   return (
     <>
-      <SearchBarWardrobe displayMode={displayMode} onDisplayPress={setDisplayMode}/>
+      <SearchBarWardrobe displayMode={displayMode} onDisplayPress={setDisplayMode} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} filters={filters}/>
       <FlatList
-        data={clothes}
+        data={filteredClothes}
         key={displayMode ? "single" : "double"}
         numColumns={displayMode ? 1 : 2}
         renderItem={renderItem}
