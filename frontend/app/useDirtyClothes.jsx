@@ -1,31 +1,21 @@
 import { useState, useEffect, useContext } from "react";
-import { getClothes } from "../lib/authorization/clothes";
+import { getClothes } from "../lib/clothes/clothes";
 import { TokenContext } from "./TokenContext";
 
 const useDirtyClothes = () => {
   const [dirtyClothes, setDirtyClothes] = useState(null);
   const { token } = useContext(TokenContext);
+  const { clothes } = useContext(TokenContext);
 
   useEffect(() => {
-    const fetchDirtyClothes = async () => {
-      if (!token) return;
-      try {
-        const clothesData = await getClothes(token);
-        const dirty = (clothesData || []).filter(item => !item.clean);
+    const dirty = (clothes || []).filter(item => !item.clean);
         
-        if (dirty.length === 0) {
-          console.log("Brak brudnych ubrań do wyświetlenia.");
-        }
-
-        setDirtyClothes(dirty);
-      } catch (error) {
-        console.error("Błąd podczas pobierania ubrań:", error);
+    if (dirty.length === 0) {
+        console.log("Brak brudnych ubrań do wyświetlenia.");
       }
-    };
 
-    fetchDirtyClothes();
-  }, [token]);
-
+    setDirtyClothes(dirty);
+  }, [clothes]); // Efekt odpala się tylko, gdy zmienią się `clothes`
   return dirtyClothes;
 };
 

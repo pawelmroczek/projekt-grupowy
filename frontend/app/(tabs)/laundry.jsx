@@ -5,6 +5,7 @@ import PlanLaundryButton from "../../components/features/laundry/PlanLaundryButt
 import LaundryHistory from "../../components/features/laundry/LaundryHistory";
 import SuggestedLaundry from "../../components/features/laundry/SuggestedLaundry";
 import DirtyClothes from "../../components/features/laundry/DirtyClothes";
+import MakeLaundryButton from "../../components/features/laundry/MakeLaundryButton";
 
 {/*
 
@@ -23,8 +24,8 @@ const Laundry = () => {
     <SafeAreaView>
       <View className="p-2">
         <SuggestedLaundry />
+        <MakeLaundryButton />
         <PlanLaundryButton />
-        <WardrobeStatus />
         <DirtyClothes />
         <LaundryHistory />
       </View>

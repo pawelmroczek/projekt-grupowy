@@ -19,6 +19,7 @@ import AddPhoto from "../../components/features/wardrobe/AddPhoto";
 import ColorSelector from "../../components/features/wardrobe/ColorSelector";
 import { TokenContext } from "../TokenContext";
 import VerticalSelector from "../../components/common/VerticalSelector";
+import { getClothes } from "../../lib/clothes/clothes";
 
 export default function index() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -44,6 +45,7 @@ export default function index() {
   const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
   const { token, setToken } = useContext(TokenContext);
+  const { clothes, setClothes } = useContext(TokenContext);
 
   const [selectedColor, setSelectedColor] = useState("idle");
   const [selectedSize, setSelectedSize] = useState("idle");
@@ -92,11 +94,15 @@ export default function index() {
       formData.append("id", params.id);
       //console.log("Wysyłam formularz");
       const serverresponse = await clothesEditing(formData, token);
+      const clothesData = await getClothes(token);
+      setClothes(clothesData);
       router.push("/wardrobe");
     }
     else{
       //console.log("Wysyłam formularz");
       const serverresponse = await clothesSending(formData, token);
+      const clothesData = await getClothes(token);
+      setClothes(clothesData);
       router.push("/wardrobe");
     }
   };

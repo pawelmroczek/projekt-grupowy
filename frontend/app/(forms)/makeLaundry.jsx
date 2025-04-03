@@ -1,24 +1,85 @@
-import { View, Text, TouchableOpacity} from "react-native";
-import React from "react";
-import { router } from "expo-router";
+import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import { useLocalSearchParams } from "expo-router";
+import useDirtyClothes from "../useDirtyClothes";
 
+const makeLaundry = () => {
+  const [selectedColor, setSelectedColor] = useState(null);
+  let dirtyClothes = useDirtyClothes() || [];
+  const params = useLocalSearchParams();
+  const screenWidth = Dimensions.get("window").width;
 
-const makeLaundry = ({}) => {
+  useEffect(() => {
+    if (Object.keys(params).length > 0) {
+      setSelectedColor(params.color);
+    }
+  }, []);
 
-    const [selectColor, setSelectColor] = React.useState(null);
-    const params = useLocalSearchParams();
-      useEffect(() => {
-        //console.log(params);
-        if (Object.keys(params).length > 0) {
-          setSelectColor(params.color);
-        }
-      }, []);
+  dirtyClothes = dirtyClothes.filter((item) => item.color === selectedColor);
 
-    return (
-        <View className="flex-1 bg-white p-6">
-            
-        </View>
+  const [selected, setSelected] = useState([]);
+
+  const handleSelect = (id) => {
+    setSelected((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
+  };
+
+  return (
+    <View className="flex-1 items-center justify-center">
+      <Text className="text-2xl font-bold mt-12 mb-2">Wybierz brudne ubrania</Text>
+      <ScrollView 
+      contentContainerStyle={{ alignItems: "center", paddingVertical: 20, paddingHorizontal: 10 }}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      >
+        <View className="flex-row flex-wrap justify-center">
+          {dirtyClothes.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              className={`rounded-xl p-2 border-2 m-2 ${
+                selected.includes(item.id)
+                  ? "border-secondary-300"
+                  : "bg-white-200 border-gray-200"
+              }`}
+              onPress={() => handleSelect(item.id)}
+            >
+              <Image
+                source={{ uri: item.picture }}
+                style={{
+                  width: screenWidth * 0.8, // 90% szerokości ekranu
+                  height: screenWidth * 0.8, // Przykładowy stosunek wysokości (dostosuj według potrzeb)
+                  resizeMode: "contain",
+                  borderRadius: 10,
+                }}
+              />
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+
+      <View className="flex-row justify-center space-x-4 mt-4 mb-4">
+        <TouchableOpacity
+          className="bg-primary-100 rounded-lg p-4"
+          onPress={() => {
+            console.log("Selected items for laundry:", selected);
+          }}
+        >
+          <Text className="text-white text-lg font-bold">Zrób pranie</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          className="bg-red-500 rounded-lg p-4"
+          onPress={() => {
+            // Handle cancel action
+          }}
+        >
+          <Text className="text-white text-lg font-bold">Anuluj</Text>
+        </TouchableOpacity>
+      </View>
+
+    </View>
+  );
 };
 
 export default makeLaundry;

@@ -19,27 +19,11 @@ const FormData = global.FormData;
 
 const Wardrobe = () => {
   const [displayMode, setDisplayMode] = useState(false);
-  const [clothes, setClothes] = useState([]);
+  //const [clothes, setClothes] = useState([]);
   
   const { token, setToken } = useContext(TokenContext);
-  
-  useFocusEffect(
-    React.useCallback(() => {
-      const fetchClothes = async () => {
-        const clothesData = await getClothes(token);
-        console.log("Pobrane dane ubrań:", clothesData);
-        if (clothesData) {
-          setClothes(clothesData);
-        }
-      };
-      fetchClothes();
-  
-      return () => {
-        // Opcjonalnie kod do czyszczenia, jeśli ekran opuścisz
-        setClothes([]);
-      };
-    }, [])
-  );
+  const { clothes, setClothes } = useContext(TokenContext);
+
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
