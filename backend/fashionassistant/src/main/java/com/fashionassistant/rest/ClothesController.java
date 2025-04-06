@@ -20,6 +20,11 @@ public class ClothesController {
         return clothesService.addClothes(clothes);
     }
 
+    @PostMapping("/toggleStatus")
+    public List<ClothesGet> toggleStatus(@RequestBody List<Integer> ids) {
+        return clothesService.toggleStatus(ids);
+    }
+
     @GetMapping
     public List<ClothesGet> getAllClothes() {
         return clothesService.getClothes();

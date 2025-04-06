@@ -65,9 +65,24 @@ public class ClothesServiceImpl implements ClothesService {
             pictureService.deleteById(clothes.getPicture().getId());
             clothes.setUser(null);
             user.getClothes().remove(clothes);
-            System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
             clothesRepository.deleteById(id);
         }
+    }
+
+    @Override
+    public List<ClothesGet> toggleStatus(List<Integer> ids) {
+        List<ClothesGet> response = new ArrayList<>();
+        for (Integer id : ids) {
+            Clothes clothes = clothesRepository.findById(id)
+                    .orElseThrow(() -> new BadRequestException("Clothes not found"));
+            User user = authService.getCurrentUser();
+            if (clothes.getUser().getId() == user.getId()) {
+                clothes.setClean(!clothes.isClean());
+                Clothes changedClothes = clothesRepository.save(clothes);
+                response.add(new ClothesGet(changedClothes));
+            }
+        }
+        return response;
     }
 
     @Override
