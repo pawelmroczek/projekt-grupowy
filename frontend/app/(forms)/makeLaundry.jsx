@@ -1,10 +1,16 @@
 import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState, useContext } from "react";
+import { useLocalSearchParams, router } from "expo-router";
 import useDirtyClothes from "../useDirtyClothes";
+import { toggleClean } from "../../lib/clothes/clothes";
+import { TokenContext } from "../TokenContext";
+import { getClothes } from "../../lib/clothes/clothes";
 
 const makeLaundry = () => {
   const [selectedColor, setSelectedColor] = useState(null);
+  const { token, setToken } = useContext(TokenContext);
+  const {clothes, setClothes} = useContext(TokenContext);
+
   let dirtyClothes = useDirtyClothes() || [];
   const params = useLocalSearchParams();
   const screenWidth = Dimensions.get("window").width;
@@ -24,6 +30,13 @@ const makeLaundry = () => {
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
+
+  const handleSubmit = async () => {
+    const serverresponse = await toggleClean(selected, token);
+    const clothesData = await getClothes(token);
+    setClothes(clothesData);
+    router.push("/laundry");
+  }
 
   return (
     <View className="flex-1 items-center justify-center">
@@ -62,7 +75,7 @@ const makeLaundry = () => {
         <TouchableOpacity
           className="bg-primary-100 rounded-lg p-4"
           onPress={() => {
-            console.log("Selected items for laundry:", selected);
+            handleSubmit();
           }}
         >
           <Text className="text-white text-lg font-bold">Zrób pranie</Text>
@@ -71,7 +84,7 @@ const makeLaundry = () => {
         <TouchableOpacity
           className="bg-red-500 rounded-lg p-4"
           onPress={() => {
-            // Handle cancel action
+            router.push("/laundry");
           }}
         >
           <Text className="text-white text-lg font-bold">Anuluj</Text>

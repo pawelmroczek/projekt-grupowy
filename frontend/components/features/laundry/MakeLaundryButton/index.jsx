@@ -16,7 +16,6 @@ export default function MakeLaundryButton() {
 
   const handleSubmit = () => {
     setModalVisible(false);
-    console.log("selectedColor", selectedColor);
     router.push({
       pathname: "/makeLaundry",
       params: { color: selectedColor },

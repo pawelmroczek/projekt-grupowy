@@ -87,3 +87,22 @@ export const clothesSending = async (formData, token) => {
       console.error('Błąd:', error);
     }
   }
+
+  export const toggleClean = async (ids, token) => {
+    try {
+      const response = await fetch(ipAddress+"/fashion/clothes/toggleStatus", {
+          method: "POST",
+          headers: {
+              "Authentication": `Bearer ${token}`,
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(ids),
+      });
+      if (!response.ok) {
+          throw new Error(`HTTP status ${response.status}`);
+      }
+      return 1;
+    } catch (error) {
+      console.error('Błąd:', error);
+    }
+  }

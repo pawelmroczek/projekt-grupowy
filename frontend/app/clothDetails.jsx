@@ -18,7 +18,7 @@ import { getClothes } from "../lib/clothes/clothes";
 const clothDetails = () => {
   const cloth = useLocalSearchParams();
   const { token, setToken } = useContext(TokenContext);
-  const [clothes, setClothes] = useContext(TokenContext);
+  const {clothes, setClothes} = useContext(TokenContext);
 
   const handleDelete = async (id) => {
     console.log("Usuwam ubranie o id:", id);
