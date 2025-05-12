@@ -1,4 +1,4 @@
-import { ipAddress, ipAddressNginx } from "./ip";
+import { ipAddress, ipAddressNginx } from "../ipAddress.js";
 
 export const loginUser = async (email, password) => {
   const body = {

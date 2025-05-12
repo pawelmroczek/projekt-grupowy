@@ -14,4 +14,6 @@ public interface ClothesService {
     ClothesGet updateClothes(ClothesUpdate clothes);
 
     void deleteClothesById(int id);
+
+    List<ClothesGet> toggleStatus(List<Integer> ids);
 }

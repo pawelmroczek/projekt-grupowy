@@ -33,7 +33,21 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     public void deleteById(int id) {
+        Picture picture = pictureRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Picture not found"));
+        try {
+            deleteFileFromServer(picture);
+        } catch (IOException exc) {
+            throw new BadRequestException("Problem with file");
+        }
         pictureRepository.deleteById(id);
+    }
+
+    private void deleteFileFromServer(Picture picture) throws IOException {
+        String uploadDirectory = "/app/uploads/";
+        String fileName = picture.getName();
+        Path path = Paths.get(uploadDirectory + fileName);
+        Files.delete(path);
     }
 
     private String saveFileToServer(MultipartFile file) throws IOException {

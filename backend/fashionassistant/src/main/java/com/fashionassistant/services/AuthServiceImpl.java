@@ -41,6 +41,6 @@ public class AuthServiceImpl implements AuthService {
         if (authentication != null && authentication.isAuthenticated()) {
             return (User) authentication.getPrincipal();
         }
-        return null;
+        throw new BadRequestException("User not found");
     }
 }

@@ -14,7 +14,7 @@ import { router } from "expo-router";
 import { Search, LayoutGrid, SlidersHorizontal, X } from "lucide-react-native";
 import VerticalSelector from "../VerticalSelector";
 
-const SearchBarWardrobe = ({ displayMode, onDisplayPress }) => {
+const SearchBarWardrobe = ({ displayMode, onDisplayPress, selectedCategory, setSelectedCategory, filters }) => {
   const [searchMode, setSearchMode] = useState(false);
   const [searchText, setSearchText] = useState("");
   
@@ -28,8 +28,6 @@ const SearchBarWardrobe = ({ displayMode, onDisplayPress }) => {
     "Sukienka",
     "Spódnica",
   ];
-
-  const [selectedCategory, setSelectedCategory] = useState(null);
 
   return (
     <SafeAreaView style={{ backgroundColor: "white" }}>
@@ -55,7 +53,9 @@ const SearchBarWardrobe = ({ displayMode, onDisplayPress }) => {
                 <LayoutGrid className="text-black" size={30} />
               </TouchableOpacity>
               <View className="flex-row gap-4">
-                <TouchableOpacity onPress={() => router.push("/filterClothes")}>
+                <TouchableOpacity onPress={() => 
+                router.push({ pathname: "/filterClothes", params: filters })
+              }>
                   <SlidersHorizontal className="text-black" size={30} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => setSearchMode(true)}>

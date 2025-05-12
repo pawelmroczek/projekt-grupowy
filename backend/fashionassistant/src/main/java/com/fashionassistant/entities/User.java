@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private String email;
     @Column(name = "password")
     private String password;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Clothes> clothes;
 
     @Override

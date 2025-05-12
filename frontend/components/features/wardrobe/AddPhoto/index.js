@@ -4,7 +4,7 @@ import { Camera, ImagePlus, Images, Trash2 } from "lucide-react-native";
 import {
   captureImage,
   selectImageFromLibrary,
-} from "../../../../lib/authorization/picture_logic";
+} from "../../../../lib/clothes/picture_logic";
 
 export default function AddPhoto({
   imageUri,
