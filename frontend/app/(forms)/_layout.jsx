@@ -3,10 +3,11 @@ import { Stack } from "expo-router";
 
 const formsLayout = () => {
   return (
-    <Stack >
+    <Stack>
       <Stack.Screen name="addClothes" options={{ headerShown: false }} />
       <Stack.Screen name="filterClothes" options={{ headerShown: false }} />
       <Stack.Screen name="makeLaundry" options={{ headerShown: false }} />
+      <Stack.Screen name="addToLaundry" options={{ headerShown: false }} />
     </Stack>
   );
 };
