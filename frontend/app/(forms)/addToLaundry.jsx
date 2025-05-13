@@ -16,7 +16,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { TokenContext } from "../TokenContext";
 import VerticalSelector from "../../components/common/VerticalSelector";
 import { useFocusEffect } from "@react-navigation/core";
-import { getClothes } from "../../lib/authorization/clothes";
+import { getClothes, toggleClean } from "../../lib/clothes/clothes";
 
 export default function index() {
   const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
@@ -32,25 +32,55 @@ export default function index() {
   ];
 
   const [clothes, setClothes] = useState([]);
+  const [filteredClothes, setFilteredClothes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
 
   const [selectedClothes, setSelectedClothes] = useState([]);
 
-  // const { token, setToken } = useContext(TokenContext);
-  const token =
-    "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzcG9kbmllQGdtYWlsLmNvbSIsImlhdCI6MTc0Mzc5NTE2MSwiZXhwIjoxNzQzNzk4NzYxfQ.xle8WKCzbk3NkG5QcaMbqrOgZ1votlEvRI148BAChOjmN_tGiaJeYRtlAwYYj7ew";
-  console.log("Token:", token);
+  const { token, setToken } = useContext(TokenContext);
+  
+  const handleSubmit =()=>{
+
+    const selectedClothesIds = selectedClothes.map((item) => item.id);
+
+    toggleClean(selectedClothesIds, token).then((response) => {
+      if (response) {
+        
+        router.push("/laundry");
+      } else {
+        console.error("Error fetching clothes:", response.status);
+      }
+    })
+  }
+  
   useEffect(() => {
     getClothes(token).then((response) => {
       if (response) {
-        console.log("Clothes:", response);
-        setClothes(response);
+        const cleanClothes = response.filter((item) => item.clean === true);
+        setClothes(cleanClothes);
+
       } else {
         console.error("Error fetching clothes:", response.status);
       }
     });
   }, [token]);
+
+  useEffect(() => {
+    if (selectedCategory || selectedColor) {
+      const filtered = clothes.filter((item) => {
+        const matchesCategory =
+          selectedCategory === null || item.type === selectedCategory;
+        const matchesColor =
+          selectedColor === null || item.color === selectedColor;
+
+        return matchesCategory && matchesColor;
+      });
+      setFilteredClothes(filtered);
+    }
+  }, [selectedCategory, selectedColor,clothes]);
+
+  
 
   const renderItem = ({ item }) => {
     const isSelected = selectedClothes.includes(item);
@@ -98,7 +128,7 @@ export default function index() {
             />
           </View>
           <FlatList
-            data={clothes}
+            data={filteredClothes}
             key={"double"}
             numColumns={2}
             renderItem={renderItem}
@@ -110,7 +140,7 @@ export default function index() {
         </View>
         <TouchableOpacity
           onPress={() => {
-            router.push("/laundry");
+            handleSubmit();
           }}
           className="bg-primary-100 w-[95%] p-2 px-8 rounded-md mb-4"
         >
