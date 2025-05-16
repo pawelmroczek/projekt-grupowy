@@ -12,13 +12,14 @@ import FormField from "../../components/common/FormField";
 import {
   Shirt
 } from "lucide-react-native";
-import { clothesSending, clothesEditing } from "../../lib/authorization/authorization";
+import { clothesSending, clothesEditing } from "../../lib/clothes/clothes";
 import { router, useLocalSearchParams} from "expo-router";
 
 import AddPhoto from "../../components/features/wardrobe/AddPhoto";
 import ColorSelector from "../../components/features/wardrobe/ColorSelector";
 import { TokenContext } from "../TokenContext";
 import VerticalSelector from "../../components/common/VerticalSelector";
+import { getClothes } from "../../lib/clothes/clothes";
 
 export default function index() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -44,6 +45,7 @@ export default function index() {
   const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
   const { token, setToken } = useContext(TokenContext);
+  const { clothes, setClothes } = useContext(TokenContext);
 
   const [selectedColor, setSelectedColor] = useState("idle");
   const [selectedSize, setSelectedSize] = useState("idle");
@@ -67,7 +69,7 @@ export default function index() {
       setImageName(".jpg");
       setImageType("image/jpeg");
       setCleanStatus(params.clean);
-      console.log("Wczytano parametry");
+      //console.log("Wczytano parametry");
     }
   }, []);
 
@@ -83,17 +85,24 @@ export default function index() {
     formData.append("size", selectedSize);
     formData.append("color", selectedColor);
     formData.append("clean", cleanStatus);
-    console.log(formData);
-    console.log(editing);
+    //console.log(formData);
+    console.log(formData.get("file").uri);
+    console.log(formData.get("file").name);
+    console.log(formData.get("file").type);
+    //console.log(editing);
     if(editing){
       formData.append("id", params.id);
-      console.log("Wysyłam formularz");
+      //console.log("Wysyłam formularz");
       const serverresponse = await clothesEditing(formData, token);
+      const clothesData = await getClothes(token);
+      setClothes(clothesData);
       router.push("/wardrobe");
     }
     else{
-      console.log("Wysyłam formularz");
+      //console.log("Wysyłam formularz");
       const serverresponse = await clothesSending(formData, token);
+      const clothesData = await getClothes(token);
+      setClothes(clothesData);
       router.push("/wardrobe");
     }
   };
@@ -155,7 +164,7 @@ export default function index() {
             <View className="items-center   py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4 ">
               <TouchableOpacity
                 onPress={() => {
-                  console.log("submit");
+                  //console.log("submit");
                   handleSubmit();
                 }}
                 className="px-4 py-2 bg-primary-100 rounded-lg"

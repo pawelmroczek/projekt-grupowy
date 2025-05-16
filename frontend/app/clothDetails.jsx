@@ -10,16 +10,21 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 
 import { X, Pencil } from "lucide-react-native";
-import { clothesDeleting } from "../lib/authorization/authorization";
+import { clothesDeleting } from "../lib/clothes/clothes";
 import { TokenContext } from "./TokenContext";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { getClothes } from "../lib/clothes/clothes";
 
 const clothDetails = () => {
   const cloth = useLocalSearchParams();
   const { token, setToken } = useContext(TokenContext);
+  const {clothes, setClothes} = useContext(TokenContext);
 
   const handleDelete = async (id) => {
     console.log("Usuwam ubranie o id:", id);
     const serverresponse = await clothesDeleting(id, token);
+    const clothesData = await getClothes(token);
+    setClothes(clothesData);
     router.push("/wardrobe");
   };
 

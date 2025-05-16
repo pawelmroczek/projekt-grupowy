@@ -11,6 +11,7 @@ import { CircleX } from "lucide-react-native";
 import ErrorText from "../../components/common/ErrorText";
 import Link from "../../components/common/Link";
 import { TokenContext } from "../TokenContext";
+import { getClothes } from "../../lib/clothes/clothes";
 
 const SignIn = () => {
   const [loginStatus, setLoginStatus] = useState(false);
@@ -21,6 +22,7 @@ const SignIn = () => {
   });
 
   const { token, setToken } = useContext(TokenContext);
+  const { clothes, setClothes } = useContext(TokenContext);
 
   function validateForm()
   {
@@ -55,6 +57,8 @@ const SignIn = () => {
       
       if (token) {
         setToken(token);
+        const clothesData = await getClothes(token);
+        setClothes(clothesData);
         router.push("/home");
       } else {
         console.log("❌ Błąd:",data.message.message);

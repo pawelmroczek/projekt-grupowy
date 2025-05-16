@@ -1,9 +1,4 @@
-import {
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import backgroundImage from "../assets/backgrounds/initialBackground.png";
 import logo from "../assets/logo.png";
 import { router } from "expo-router";
@@ -25,7 +20,8 @@ export default function App() {
         </Text>
         <TouchableOpacity
           onPress={() => router.push("/sign-in")}
-          // onPress={() => router.push("/addClothes")}
+          //onPress={() => router.push("/laundry")}
+          // onPress={() => router.push("/addToLaundry")}
           className="bg-primary-100 p-2 px-8 rounded-md mt-4"
         >
           <Text className="text-white text-xl font-pregular ">ZALOGUJ SIĘ</Text>
@@ -39,9 +35,6 @@ export default function App() {
           </TouchableOpacity>
         </View>
       </View>
-      
     </InitialBackground>
-
-    
   );
 }

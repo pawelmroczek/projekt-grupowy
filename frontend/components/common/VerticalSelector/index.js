@@ -9,7 +9,7 @@ const VerticalSelector = ({ options, value, setValue }) => {
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{ paddingHorizontal: 0 }}
     >
-      <View className="flex-row space-x-2 my-2">
+      <View className="flex-row space-x-2 m-2">
         {options.map((opt) => (
           <TouchableOpacity
             key={opt}
