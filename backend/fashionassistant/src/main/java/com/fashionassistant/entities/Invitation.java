@@ -23,4 +23,6 @@ public class Invitation {
     @ManyToOne
     @JoinColumn(name = "toUserId")
     private User toUser;
+    @Column(name = "type")
+    private String type;
 }
