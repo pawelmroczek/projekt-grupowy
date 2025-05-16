@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +25,9 @@ public class UserServiceImpl implements UserService {
                 userCreate.username(),
                 userCreate.email(),
                 passwordEncoder.encode(userCreate.password()),
-                new ArrayList<Clothes>()
+                new ArrayList<Clothes>(),
+                new HashSet<>(),
+                null
         );
         userRepository.save(user);
         return authService.logIn(new UserAuth(userCreate.email(), userCreate.password()));
