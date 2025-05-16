@@ -21,6 +21,7 @@ import { getClothes, toggleClean } from "../../lib/clothes/clothes";
 export default function index() {
   const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
   const typeOptions = [
+    "wszystkie",
     "Koszulka",
     "Koszula",
     "Spodnie",
@@ -31,7 +32,6 @@ export default function index() {
     "Spódnica",
   ];
 
-  const [clothes, setClothes] = useState([]);
   const [filteredClothes, setFilteredClothes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
@@ -39,27 +39,31 @@ export default function index() {
   const [selectedClothes, setSelectedClothes] = useState([]);
 
   const { token, setToken } = useContext(TokenContext);
-  
-  const handleSubmit =()=>{
+  const { clothes, setClothes } = useContext(TokenContext);
 
+  const handleSubmit = () => {
     const selectedClothesIds = selectedClothes.map((item) => item.id);
 
     toggleClean(selectedClothesIds, token).then((response) => {
       if (response) {
-        
-        router.push("/laundry");
+        getClothes(token).then((response) => {
+          if (response) {
+            setClothes(response);
+            router.push("/laundry");
+          } else {
+            console.error("Error fetching clothes:", response.status);
+          }
+        });
       } else {
         console.error("Error fetching clothes:", response.status);
       }
-    })
-  }
-  
+    });
+  };
+
   useEffect(() => {
     getClothes(token).then((response) => {
       if (response) {
-        const cleanClothes = response.filter((item) => item.clean === true);
-        setClothes(cleanClothes);
-
+        setClothes(response);
       } else {
         console.error("Error fetching clothes:", response.status);
       }
@@ -67,20 +71,21 @@ export default function index() {
   }, [token]);
 
   useEffect(() => {
-    if (selectedCategory || selectedColor) {
-      const filtered = clothes.filter((item) => {
-        const matchesCategory =
-          selectedCategory === null || item.type === selectedCategory;
-        const matchesColor =
-          selectedColor === null || item.color === selectedColor;
+    if (clothes) {
+      
+      let filtered = clothes.filter((item) => item.clean);
 
-        return matchesCategory && matchesColor;
-      });
+      if (selectedCategory && selectedCategory !== "wszystkie") {
+        filtered = filtered.filter((item) => item.type === selectedCategory);
+      }
+
+      if (selectedColor && selectedColor !== "wszystkie") {
+        filtered = filtered.filter((item) => item.color === selectedColor);
+      }
+
       setFilteredClothes(filtered);
     }
-  }, [selectedCategory, selectedColor,clothes]);
-
-  
+  }, [selectedCategory, selectedColor, clothes]);
 
   const renderItem = ({ item }) => {
     const isSelected = selectedClothes.includes(item);
@@ -162,7 +167,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
     borderBlockColor: "#264653",
     borderWidth: 1,
-    
   },
   item: {
     backgroundColor: "#fff",
