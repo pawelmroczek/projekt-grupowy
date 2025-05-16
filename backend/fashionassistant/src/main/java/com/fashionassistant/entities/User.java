@@ -42,6 +42,10 @@ public class User implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "householdId")
     private Household household;
+    @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Invitation> sentInvitations;
+    @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Invitation> receivedInvitations;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -73,5 +77,28 @@ public class User implements UserDetails {
             clothes = new ArrayList<>();
         }
         clothes.add(newClothes);
+    }
+
+    public void addSentInvitation(Invitation invitation) {
+        if (invitation == null) {
+            sentInvitations = new ArrayList<>();
+        }
+        sentInvitations.add(invitation);
+    }
+
+    public void addReceivedInvitation(Invitation invitation) {
+        if (invitation == null) {
+            receivedInvitations = new ArrayList<>();
+        }
+        receivedInvitations.add(invitation);
+    }
+
+    public void deleteInvitation(Invitation invitation) {
+        if (sentInvitations != null) {
+            sentInvitations.remove(invitation);
+        }
+        if (receivedInvitations != null) {
+            receivedInvitations.remove(invitation);
+        }
     }
 }

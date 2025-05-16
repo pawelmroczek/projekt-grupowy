@@ -4,10 +4,7 @@ import com.fashionassistant.entities.InvitationCreate;
 import com.fashionassistant.entities.InvitationGet;
 import com.fashionassistant.services.InvitationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("fashion/invitations")
@@ -18,5 +15,15 @@ public class InvitationController {
     @PostMapping("/send")
     public InvitationGet sendInvitation(@RequestBody InvitationCreate invitationCreate) {
         return invitationService.sendInvitation(invitationCreate);
+    }
+
+    @PostMapping("/accept/{id}")
+    public void acceptInvitation(@PathVariable int id) {
+        invitationService.acceptInvitation(id);
+    }
+
+    @PostMapping("/reject/{id}")
+    public void rejectInvitation(@PathVariable int id) {
+        invitationService.rejectInvitation(id);
     }
 }

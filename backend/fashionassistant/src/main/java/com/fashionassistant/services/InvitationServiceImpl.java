@@ -28,7 +28,34 @@ public class InvitationServiceImpl implements InvitationService {
         }
         Invitation invitation = new Invitation(0, fromUser, toUser, invitationCreate.type());
         invitation = invitationRepository.save(invitation);
+        toUser.addReceivedInvitation(invitation);
+        fromUser.addSentInvitation(invitation);
         return new InvitationGet(invitation.getId(), invitation.getFromUser().getId(),
                 invitation.getToUser().getId(), invitation.getType());
+    }
+
+    @Override
+    public void acceptInvitation(int invitationId) {
+
+    }
+
+    @Override
+    public void rejectInvitation(int invitationId) {
+        Invitation invitation = invitationRepository.findById(invitationId)
+                .orElseThrow(() -> new NotFoundException("Invitation not found"));
+        User currentUser = authService.getCurrentUser();
+        if (currentUser.getId() != invitation.getToUser().getId() &&
+                currentUser.getId() != invitation.getFromUser().getId()) {
+            throw new BadRequestException("You don't have access to this invitation");
+        }
+        User fromUser = userRepository.findById(invitation.getFromUser().getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        User toUser = userRepository.findById(invitation.getToUser().getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        fromUser.deleteInvitation(invitation);
+        toUser.deleteInvitation(invitation);
+        invitation.setToUser(null);
+        invitation.setFromUser(null);
+        invitationRepository.deleteById(invitationId);
     }
 }
