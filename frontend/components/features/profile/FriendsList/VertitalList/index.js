@@ -1,11 +1,8 @@
 import { View, Text, ScrollView } from "react-native";
 import React from "react";
-import { CircleUser } from "lucide-react-native";
+import { CircleUser, UserX } from "lucide-react-native";
 
 export default function VerticalList({friends}) {
- 
-  
-
 
   return (
     <ScrollView
@@ -21,7 +18,10 @@ export default function VerticalList({friends}) {
         </View>
       ))}
       {friends.length === 0 && (
-        <Text className="text-center text-gray-500">Brak znajomych</Text>
+        <View className="p-4 items-center ">
+          <UserX size={30}  />
+          <Text className="text-lg">Brak znajomych</Text>
+        </View>
       )}
     </ScrollView>
   );

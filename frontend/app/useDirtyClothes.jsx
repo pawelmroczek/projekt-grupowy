@@ -12,7 +12,7 @@ const useDirtyClothes = () => {
         
     if (dirty.length === 0) {
         console.log("Brak brudnych ubrań do wyświetlenia.");
-      }
+    }
 
     setDirtyClothes(dirty);
   }, [clothes]); // Efekt odpala się tylko, gdy zmienią się `clothes`

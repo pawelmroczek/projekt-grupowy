@@ -5,9 +5,6 @@ import VerticalList from "./VertitalList";
 export default function FriendsList() {
 
   const people = [
-    { id: 1, name: "Jan" },
-    { id: 2, name: "Anna" },
-    { id: 3, name: "Piotr" },
   ];
 
   return (
