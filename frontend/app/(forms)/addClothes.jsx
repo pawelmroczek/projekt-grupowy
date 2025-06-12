@@ -86,14 +86,14 @@ export default function index() {
       const serverresponse = await clothesEditing(formData, token);
       const clothesData = await getClothes(token);
       setClothes(clothesData);
-      router.push("/wardrobe");
+      router.back()
     }
     else{
       //console.log("Wysyłam formularz");
       const serverresponse = await clothesSending(formData, token);
       const clothesData = await getClothes(token);
       setClothes(clothesData);
-      router.push("/wardrobe");
+      router.back();
     }
   };
 
@@ -165,7 +165,7 @@ export default function index() {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  router.push("/wardrobe");
+                  router.back();
                 }}
                 className="px-4 py-2 bg-red-500 rounded-lg"
               >

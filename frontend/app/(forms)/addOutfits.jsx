@@ -1,12 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { ArrowLeft, Scroll } from "lucide-react-native";
-import { ScrollView, Text, View } from "react-native";
+import { useState } from "react";
+import { ArrowLeft, CirclePlus } from "lucide-react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OutfitSelector from "../../components/features/outfits/OutfitSelector";
+import { router } from "expo-router";
 
 export default function index() {
   const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
 
+  const dictionary = {
+    "Nakrycie głowy": ["Nakrycie głowy"],
+    "Górna część": ["Koszulka", "Koszula", "Sweter", "Kurtka", "Sukienka"],
+    "Dolna część": ["Spodnie", "Spódnica"],
+    Buty: ["Buty"],
+    Akcesoria: ["Akcesoria"],
+  };
 
   const clothes = [
     {
@@ -83,11 +91,15 @@ export default function index() {
     },
   ];
 
+  const clothesFiltredByType = (type) => {
+    return clothes.filter((item) => dictionary[type].includes(item.type));
+  };
+
   const [selectedItems, setSelectedItems] = useState([]);
 
-  useEffect(() => {
-    console.log("Selected items:", selectedItems);
-  }, [selectedItems]);
+  const handleSave = () => {
+    console.log("Zapisz outfit", selectedItems);
+  };
 
   const handleSelect = (item, type) => {
     if (item.id === 0) {
@@ -112,39 +124,48 @@ export default function index() {
 
   return (
     <SafeAreaView className="p-2">
-      <View className="flex items-center flex-row ">
+      <TouchableOpacity
+        onPress={() => {router.back()}}
+        className="flex items-center flex-row z-30"
+      >
         <ArrowLeft size={15} color={"#909090"} />
         <Text className=""> Powrót</Text>
-      </View>
+      </TouchableOpacity>
       <Text className="text-2xl font-bold text-center mt-[-20px]">
         Dodaj Outfit
       </Text>
       <ScrollView>
         <OutfitSelector
-          clothes={clothes}
+          clothes={clothesFiltredByType("Nakrycie głowy")}
           title="Nakrycie głowy"
           onSelect={(item) => handleSelect(item, "Nakrycie głowy")}
         />
         <OutfitSelector
-          clothes={clothes}
+          clothes={clothesFiltredByType("Górna część")}
           title="Górna część"
           onSelect={(item) => handleSelect(item, "Górna część")}
         />
         <OutfitSelector
-          clothes={clothes}
+          clothes={clothesFiltredByType("Dolna część")}
           title="Dolna część"
           onSelect={(item) => handleSelect(item, "Dolna część")}
         />
         <OutfitSelector
-          clothes={clothes}
+          clothes={clothesFiltredByType("Buty")}
           title="Buty"
           onSelect={(item) => handleSelect(item, "Buty")}
         />
         <OutfitSelector
-          clothes={clothes}
+          clothes={clothesFiltredByType("Akcesoria")}
           title="Dodatki"
           onSelect={(item) => handleSelect(item, "Dodatki")}
         />
+        <TouchableOpacity onPress={() => handleSave()}>
+          <View className="bg-primary-200 rounded-lg p-2 m-2 items-center justify-center flex-row space-x-2">
+            <CirclePlus size={20} color={"#fff"} />
+            <Text className="text-lg text-white  text-center">Zapisz</Text>
+          </View>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );

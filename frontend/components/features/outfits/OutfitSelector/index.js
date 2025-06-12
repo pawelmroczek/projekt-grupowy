@@ -7,14 +7,31 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
-import { ImageOff, Shirt } from "lucide-react-native";
+import { useEffect, useRef, useState } from "react";
+import { CirclePlus, ImageOff, Shirt } from "lucide-react-native";
+import { router } from "expo-router";
 
 const fallbackImage =
-  "https://via.placeholder.com/100x100.png?text=Image+Error"; // lub lokalny asset
+  "https://via.placeholder.com/100x100.png?text=Image+Error";
 
 const Tile = ({ clothe, isSelected }) => {
   const [imageError, setImageError] = useState(false);
+
+  const handleCustomIDS = (id) => {
+    if (id === 0) {
+      return (
+        <View className="p-5 items-center justify-center rounded-full bg-gray-200">
+          <Shirt color="#AFAFAF" size="50" />
+        </View>
+      );
+    } else if (id === -1) {
+      return (
+        <View className="p-5 items-center justify-center rounded-full bg-gray-200">
+          <CirclePlus color="#AFAFAF" size="50" />
+        </View>
+      );
+    }
+  };
 
   return (
     <View
@@ -33,9 +50,7 @@ const Tile = ({ clothe, isSelected }) => {
           <ImageOff color="#AFAFAF" size="50" />
         </View>
       ) : (
-        <View className="p-5 items-center justify-center rounded-full bg-gray-200">
-          <Shirt color="#AFAFAF" size="50" />
-        </View>
+        handleCustomIDS(clothe.id)
       )}
       <Text className="text-sm mt-2 font-semibold text-center">
         {clothe.name}
@@ -47,20 +62,39 @@ const Tile = ({ clothe, isSelected }) => {
 export default function OutfitSelector({ clothes, title, onSelect }) {
   const clothesWithEmpty = [
     {
-      clean: true,
-      color: "blue",
-      createdAt: "2025-06-12",
       id: 0,
       name: "Wybierz",
-      picture: "",
-      size: "M",
-      type: "Spodnie",
-      user: "p.m@gmail.com",
     },
     ...clothes,
-  ]; // Dodaj pusty element na początku
+    {
+      id: -1,
+      name: "Dodaj",
+    },
+  ];
 
   const [selectedItem, setSelectedItem] = useState(null);
+  const scrollRef = useRef(null);
+  const itemLayouts = useRef({});
+
+  const scrollToCenter = (index) => {
+    const screenWidth = Dimensions.get("window").width;
+    const itemX = itemLayouts.current[index] ?? 0;
+    const itemWidth = 160; // szerokość kafelka + marginesy (40 + marginesy = ~160)
+    const offset = itemX - screenWidth / 2 + itemWidth / 2 + 20;
+
+    scrollRef.current?.scrollTo({ x: offset, animated: true });
+  };
+
+  useEffect(() => {
+    if (selectedItem) {
+      const index = clothesWithEmpty.findIndex(
+        (item) => item.id === selectedItem.id
+      );
+      if (index !== -1 && itemLayouts.current[index] !== undefined) {
+        scrollToCenter(index);
+      }
+    }
+  }, [selectedItem]);
 
   return (
     <View>
@@ -68,24 +102,30 @@ export default function OutfitSelector({ clothes, title, onSelect }) {
         {title}
       </Text>
       <ScrollView
-       
+        ref={scrollRef}
         horizontal
         showsHorizontalScrollIndicator={false}
-       
         scrollEventThrottle={16}
-      
       >
-        {clothesWithEmpty.map((clothe) => (
+        {clothesWithEmpty.map((clothe, index) => (
           <TouchableOpacity
             key={clothe.id}
             onPress={() => {
-              setSelectedItem(clothe);
-              onSelect(clothe);
+              if (clothe.id === -1) {
+                router.push("addClothes");
+              } else {
+                setSelectedItem(clothe);
+                onSelect(clothe);
+              }
+            }}
+            onLayout={(event) => {
+              itemLayouts.current[index] = event.nativeEvent.layout.x;
             }}
           >
             <Tile clothe={clothe} isSelected={selectedItem?.id === clothe.id} />
           </TouchableOpacity>
         ))}
+       
       </ScrollView>
     </View>
   );

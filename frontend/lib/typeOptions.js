@@ -1,12 +1,18 @@
 export const typeOptions = [
   "wszystkie",
+  "Nakrycie głowy",
+
+  "Kurtka",
+  "Sweter",
   "Koszulka",
   "Koszula",
-  "Spodnie",
-  "Sweter",
-  "Kurtka",
-  "Buty",
   "Sukienka",
+
+ 
+  "Spodnie",
   "Spódnica",
-  "Nakrycie głowy",
+
+  "Buty",
+
+  "Akcesoria",
 ];
