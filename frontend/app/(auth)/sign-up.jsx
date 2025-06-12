@@ -84,7 +84,7 @@ const SignUp = () => {
         setToken(token);
         const clothesData = await getClothes(token);
         setClothes(clothesData);
-        router.push("/home"); 
+        router.push("/outfits"); 
       } else {
         console.log("❌ Błąd:", response.message);
         setError(response.message); 

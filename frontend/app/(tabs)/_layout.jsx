@@ -2,6 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import { Tabs, Redirect } from "expo-router";
 import {
+  Brush,
   CircleUserRound,
   House,
   Shirt,
@@ -35,12 +36,12 @@ const TabsLayout = () => {
         }}
       >
         <Tabs.Screen
-          name="home"
+          name="outfits"
           options={{
-            title: "Home",
+            title: "Outfits",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              TabIcon({icon: <House size={24} color={color} />, name: "Odkrywaj",focused})
+              TabIcon({icon: <Brush size={24} color={color} />, name: "Outfits",focused})
             ),
             tabBarLabel: "",
           }}

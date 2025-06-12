@@ -20,6 +20,7 @@ import ColorSelector from "../../components/features/wardrobe/ColorSelector";
 import { TokenContext } from "../TokenContext";
 import VerticalSelector from "../../components/common/VerticalSelector";
 import { getClothes } from "../../lib/clothes/clothes";
+import { typeOptions } from "../../lib/typeOptions";
 
 export default function index() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -30,17 +31,6 @@ export default function index() {
     name: "",
     type: "",
   });
-
-  const typeOptions = [
-    "Koszulka",
-    "Koszula",
-    "Spodnie",
-    "Sweter",
-    "Kurtka",
-    "Buty",
-    "Sukienka",
-    "Spódnica",
-  ];
 
   const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
