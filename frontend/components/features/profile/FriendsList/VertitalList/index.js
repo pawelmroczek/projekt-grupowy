@@ -2,12 +2,10 @@ import { View, Text, ScrollView } from "react-native";
 import React from "react";
 import { CircleUser } from "lucide-react-native";
 
-export default function VerticalList() {
-  const friends = [
-    { id: 1, name: "Jan" },
-    { id: 2, name: "Anna" },
-    { id: 3, name: "Piotr" },
-  ];
+export default function VerticalList({friends}) {
+ 
+  
+
 
   return (
     <ScrollView
@@ -18,8 +16,8 @@ export default function VerticalList() {
     >
       {friends.map((friend) => (
         <View key={friend.id} className="p-4 items-center ">
-          <CircleUser/>
-          <Text className="">{friend.name}</Text>
+          <CircleUser size={30}  />
+          <Text className="text-lg">{friend.name}</Text>
         </View>
       ))}
       {friends.length === 0 && (
