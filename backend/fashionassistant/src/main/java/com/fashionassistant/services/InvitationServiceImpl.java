@@ -11,6 +11,9 @@ import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class InvitationServiceImpl implements InvitationService {
@@ -35,19 +38,46 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public void acceptInvitation(int invitationId) {
+    public List<InvitationGet> getAllInvitations() {
+        User currentUser = authService.getCurrentUser();
+        List<Invitation> invitations = currentUser.getReceivedInvitations();
+        List<InvitationGet> invitationsGet = new ArrayList<>();
+        invitations.forEach(
+                invitation -> {
+                    invitationsGet.add(
+                            new InvitationGet(
+                                    invitation.getId(),
+                                    invitation.getFromUser().getId(),
+                                    invitation.getToUser().getId(),
+                                    invitation.getType()
+                            )
+                    );
+                }
+        );
+        return invitationsGet;
+    }
 
+    @Override
+    public void acceptInvitation(int invitationId) {
+        Invitation invitation = getInvitationById(invitationId);
+        User fromUser = userRepository.findById(invitation.getFromUser().getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        User toUser = userRepository.findById(invitation.getToUser().getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        if (invitation.getType().equals("FRIENDS")){
+            fromUser.addFriend(toUser);
+            toUser.addFriend(fromUser);
+        }
+        fromUser.deleteInvitation(invitation);
+        toUser.deleteInvitation(invitation);
+        invitation.setToUser(null);
+        invitation.setFromUser(null);
+        invitationRepository.deleteById(invitationId);
     }
 
     @Override
     public void rejectInvitation(int invitationId) {
-        Invitation invitation = invitationRepository.findById(invitationId)
-                .orElseThrow(() -> new NotFoundException("Invitation not found"));
-        User currentUser = authService.getCurrentUser();
-        if (currentUser.getId() != invitation.getToUser().getId() &&
-                currentUser.getId() != invitation.getFromUser().getId()) {
-            throw new BadRequestException("You don't have access to this invitation");
-        }
+        Invitation invitation = getInvitationById(invitationId);
         User fromUser = userRepository.findById(invitation.getFromUser().getId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
         User toUser = userRepository.findById(invitation.getToUser().getId())
@@ -57,5 +87,16 @@ public class InvitationServiceImpl implements InvitationService {
         invitation.setToUser(null);
         invitation.setFromUser(null);
         invitationRepository.deleteById(invitationId);
+    }
+
+    private Invitation getInvitationById(int invitationId) {
+        Invitation invitation = invitationRepository.findById(invitationId)
+                .orElseThrow(() -> new NotFoundException("Invitation not found"));
+        User currentUser = authService.getCurrentUser();
+        if (currentUser.getId() != invitation.getToUser().getId() &&
+                currentUser.getId() != invitation.getFromUser().getId()) {
+            throw new BadRequestException("You don't have access to this invitation");
+        }
+        return invitation;
     }
 }

@@ -8,10 +8,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -100,5 +97,11 @@ public class User implements UserDetails {
         if (receivedInvitations != null) {
             receivedInvitations.remove(invitation);
         }
+    }
+    public void addFriend(User user) {
+        if (friends == null) {
+            friends = new HashSet<>();
+        }
+        friends.add(user);
     }
 }

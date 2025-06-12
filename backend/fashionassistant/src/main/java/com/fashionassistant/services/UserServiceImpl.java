@@ -2,6 +2,7 @@ package com.fashionassistant.services;
 
 import com.fashionassistant.entities.*;
 import com.fashionassistant.exceptions.BadRequestException;
+import com.fashionassistant.exceptions.NotFoundException;
 import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +36,26 @@ public class UserServiceImpl implements UserService {
         );
         userRepository.save(user);
         return authService.logIn(new UserAuth(userCreate.email(), userCreate.password()));
+    }
+
+    @Override
+    public List<UserFriendGet> getUsersByUsername(String username) {
+        int currentUserId = authService.getCurrentUser().getId();
+        User currentUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        Set<User> userFriends = currentUser.getFriends();
+        List<User> users = userRepository.findAllByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User with this username not found"));
+        List<UserFriendGet> usersGet = new ArrayList<>();
+        users.forEach(user -> {
+            if (userFriends.contains(user) && user.getId() != currentUser.getId()) {
+                usersGet.add(new UserFriendGet(user.getId(), user.getUsername(), true));
+            }
+            else if(user.getId() != currentUser.getId()){
+                usersGet.add(new UserFriendGet(user.getId(), user.getUsername(), false));
+            }
+        });
+        return usersGet;
     }
 
     private void throwIfUserExists(UserCreate userCreate) {
