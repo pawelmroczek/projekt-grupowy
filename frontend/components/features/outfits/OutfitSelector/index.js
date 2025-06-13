@@ -63,7 +63,7 @@ export default function OutfitSelector({ clothes, title, onSelect }) {
   const clothesWithEmpty = [
     {
       id: 0,
-      name: "Wybierz",
+      name: "Brak",
     },
     ...clothes,
     {

@@ -1,9 +1,69 @@
 import { useState } from "react";
 import { ArrowLeft, CirclePlus } from "lucide-react-native";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Modal,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OutfitSelector from "../../components/features/outfits/OutfitSelector";
 import { router } from "expo-router";
+import FormField from "../../components/common/FormField";
+import SelectForm from "../../components/common/SelectForm";
+import { outfitsTypes } from "../../lib/outfitsTypes";
+import VerticalSelector from "../../components/common/VerticalSelector";
+
+const ModalBox = ({ modalVisible, setModalVisible }) => {
+  const [outfitName, setOutfitName] = useState("");
+  const [selectType, setSelectType] = useState("ide");
+
+  return (
+    <Modal visible={modalVisible} transparent animationType="fade">
+      <TouchableWithoutFeedback>
+        <View className="flex-1 justify-center items-center bg-black/50">
+          <TouchableWithoutFeedback>
+            <View className="w-11/12 bg-white p-5 rounded-2xl items-center shadow-lg shadow-black/30">
+              <Text className=" font-pbold mb-4 ">Wprowadź nazwę </Text>
+              <FormField
+                title="Nazwa"
+                placeholder="Wprowadź nazwę"
+                value={outfitName}
+                onChangeText={(text) => setOutfitName(text)}
+              />
+
+              <VerticalSelector
+                options={outfitsTypes}
+                setValue={setSelectType}
+                value={selectType}
+              />
+
+              <View className="items-center   py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4 ">
+                <TouchableOpacity className="px-4 py-2 bg-primary-100 rounded-lg">
+                  <Text className="text-white text-sm font-pregular">
+                    Zapisz
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(false);
+                  }}
+                  className="px-4 py-2 bg-red-500  rounded-lg"
+                >
+                  <Text className="text-white font-pregular text-sm">
+                    Anuluj
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
+};
 
 export default function index() {
   const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
@@ -91,6 +151,8 @@ export default function index() {
     },
   ];
 
+  const [modalVisible, setModalVisible] = useState(false);
+
   const clothesFiltredByType = (type) => {
     return clothes.filter((item) => dictionary[type].includes(item.type));
   };
@@ -98,7 +160,7 @@ export default function index() {
   const [selectedItems, setSelectedItems] = useState([]);
 
   const handleSave = () => {
-    console.log("Zapisz outfit", selectedItems);
+    setModalVisible(true); // zamiast console.log
   };
 
   const handleSelect = (item, type) => {
@@ -125,7 +187,9 @@ export default function index() {
   return (
     <SafeAreaView className="p-2">
       <TouchableOpacity
-        onPress={() => {router.back()}}
+        onPress={() => {
+          router.back();
+        }}
         className="flex items-center flex-row z-30"
       >
         <ArrowLeft size={15} color={"#909090"} />
@@ -167,6 +231,7 @@ export default function index() {
           </View>
         </TouchableOpacity>
       </ScrollView>
+      <ModalBox modalVisible={modalVisible} setModalVisible={setModalVisible} />
     </SafeAreaView>
   );
 }
