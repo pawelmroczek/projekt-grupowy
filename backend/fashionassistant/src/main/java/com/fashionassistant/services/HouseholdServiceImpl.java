@@ -2,11 +2,14 @@ package com.fashionassistant.services;
 
 import com.fashionassistant.entities.Household;
 import com.fashionassistant.entities.User;
+import com.fashionassistant.entities.UserFriendGet;
 import com.fashionassistant.exceptions.NotFoundException;
 import com.fashionassistant.repositories.HouseholdRepository;
 import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +17,18 @@ public class HouseholdServiceImpl implements HouseholdService {
     private final HouseholdRepository householdRepository;
     private final AuthService authService;
     private final UserRepository userRepository;
+
+    @Override
+    public List<UserFriendGet> getUsersFromHousehold() {
+        User currentUser = authService.getCurrentUser();
+        Household household = householdRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new NotFoundException("Household not found"));
+        List<UserFriendGet> usersFromHousehold = household.getUsers().stream()
+                .map(user -> new UserFriendGet(user.getId(), user.getUsername()))
+                .toList();
+        return usersFromHousehold;
+    }
+
     @Override
     public void leaveHousehold() {
         User user = authService.getCurrentUser();
