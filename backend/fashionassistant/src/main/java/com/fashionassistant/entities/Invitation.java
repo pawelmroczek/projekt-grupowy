@@ -25,4 +25,6 @@ public class Invitation {
     private User toUser;
     @Column(name = "type")
     private String type;
+    @Column(name = "household_id")
+    private int householdId;
 }

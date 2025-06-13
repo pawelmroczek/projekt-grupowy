@@ -1,18 +1,18 @@
 package com.fashionassistant.services;
 
-import com.fashionassistant.entities.Invitation;
-import com.fashionassistant.entities.InvitationCreate;
-import com.fashionassistant.entities.InvitationGet;
-import com.fashionassistant.entities.User;
+import com.fashionassistant.entities.*;
 import com.fashionassistant.exceptions.BadRequestException;
 import com.fashionassistant.exceptions.NotFoundException;
+import com.fashionassistant.repositories.HouseholdRepository;
 import com.fashionassistant.repositories.InvitationRepository;
 import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +20,7 @@ public class InvitationServiceImpl implements InvitationService {
     private final InvitationRepository invitationRepository;
     private final UserRepository userRepository;
     private final AuthService authService;
+    private final HouseholdRepository householdRepository;
 
     @Override
     public InvitationGet sendInvitation(InvitationCreate invitationCreate) {
@@ -29,11 +30,23 @@ public class InvitationServiceImpl implements InvitationService {
         if (toUser.getId() == fromUser.getId()) {
             throw new BadRequestException("You can't send invitation to yourself");
         }
-        Invitation invitation = new Invitation(0, fromUser, toUser, invitationCreate.type());
+        Invitation invitation = new Invitation(0, fromUser, toUser, invitationCreate.type(), 0);
+        if(invitation.getType().equals("HOUSEHOLDS")){
+            Household household = householdRepository
+                    .findById(fromUser.getHousehold().getId())
+                    .orElse(
+                          householdRepository.save(new Household(
+                                  0,
+                                  new HashSet<>(Set.of(fromUser))
+                          ))
+                    );
+            invitation.setHouseholdId(household.getId());
+        }
         invitation = invitationRepository.save(invitation);
         toUser.addReceivedInvitation(invitation);
         fromUser.addSentInvitation(invitation);
         return new InvitationGet(invitation.getId(), invitation.getFromUser().getId(),
+                invitation.getFromUser().getUsername(),
                 invitation.getToUser().getId(), invitation.getType());
     }
 
@@ -48,6 +61,7 @@ public class InvitationServiceImpl implements InvitationService {
                             new InvitationGet(
                                     invitation.getId(),
                                     invitation.getFromUser().getId(),
+                                    invitation.getFromUser().getUsername(),
                                     invitation.getToUser().getId(),
                                     invitation.getType()
                             )
@@ -67,6 +81,19 @@ public class InvitationServiceImpl implements InvitationService {
         if (invitation.getType().equals("FRIENDS")){
             fromUser.addFriend(toUser);
             toUser.addFriend(fromUser);
+        }
+        if (invitation.getType().equals("HOUSEHOLDS")){
+            Household household = householdRepository.findById(fromUser.getHousehold().getId())
+                    .orElseThrow(() -> new NotFoundException("Household not found"));
+            if (toUser.getHousehold() != null){
+                Household actualHousehold = householdRepository
+                        .findById(toUser.getHousehold().getId())
+                        .orElseThrow(() -> new NotFoundException("Household not found"));
+                actualHousehold.getUsers().remove(toUser);
+                householdRepository.save(actualHousehold);
+            }
+            toUser.setHousehold(household);
+            household.addUser(toUser);
         }
         fromUser.deleteInvitation(invitation);
         toUser.deleteInvitation(invitation);

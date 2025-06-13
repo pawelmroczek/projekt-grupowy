@@ -30,6 +30,11 @@ public class ClothesController {
         return clothesService.getClothes();
     }
 
+    @GetMapping
+    public List<ClothesGet> getAllClothesFromHousehold(){
+        return clothesService.getClothesFromHousehold();
+    }
+
     @PutMapping
     public ClothesGet updateClothes(@ModelAttribute ClothesUpdate clothes) {
         return clothesService.updateClothes(clothes);

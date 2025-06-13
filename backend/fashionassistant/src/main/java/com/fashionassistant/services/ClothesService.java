@@ -11,6 +11,8 @@ public interface ClothesService {
 
     List<ClothesGet> getClothes();
 
+    List<ClothesGet> getClothesFromHousehold();
+
     ClothesGet updateClothes(ClothesUpdate clothes);
 
     void deleteClothesById(int id);

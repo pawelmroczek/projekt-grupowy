@@ -2,7 +2,9 @@ package com.fashionassistant.services;
 
 import com.fashionassistant.entities.*;
 import com.fashionassistant.exceptions.BadRequestException;
+import com.fashionassistant.exceptions.NotFoundException;
 import com.fashionassistant.repositories.ClothesRepository;
+import com.fashionassistant.repositories.HouseholdRepository;
 import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +23,30 @@ public class ClothesServiceImpl implements ClothesService {
     private final PictureService pictureService;
     private final AuthService authService;
     private final UserRepository userRepository;
+    private final HouseholdRepository householdRepository;
 
     @Override
     public List<ClothesGet> getClothes() {
         User user = authService.getCurrentUser();
         List<ClothesGet> clothesGets = new ArrayList<>();
         List<Clothes> clothes = clothesRepository.findClothesByUserId(user.getId());
+        clothes.forEach(singleClothes -> {
+            clothesGets.add(new ClothesGet(singleClothes));
+        });
+        return clothesGets;
+    }
+
+    @Override
+    public List<ClothesGet> getClothesFromHousehold() {
+        User currentUser = authService.getCurrentUser();
+        Household household = householdRepository.findById(currentUser.getHousehold().getId())
+                .orElseThrow(() -> new NotFoundException("Household not found"));
+        Set<Clothes> clothes = new HashSet<>();
+        Set<User> users = household.getUsers();
+        users.forEach(
+                user -> clothes.addAll(user.getClothes())
+        );
+        List<ClothesGet> clothesGets = new ArrayList<>();
         clothes.forEach(singleClothes -> {
             clothesGets.add(new ClothesGet(singleClothes));
         });
