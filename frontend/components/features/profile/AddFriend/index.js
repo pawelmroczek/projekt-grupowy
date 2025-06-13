@@ -1,24 +1,21 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Bell, UserRoundPlus } from "lucide-react-native";
 import { router } from "expo-router";
+import { getInvites } from "../../../../lib/friends/friends";
+import { TokenContext } from "../../../../app/TokenContext";
 
 export default function AddFriend() {
   const [invites, setInvites] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { token, setToken } = useContext(TokenContext);
 
   useEffect(() => {
     const fetchInvites = async () => {
-      try {
-        // Przykład fetchowania – zastąp swoim URL/emulatorem
-        const response = await fetch("https://example.com/api/invites");
-        const data = await response.json();
-        setInvites(data); // zakładamy, że to tablica zaproszeń
-      } catch (error) {
-        console.error("Błąd pobierania zaproszeń:", error);
-      } finally {
-        setLoading(false);
-      }
+      setLoading(true);
+      const response = await getInvites(token);
+      setInvites(response);
+      setLoading(false);
     };
 
     fetchInvites();
@@ -36,14 +33,16 @@ export default function AddFriend() {
           </View>
         </View>
       </TouchableOpacity>
-      <View className="rounded-md border bg-white shadow-sm items-center border-primary-100  p-4 flex flex-row justify-center  ">
-        <Bell size={35} color={"#2A9D8F"} />
-         {!loading && invites.length > 0 && (
-          <Text className="bg-red-500 font-bold top-2.5 right-3 text-xs text-white p-1 px-2 rounded-full absolute">
-            {invites.length}
-          </Text>
-        )}
-      </View>
+      <TouchableOpacity onPress={() => router.push("/invites")}>
+        <View className="rounded-md border bg-white shadow-sm items-center border-primary-100  p-4 flex flex-row justify-center  ">
+          <Bell size={35} color={"#2A9D8F"} />
+          {!loading && invites?.length > 0 && (
+            <Text className="bg-red-500 font-bold top-2.5 right-3 text-xs text-white p-1 px-2 rounded-full absolute">
+              {invites.length}
+            </Text>
+          )}
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }

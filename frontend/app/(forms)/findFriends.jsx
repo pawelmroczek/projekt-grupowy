@@ -1,7 +1,10 @@
-import React from "react";
-import { useState } from "react";
-import { View, Text, TouchableOpacity, TextInput} from "react-native";
+import React, { use } from "react";
+import { useState, useContext } from "react";
+import { View, Text, TouchableOpacity, TextInput, FlatList} from "react-native";
 import { Search } from "lucide-react-native";
+import { getUsers, iviteSending } from "../../lib/friends/friends";
+import { TokenContext } from "../TokenContext";
+
 
 
 const findFriends = () => {
@@ -9,14 +12,42 @@ const findFriends = () => {
     const [username, setUsername] = useState('');
     const [userList, setUserList] = useState([]);
     const [loading, setLoading] = useState(false);
+    const { token, setToken } = useContext(TokenContext);
 
-    const handleSearch = () => {
-        setLoading(!loading)
+    const handleSearch = async () => {
+        setLoading(true);
+        setUserList([]);
+        console.log(token);
+        const usersData = await getUsers(token, username);
+        if (usersData) {
+            const formattedUsers = usersData.map(user => ({
+                id: user.id,
+                username: user.username,
+                isFriend: user.friends
+            }));
+            setUserList(formattedUsers);
+            setLoading(false);
+        } else {
+            console.error("Błąd podczas pobierania użytkowników");
+            setLoading(false);
+        }
     };
 
+    const inviteUser = async (id) => {
+        console.log("Zapraszanie użytkownika o ID:", id);
+        console.log("Token:", token);
+        console.log("Dane do wysłania:", { toUser: id, type: "FRIENDS" });
+        const response = await iviteSending(token, id, "FRIENDS");
+
+        setUserList((prevList) =>
+            prevList.map((user) =>
+                user.id === id ? { ...user, isFriend: true } : user
+            )
+        );
+    }
+
     return (
-        <View className="p-4 space-y-4"> {/* Ułożenie pionowe */}
-            {/* Pole wyszukiwania i przycisk */}
+        <View className="p-4 space-y-4">
             <View className="flex-row items-center space-x-2">
                 <View className="flex-row items-center flex-1 bg-gray-100 rounded-xl px-3 py-5">
                     <Search size={20} color="#6B7280" />
@@ -54,7 +85,7 @@ const findFriends = () => {
                         </View>
                     ) : (
                         <TouchableOpacity
-                            onPress={inviteUser(item.id)}
+                            onPress={() => inviteUser(item.id)}
                             className="bg-secondary-100 px-4 py-2 rounded-xl"
                         >
                             <Text className="text-white font-semibold">Zaproś</Text>

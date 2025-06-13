@@ -1,51 +1,97 @@
 import { ipAddress, ipAddressNginx } from "../ipAddress.js";
 
-export const loginUser = async (email, password) => {
-  const body = {
-    email: email,
-    password: password,
-  };
-  console.log("logowanie");
-
-  try {
-    // !!!!!! UWAGA !!!!!!
-    //tu zamiast localhost podajecie adres IP swojego komputera
-
-    const data = await fetch(ipAddress+"/fashion/users/signIn", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    const response = await data.json();
-
-    if (response.token){
-      return {
-        status: "success",
-        message: response,
-      };
-    }else{
-      if (response.message == "Bad credentials"){
-        information = "Błędne hasło"
+export const getUsers = async (token, username) => {
+    try {
+      const response = await fetch(ipAddress+"/fashion/users/"+ username , {
+          method: "GET",
+          headers: {
+              "Authentication": `Bearer ${token}`
+          }
+      });
+      if (!response.ok) {
+          throw new Error(`HTTP status ${response.status}`);
       }
-      else{
-        information = "Nie istnieje użytkownik o podanym adresie email"
-      }
-      return {
-        status: "error",
-        message: {
-           message: information,
-        },
-      };
+      const data = await response.json();   
+        console.log("Odpowiedź serwera:", data);
+      return data;
+    } catch (error) {
+      console.error('Błąd:', error);
     }
-  } catch (error) {
+}
 
-    return {
-      status: "error",
-      message: {
-        message: "Błąd połączenia z serwerem. Spróbuj ponownie później.",
-      },
-    };
+export const iviteSending = async (token, id, type) => {
+    try {
+      const response = await fetch(ipAddress+"/fashion/invitations/send", {
+          method: "POST",
+          headers: {
+              "Authentication": `Bearer ${token}`,
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+              toUser: id,
+              type: type
+          })
+      });
+      console.log("Odpowiedź serwera:", response);
+      if (!response.ok) {
+          throw new Error(`HTTP status ${response.status}`);
+      }
+      //const data = await response.json();
+      return 1;
+    } catch (error) {
+      console.error('Błąd:', error);
+    }
   }
-};
+
+export const getInvites = async (token) => {
+    try {
+      const response = await fetch(ipAddress+"/fashion/invitations" , {
+          method: "GET",
+          headers: {
+              "Authentication": `Bearer ${token}`
+          }
+      });
+      if (!response.ok) {
+          throw new Error(`HTTP status ${response.status}`);
+      }
+      const data = await response.json();   
+        console.log("Odpowiedź serwera:", data);
+      return data;
+    } catch (error) {
+      console.error('Błąd:', error);
+    }
+}
+
+export const acceptInvite = async (token, id) => {
+    try {
+      const response = await fetch(ipAddress+"/fashion/invitations/accept/"+id , {
+          method: "POST",
+          headers: {
+              "Authentication": `Bearer ${token}`
+          }
+      });
+      if (!response.ok) {
+          throw new Error(`HTTP status ${response.status}`);
+      }
+      return;
+    } catch (error) {
+      console.error('Błąd:', error);
+    }
+}
+
+export const rejectInvite = async (token, id) => {
+    try {
+      const response = await fetch(ipAddress+"/fashion/invitations/reject/"+id , {
+          method: "POST",
+          headers: {
+              "Authentication": `Bearer ${token}`
+          }
+      });
+      if (!response.ok) {
+          throw new Error(`HTTP status ${response.status}`);
+      }
+      return;
+    } catch (error) {
+      console.error('Błąd:', error);
+    }
+}
