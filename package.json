@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "react-native-select-dropdown": "^4.0.1"
+  },
+  "devDependencies": {
+    "@react-native-community/cli": "^15.1.3"
+  }
+}

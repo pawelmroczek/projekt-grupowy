@@ -32,6 +32,8 @@ public class User implements UserDetails {
     private String password;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Clothes> clothes;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Outfit> outfits;
     @ManyToMany
     @JoinTable(
             name = "user_friends",
@@ -77,6 +79,14 @@ public class User implements UserDetails {
             clothes = new ArrayList<>();
         }
         clothes.add(newClothes);
+    }
+
+    public void addOutfit(Outfit outfit) {
+        if (outfits == null) {
+            outfits = new ArrayList<>();
+        }
+        outfits.add(outfit);
+        outfit.setUser(this);
     }
 
     public void addSentInvitation(Invitation invitation) {

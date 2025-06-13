@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
                                 .requestMatchers("fashion/users/**",
-                                        "fashion/clothes/**", "fashion/invitations/**")
+                                        "fashion/clothes/**", "fashion/invitations/**", "/fashion/outfits/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()

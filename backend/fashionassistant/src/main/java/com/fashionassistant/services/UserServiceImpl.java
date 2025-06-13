@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
                 userCreate.email(),
                 passwordEncoder.encode(userCreate.password()),
                 new ArrayList<Clothes>(),
+                new ArrayList<Outfit>(),
                 new HashSet<>(),
                 null,
                 new ArrayList<>(),
