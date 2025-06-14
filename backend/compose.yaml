@@ -7,6 +7,8 @@ services:
       - 'MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}'
     ports:
       - '3306:3306'
+    volumes:
+      - ./fashionassistant/src/main/resources/dump.sql:/docker-entrypoint-initdb.d/dump.sql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 6s
