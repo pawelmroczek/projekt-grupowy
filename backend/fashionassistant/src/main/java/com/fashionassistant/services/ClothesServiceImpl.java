@@ -37,7 +37,7 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
-    public List<ClothesGet> getClothesFromHousehold() {
+    public List<ClothesHouseholdGet> getClothesFromHousehold() {
         User currentUser = authService.getCurrentUser();
         Household household = householdRepository.findById(currentUser.getHousehold().getId())
                 .orElseThrow(() -> new NotFoundException("Household not found"));
@@ -46,9 +46,10 @@ public class ClothesServiceImpl implements ClothesService {
         users.forEach(
                 user -> clothes.addAll(user.getClothes())
         );
-        List<ClothesGet> clothesGets = new ArrayList<>();
+        List<ClothesHouseholdGet> clothesGets = new ArrayList<>();
         clothes.forEach(singleClothes -> {
-            clothesGets.add(new ClothesGet(singleClothes));
+            clothesGets.add(new ClothesHouseholdGet(singleClothes,
+                    currentUser.getId() == singleClothes.getUser().getId()));
         });
         return clothesGets;
     }

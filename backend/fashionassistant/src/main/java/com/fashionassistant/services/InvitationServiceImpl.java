@@ -31,14 +31,14 @@ public class InvitationServiceImpl implements InvitationService {
             throw new BadRequestException("You can't send invitation to yourself");
         }
         Invitation invitation = new Invitation(0, fromUser, toUser, invitationCreate.type(), 0);
-        if(invitation.getType().equals("HOUSEHOLDS")){
+        if (invitation.getType().equals("HOUSEHOLDS")) {
             Household household = householdRepository
                     .findById(fromUser.getHousehold().getId())
                     .orElse(
-                          householdRepository.save(new Household(
-                                  0,
-                                  new HashSet<>(Set.of(fromUser))
-                          ))
+                            householdRepository.save(new Household(
+                                    0,
+                                    new HashSet<>(Set.of(fromUser))
+                            ))
                     );
             invitation.setHouseholdId(household.getId());
         }
@@ -78,14 +78,14 @@ public class InvitationServiceImpl implements InvitationService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
         User toUser = userRepository.findById(invitation.getToUser().getId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
-        if (invitation.getType().equals("FRIENDS")){
+        if (invitation.getType().equals("FRIENDS")) {
             fromUser.addFriend(toUser);
             toUser.addFriend(fromUser);
         }
-        if (invitation.getType().equals("HOUSEHOLDS")){
+        if (invitation.getType().equals("HOUSEHOLDS")) {
             Household household = householdRepository.findById(fromUser.getHousehold().getId())
                     .orElseThrow(() -> new NotFoundException("Household not found"));
-            if (toUser.getHousehold() != null){
+            if (toUser.getHousehold() != null) {
                 Household actualHousehold = householdRepository
                         .findById(toUser.getHousehold().getId())
                         .orElseThrow(() -> new NotFoundException("Household not found"));
@@ -120,8 +120,7 @@ public class InvitationServiceImpl implements InvitationService {
         Invitation invitation = invitationRepository.findById(invitationId)
                 .orElseThrow(() -> new NotFoundException("Invitation not found"));
         User currentUser = authService.getCurrentUser();
-        if (currentUser.getId() != invitation.getToUser().getId() &&
-                currentUser.getId() != invitation.getFromUser().getId()) {
+        if (currentUser.getId() != invitation.getToUser().getId()) {
             throw new BadRequestException("You don't have access to this invitation");
         }
         return invitation;
