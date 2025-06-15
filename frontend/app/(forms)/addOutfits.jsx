@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { ArrowLeft, CirclePlus } from "lucide-react-native";
 import {
   Modal,
@@ -15,10 +15,25 @@ import FormField from "../../components/common/FormField";
 import SelectForm from "../../components/common/SelectForm";
 import { outfitsTypes } from "../../lib/outfitsTypes";
 import VerticalSelector from "../../components/common/VerticalSelector";
+import { TokenContext } from "../TokenContext";
+import { outfitsSending } from "../../lib/outfits/outfits";
 
-const ModalBox = ({ modalVisible, setModalVisible }) => {
+const ModalBox = ({ modalVisible, setModalVisible, selectedItems }) => {
   const [outfitName, setOutfitName] = useState("");
   const [selectType, setSelectType] = useState("ide");
+  const { token } = useContext(TokenContext);
+
+  const handleSave = () => {
+    const dataToSend = {
+      name: outfitName,
+      type: selectType,
+      clothesIds: selectedItems.map((item) => item.id),
+    };
+
+    console.log("Dane do wysłania:", dataToSend);
+    outfitsSending(dataToSend,token)
+    setModalVisible(false);
+  };
 
   return (
     <Modal visible={modalVisible} transparent animationType="fade">
@@ -41,7 +56,10 @@ const ModalBox = ({ modalVisible, setModalVisible }) => {
               />
 
               <View className="items-center   py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4 ">
-                <TouchableOpacity className="px-4 py-2 bg-primary-100 rounded-lg">
+                <TouchableOpacity
+                  onPress={() => handleSave()}
+                  className="px-4 py-2 bg-primary-100 rounded-lg"
+                >
                   <Text className="text-white text-sm font-pregular">
                     Zapisz
                   </Text>
@@ -76,81 +94,7 @@ export default function index() {
     Akcesoria: ["Akcesoria"],
   };
 
-  const clothes = [
-    {
-      clean: true,
-      color: "blue",
-      createdAt: "2025-06-12",
-      id: 19,
-      name: "jeansy",
-      picture:
-        "http://localhost:8888/uploads/2adaf94c-5b47-4c4b-af99-58f2a6d86c7e_IMG_0010.PNG",
-      size: "M",
-      type: "Spodnie",
-      user: "p.m@gmail.com",
-    },
-    {
-      clean: true,
-      color: "gray",
-      createdAt: "2025-06-12",
-      id: 20,
-      name: "",
-      picture:
-        "http://localhost:8888/uploads/ac556b31-7213-4e01-ab57-d5629922eb02_IMG_0008.PNG",
-      size: "M",
-      type: "Sweter",
-      user: "p.m@gmail.com",
-    },
-    {
-      clean: true,
-      color: "blue",
-      createdAt: "2025-05-16",
-      id: 15,
-      name: "test",
-      picture:
-        "http://localhost:8888/uploads/1c1d8533-f525-410a-b170-ba92b1213005_IMG_0010.PNG",
-      size: "idle",
-      type: "Koszula",
-      user: "p.m@gmail.com",
-    },
-    {
-      clean: true,
-      color: "blue",
-      createdAt: "2025-05-16",
-      id: 16,
-      name: "test2",
-      picture:
-        "http://localhost:8888/uploads/ba6078f0-8cc8-4d4d-9afd-bc83a61ca99e_IMG_0008.PNG",
-      size: "idle",
-      type: "Spodnie",
-      user: "p.m@gmail.com",
-    },
-    {
-      clean: true,
-      color: "blue",
-      createdAt: "2025-05-12",
-      id: 11,
-      name: "niebieska koszulka",
-      picture:
-        "http://localhost:8888/uploads/8fb64a0d-53f4-425d-a283-74645efd03e2_IMG_0008.PNG",
-      size: "S",
-      type: "Koszulka",
-      user: "p.m@gmail.com",
-    },
-    {
-      clean: true,
-      color: "gray",
-      createdAt: "2025-05-12",
-      id: 12,
-      name: "jeans",
-      picture:
-        "http://localhost:8888/uploads/c1c4b441-dba4-46d6-bcd2-e9c27ce70232_IMG_0010.PNG",
-      size: "idle",
-      type: "Spodnie",
-      user: "p.m@gmail.com",
-    },
-  ];
-
+  const { clothes, setClothes } = useContext(TokenContext);
   const [modalVisible, setModalVisible] = useState(false);
 
   const clothesFiltredByType = (type) => {
@@ -231,7 +175,11 @@ export default function index() {
           </View>
         </TouchableOpacity>
       </ScrollView>
-      <ModalBox modalVisible={modalVisible} setModalVisible={setModalVisible} />
+      <ModalBox
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        selectedItems={selectedItems}
+      />
     </SafeAreaView>
   );
 }
