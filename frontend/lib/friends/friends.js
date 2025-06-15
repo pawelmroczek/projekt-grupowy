@@ -95,3 +95,39 @@ export const rejectInvite = async (token, id) => {
       console.error('Błąd:', error);
     }
 }
+
+export const getFriendsList = async (token) => {
+    try {
+      const response = await fetch(ipAddress+"/fashion/friends", {
+          method: "GET",
+          headers: {
+              "Authentication": `Bearer ${token}`
+          }
+      });
+      if (!response.ok) {
+          throw new Error(`HTTP status ${response.status}`);
+      }
+      const data = await response.json();   
+      return data;
+    } catch (error) {
+      console.error('Błąd:', error);
+    }
+}
+
+export const getHomiesList = async (token) => {
+    try {
+      const response = await fetch(ipAddress+"/fashion/household", {
+          method: "GET",
+          headers: {
+              "Authentication": `Bearer ${token}`
+          }
+      });
+      if (!response.ok) {
+          return [];
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Błąd:', error);
+    }
+}

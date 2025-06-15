@@ -7,6 +7,9 @@ import { acceptInvite, getInvites, rejectInvite } from "../../lib/friends/friend
 const invites = () => {
 
     const [invitesArray, setInvitesArray] = useState([]);
+    const [friendInvites, setFriendInvites] = useState([]); 
+    const [householdInvites, setHouseholdInvites] = useState([]); 
+
     const { token, setToken } = useContext(TokenContext);
     const [loading, setLoading] = useState(true);
     
@@ -15,6 +18,10 @@ const invites = () => {
       setLoading(true);
       const data = await getInvites(token);
       setInvitesArray(data);
+      const friends = data.filter((invite) => invite.type === "FRIENDS");
+      const households = data.filter((invite) => invite.type === "HOUSEHOLD");
+      setFriendInvites(friends); 
+      setHouseholdInvites(households);
     } catch (error) {
       console.error("Błąd ładowania zaproszeń:", error);
     } finally {
@@ -29,6 +36,16 @@ const invites = () => {
                 item.id === id ? { ...item, isFriend: true } : item
             )
         );
+        setFriendInvites((prevList) =>
+            prevList.map((item) =>
+                item.id === id ? { ...item, isFriend: true } : item
+            )
+        );
+        setHouseholdInvites((prevList) =>
+            prevList.map((item) =>
+                item.id === id ? { ...item, isFriend: true } : item
+            )
+        );
     }
     const rejectUser = async (id) => {
         await rejectInvite(token, id);
@@ -39,54 +56,75 @@ const invites = () => {
         loadInvites();
     }, []);
 
+    const renderInviteItem = ({ item }) => (
+        <View className="flex-row items-center justify-between p-3 bg-white rounded-xl border border-gray-200 mb-2">
+            <View>
+            <Text className="text-base font-semibold">{item.fromUsername}</Text>
+            </View>
+            <View className="flex-row items-center space-x-2">
+            {item.isFriend ? (
+                <View className="bg-green-500 px-4 py-2 rounded-xl">
+                <Text className="text-black font-semibold">Zaakceptowano</Text>
+                </View>
+            ) : (
+                <View className="flex-row space-x-2">
+                <TouchableOpacity
+                    onPress={() => acceptUser(item.id)}
+                    className="bg-green-500 px-4 py-2 rounded-xl"
+                >
+                    <Text className="text-white font-semibold">Akceptuj</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => rejectUser(item.id)}
+                    className="bg-red-500 px-4 py-2 rounded-xl"
+                >
+                    <Text className="text-white font-semibold">Odrzuć</Text>
+                </TouchableOpacity>
+                </View>
+            )}
+            </View>
+        </View>
+    );
+
     return (
         <SafeAreaView className="flex-1 bg-white">
             <View className="flex-1 p-4 pt-6">
                 {loading ? (
-                <View className="flex-1 justify-center items-center">
-                    <ActivityIndicator size="large" color="#888" />
-                </View>
-                ) : invitesArray.length > 0 ? (
-                <FlatList
-                    data={invitesArray}
-                    keyExtractor={(item) => item.id.toString()}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingBottom: 16 }}
-                    renderItem={({ item }) => (
-                    <View className="flex-row items-center justify-between p-3 bg-white rounded-xl border border-gray-200 mb-2">
-                        <View>
-                        <Text className="text-base font-semibold">{item.id}</Text>
-                        </View>
-                        <View className="flex-row items-center space-x-2">
-                        {item.isFriend ? (
-                            <View className="bg-green-500 px-4 py-2 rounded-xl">
-                            <Text className="text-white font-semibold">Zaakceptowano</Text>
-                            </View>
-                        ) : (
-                            <View className="flex-row space-x-2">
-                            <TouchableOpacity
-                                onPress={() => acceptUser(item.id)}
-                                className="bg-secondary-100 px-4 py-2 rounded-xl"
-                            >
-                                <Text className="text-white font-semibold">Akceptuj</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => rejectUser(item.id)}
-                                className="bg-red-500 px-4 py-2 rounded-xl"
-                            >
-                                <Text className="text-white font-semibold">Odrzuć</Text>
-                            </TouchableOpacity>
-                            </View>
+                    <View className="flex-1 justify-center items-center">
+                        <ActivityIndicator size="large" color="#888" />
+                    </View>
+                    ) : invitesArray.length > 0 ? (
+                    <>
+                        {friendInvites.length > 0 && (
+                        <>
+                            <Text className="text-lg font-bold mb-2">Zaproszenia do znajomych</Text>
+                            <FlatList
+                            data={friendInvites}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={renderInviteItem}
+                            contentContainerStyle={{ paddingBottom: 16 }}
+                            />
+                        </>
                         )}
-                        </View>
+
+                        {householdInvites.length > 0 && (
+                        <>
+                            <Text className="text-lg font-bold mt-4 mb-2">Zaproszenia do domowników</Text>
+                            <FlatList
+                            data={householdInvites}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={renderInviteItem}
+                            contentContainerStyle={{ paddingBottom: 16 }}
+                            />
+                        </>
+                        )}
+                    </>
+                    ) : (
+                    <View className="flex-1 justify-center items-center">
+                        <Text className="text-gray-400">Brak zaproszeń</Text>
                     </View>
                     )}
-                />
-                ) : (
-                <View className="flex-1 justify-center items-center">
-                    <Text className="text-gray-400">Brak zaproszeń</Text>
-                </View>
-                )}
+
             </View>
         </SafeAreaView>
     );

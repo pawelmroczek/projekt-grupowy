@@ -81,7 +81,7 @@ const findFriends = () => {
                 <View className="flex-row items-center space-x-1">
                     {item.isFriend ? (
                         <View className="bg-gray-100 px-4 py-2 rounded-xl">
-                            <Text className="text-white font-semibold">Znajomy</Text>
+                            <Text className="text-black font-semibold">Zaproszono</Text>
                         </View>
                     ) : (
                         <TouchableOpacity

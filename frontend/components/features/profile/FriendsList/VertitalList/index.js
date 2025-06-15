@@ -14,7 +14,7 @@ export default function VerticalList({friends}) {
       {friends.map((friend) => (
         <View key={friend.id} className="p-4 items-center ">
           <CircleUser size={30}  />
-          <Text className="text-lg">{friend.name}</Text>
+          <Text className="text-lg">{friend.username}</Text>
         </View>
       ))}
       {friends.length === 0 && (

@@ -4,22 +4,26 @@ import { Bell, UserRoundPlus } from "lucide-react-native";
 import { router } from "expo-router";
 import { getInvites } from "../../../../lib/friends/friends";
 import { TokenContext } from "../../../../app/TokenContext";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function AddFriend() {
   const [invites, setInvites] = useState([]);
   const [loading, setLoading] = useState(true);
   const { token, setToken } = useContext(TokenContext);
 
-  useEffect(() => {
-    const fetchInvites = async () => {
-      setLoading(true);
-      const response = await getInvites(token);
-      setInvites(response);
-      setLoading(false);
-    };
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchInvites = async () => {
+        setLoading(true);
+        const response = await getInvites(token);
+        setInvites(response);
+        setLoading(false);
+      };
 
-    fetchInvites();
-  }, []);
+      fetchInvites();
+    }, [token])
+  );
+  
   return (
     <View className=" w-[95%] mx-auto flex flex-row space-x-2 justify-stretch">
       <TouchableOpacity onPress={() => router.push("/findFriends")}>
