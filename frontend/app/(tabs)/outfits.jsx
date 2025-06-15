@@ -35,7 +35,7 @@ const Home = () => {
       console.log("Fetched outfits:", data);
       setOutfits([
         { id: 1, clothesIds: [1, 2], name: "tesr1", type: "Sportowe" },
-        { id: 2, clothesIds: [1, 2], name: "tesr1", type: "Sportowe" },
+        { id: 2, clothesIds: [1, 2], name: "tesr1", type: "Casualowe" },
       ]);
     });
   }, [token]);
