@@ -65,8 +65,10 @@ const outfitDetails = () => {
           <TouchableOpacity
             onPress={() =>
               router.push({
-                pathname: "/addClothes",
-               
+                pathname: "/addOutfits",
+                params: {                  
+                  id: outfit.id,              
+                },
               })
             }
           >
