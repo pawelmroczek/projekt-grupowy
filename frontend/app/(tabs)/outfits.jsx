@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { use, useContext, useEffect, useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
 import { useLocalSearchParams } from "expo-router";
@@ -22,14 +22,12 @@ const Home = () => {
 
   const [displayMode, setDisplayMode] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  //const [clothes, setClothes] = useState([]);
 
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
 
-  const [outfits, setOutfits] = useState([
-    { id: 1, clothesIds: [1, 2], name: "tesr1", type: "Sportowe" },
-  ]);
+  const [outfits, setOutfits] = useState([]);
+  const [filteredOutfits, setFilteredOutfits] = useState([]);
 
   useEffect(() => {
     fetchOutfits(token).then((data) => {
@@ -37,16 +35,25 @@ const Home = () => {
       console.log("Fetched outfits:", data);
       setOutfits([
         { id: 1, clothesIds: [1, 2], name: "tesr1", type: "Sportowe" },
-        { id: 2, clothesIds: [1, 2, 1, 2], name: "tesr1", type: "Sportowe" },
+        { id: 2, clothesIds: [1, 2], name: "tesr1", type: "Sportowe" },
       ]);
     });
   }, [token]);
 
-  console.log("Outfits:", outfits);
+  useEffect(() => {
+    if (selectedCategory) {
+      const filtered = outfits.filter(
+        (outfit) => outfit.type === selectedCategory
+      );
+      setFilteredOutfits(filtered);
+    } else {
+      setFilteredOutfits(outfits);
+    }
+  }, [selectedCategory, outfits]);
+
+
 
   const renderItem = ({ item: outfit }) => {
-    console.log("Rendering outfit:", outfit);
-
     const items = outfit?.clothesIds.map((id) => {
       const item = clothes.find((cloth) => cloth.id === id);
       return item ? { ...item, outfit } : null;
@@ -57,7 +64,7 @@ const Home = () => {
         style={[styles.item, displayMode ? styles.single : styles.double]}
         onPress={() =>
           router.push({
-            pathname: "/clothDetails",
+            pathname: "/outfitDetails",
             params: {
               name: outfit.name,
               clothesIds: outfit.clothesIds,
@@ -76,7 +83,10 @@ const Home = () => {
             />
           ))}
         </View>
-        <Text style={styles.title}>{outfit?.name}</Text>
+        <View>
+          <Text className="font-bold text-center">{outfit?.name}</Text>
+          <Text className="text-center mt-1 uppercase text-gray-500">{outfit?.type}</Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -92,7 +102,7 @@ const Home = () => {
       />
       <View className="flex-1">
         <FlatList
-          data={outfits}
+          data={filteredOutfits}
           key={displayMode ? "single" : "double"}
           numColumns={displayMode ? 1 : 2}
           renderItem={renderItem}
@@ -140,12 +150,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     resizeMode: "cover",
   },
-  title: {
-    marginTop: 8,
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
+
   imageContainer: {
     flexDirection: "row",
     flexWrap: "wrap",

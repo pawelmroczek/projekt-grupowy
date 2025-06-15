@@ -41,13 +41,7 @@ const SearchBarOutfits = ({
               </TouchableOpacity>
 
               <View className="flex-row gap-4">
-                <TouchableOpacity
-                  onPress={() =>
-                    router.push({ pathname: "/filterClothes", params: filters })
-                  }
-                >
-                  <SlidersHorizontal className="text-black" size={30} />
-                </TouchableOpacity>
+                
                 <TouchableOpacity onPress={() => setSearchMode(true)}>
                   <Search className="text-black" size={30} />
                 </TouchableOpacity>
