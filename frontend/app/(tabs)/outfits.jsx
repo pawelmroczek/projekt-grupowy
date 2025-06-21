@@ -33,7 +33,7 @@ const Home = () => {
     fetchOutfits(token).then((data) => {
       setOutfits(data);
       console.log("Fetched outfits:", data);
-      setOutfits([JSON.parse(data)]);
+      setOutfits([]);
     });
   }, [token]);
 
