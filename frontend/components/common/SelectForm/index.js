@@ -22,7 +22,7 @@ export default function SelectForm({ typeOptions, onSelect }) {
         return (
           <View style={{...styles.dropdownItemStyle, ...(isSelected && {backgroundColor: '#D2D9DF'})}}>
           
-          <Text style={styles.dropdownItemTxtStyle}>{item.title}</Text>
+          <Text style={styles.dropdownItemTxtStyle}>{item}</Text>
         </View>
         );
       }}
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     fontWeight: "500",
-    color: "#7B7B8B",
+    color: "black",
   },
   dropdownButtonArrowStyle: {
     fontSize: 28,

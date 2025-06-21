@@ -3,8 +3,7 @@ package com.fashionassistant.entities;
 import java.time.LocalDate;
 import java.util.List;
 
-public record OutfitGet(int id, String name, String type,
-                        LocalDate createdAt, String user, List<Integer> clothesIds) {
+public record OutfitGet(int id, String name, String type, LocalDate createdAt, String user, List<Integer> clothesIds) {
 
     public OutfitGet(Outfit outfit) {
         this(outfit.getId(),
