@@ -34,9 +34,9 @@ export default function FriendsList() {
   return (
     <View className="w-full bg-white rounded-xl  mt-4">
       <Text className="text-xl font-bold p-2">Znajomi:</Text>
-      <VerticalList friends={friends}/>
+      <VerticalList friends={friends} household={homies}/>
       <Text className="text-xl font-bold p-2">Domownicy:</Text>
-      <VerticalList friends={homies} />
+      <VerticalList friends={homies} household={homies} />
     </View>
   );
 }

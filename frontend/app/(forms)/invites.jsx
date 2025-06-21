@@ -19,7 +19,7 @@ const invites = () => {
       const data = await getInvites(token);
       setInvitesArray(data);
       const friends = data.filter((invite) => invite.type === "FRIENDS");
-      const households = data.filter((invite) => invite.type === "HOUSEHOLD");
+      const households = data.filter((invite) => invite.type === "HOUSEHOLDS");
       setFriendInvites(friends); 
       setHouseholdInvites(households);
     } catch (error) {

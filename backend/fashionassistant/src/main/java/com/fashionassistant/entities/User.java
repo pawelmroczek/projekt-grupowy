@@ -36,6 +36,7 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "friend_id")
     )
     private Set<User> friends;
+    @Setter
     @ManyToOne
     @JoinColumn(name = "householdId")
     private Household household;

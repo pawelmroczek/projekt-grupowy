@@ -39,19 +39,31 @@ public class ClothesServiceImpl implements ClothesService {
     @Override
     public List<ClothesHouseholdGet> getClothesFromHousehold() {
         User currentUser = authService.getCurrentUser();
-        Household household = householdRepository.findById(currentUser.getHousehold().getId())
-                .orElseThrow(() -> new NotFoundException("Household not found"));
-        Set<Clothes> clothes = new HashSet<>();
-        Set<User> users = household.getUsers();
-        users.forEach(
-                user -> clothes.addAll(user.getClothes())
-        );
-        List<ClothesHouseholdGet> clothesGets = new ArrayList<>();
-        clothes.forEach(singleClothes -> {
-            clothesGets.add(new ClothesHouseholdGet(singleClothes,
-                    currentUser.getId() == singleClothes.getUser().getId()));
-        });
-        return clothesGets;
+        if(currentUser.getHousehold() != null) {
+            Household household = householdRepository.findById(currentUser.getHousehold().getId())
+                    .orElseThrow(() -> new NotFoundException("Household not found"));
+            Set<Clothes> clothes = new HashSet<>();
+            Set<User> users = household.getUsers();
+            users.forEach(
+                    user -> clothes.addAll(user.getClothes())
+            );
+            List<ClothesHouseholdGet> clothesGets = new ArrayList<>();
+            clothes.forEach(singleClothes -> {
+                clothesGets.add(new ClothesHouseholdGet(singleClothes,
+                        currentUser.getId() == singleClothes.getUser().getId()));
+            });
+            return clothesGets;
+        }
+        else
+        {
+            List<ClothesHouseholdGet> clothesGets = new ArrayList<>();
+            List<Clothes> clothes = clothesRepository.findClothesByUserId(currentUser.getId());
+            clothes.forEach(singleClothes -> {
+                clothesGets.add(new ClothesHouseholdGet(singleClothes,
+                        currentUser.getId() == singleClothes.getUser().getId()));
+            });
+            return clothesGets;
+        }
     }
 
     @Override
