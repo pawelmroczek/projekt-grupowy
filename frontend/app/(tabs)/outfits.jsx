@@ -33,10 +33,7 @@ const Home = () => {
     fetchOutfits(token).then((data) => {
       setOutfits(data);
       console.log("Fetched outfits:", data);
-      setOutfits([
-        { id: 1, clothesIds: [1, 2], name: "tesr1", type: "Sportowe" },
-        { id: 2, clothesIds: [1, 2], name: "tesr1", type: "Casualowe" },
-      ]);
+      setOutfits([JSON.parse(data)]);
     });
   }, [token]);
 
@@ -50,8 +47,6 @@ const Home = () => {
       setFilteredOutfits(outfits);
     }
   }, [selectedCategory, outfits]);
-
-
 
   const renderItem = ({ item: outfit }) => {
     const items = outfit?.clothesIds.map((id) => {
@@ -85,7 +80,9 @@ const Home = () => {
         </View>
         <View>
           <Text className="font-bold text-center">{outfit?.name}</Text>
-          <Text className="text-center mt-1 uppercase text-gray-500">{outfit?.type}</Text>
+          <Text className="text-center mt-1 uppercase text-gray-500">
+            {outfit?.type}
+          </Text>
         </View>
       </TouchableOpacity>
     );
@@ -101,16 +98,24 @@ const Home = () => {
         filters={filters}
       />
       <View className="flex-1">
-        <FlatList
-          data={filteredOutfits}
-          key={displayMode ? "single" : "double"}
-          numColumns={displayMode ? 1 : 2}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.list}
-          showsVerticalScrollIndicator={false}
-          style={{ flex: 1 }}
-        />
+        {filteredOutfits.length > 0 ? (
+          <FlatList
+            data={filteredOutfits}
+            key={displayMode ? "single" : "double"}
+            numColumns={displayMode ? 1 : 2}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.list}
+            showsVerticalScrollIndicator={false}
+            style={{ flex: 1 }}
+          />
+        ) : (
+          <View style={styles.list}>
+            <Text className="text-center text-gray-500">
+              Brak strojów w tej kategorii
+            </Text>
+          </View>
+        )}
       </View>
       <AddButton onPress={() => router.push("/addOutfits")} />
     </>

@@ -9,7 +9,7 @@ export const outfitsSending = async (formData, token) => {
           method: "POST",
           headers: {
               "Authentication": `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
+              "Content-Type": "application/json",
           },
           body: formData,
       });

@@ -10,6 +10,7 @@ import FormField from "../../../common/FormField";
 import VerticalSelector from "../../../common/VerticalSelector";
 import { outfitsTypes } from "../../../../lib/outfitsTypes";
 import { TokenContext } from "../../../../app/TokenContext";
+import { outfitsSending } from "../../../../lib/outfits/outfits";
 
 const ModalBox = ({ modalVisible, setModalVisible, selectedItems }) => {
   const [outfitName, setOutfitName] = useState("");
@@ -24,7 +25,8 @@ const ModalBox = ({ modalVisible, setModalVisible, selectedItems }) => {
     };
 
     console.log("Dane do wysłania:", dataToSend);
-    outfitsSending(dataToSend, token);
+    const dataJson =  JSON.stringify(dataToSend);
+    outfitsSending(dataJson, token);
     setModalVisible(false);
   };
 
