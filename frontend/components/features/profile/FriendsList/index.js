@@ -22,6 +22,7 @@ export default function FriendsList() {
 
       const fetchHomies = async () => {
         const homiesData = await getHomiesList(token);
+        console.log("Homies data:", homiesData);
         setHomies(homiesData);
       };
 
