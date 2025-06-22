@@ -74,7 +74,7 @@ const outfitDetails = () => {
               })
             }
           >
-            <Pencil className="text-black" size={30} />
+            {/* <Pencil className="text-black" size={30} /> */}
           </TouchableOpacity>
           <TouchableOpacity onPress={() => router.back()}>
             <X className="text-black" size={30} />
