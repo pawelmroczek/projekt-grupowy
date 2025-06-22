@@ -6,6 +6,9 @@ import com.fashionassistant.services.InvitationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.util.List;
+
 @RestController
 @RequestMapping("fashion/invitations")
 @RequiredArgsConstructor
@@ -15,6 +18,11 @@ public class InvitationController {
     @PostMapping("/send")
     public InvitationGet sendInvitation(@RequestBody InvitationCreate invitationCreate) {
         return invitationService.sendInvitation(invitationCreate);
+    }
+
+    @GetMapping
+    public List<InvitationGet> getAllInvitations() {
+        return invitationService.getAllInvitations();
     }
 
     @PostMapping("/accept/{id}")

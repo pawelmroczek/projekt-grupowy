@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -19,8 +20,13 @@ public class Household {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    @Column(name = "name")
-    private String name;
     @OneToMany(mappedBy = "household")
     private Set<User> users;
+
+    public void addUser(User user){
+        if(users == null){
+            users = new HashSet<>();
+        }
+        users.add(user);
+    }
 }

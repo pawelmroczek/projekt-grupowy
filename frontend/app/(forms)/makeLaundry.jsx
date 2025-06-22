@@ -4,14 +4,14 @@ import { useLocalSearchParams, router } from "expo-router";
 import useDirtyClothes from "../useDirtyClothes";
 import { toggleClean } from "../../lib/clothes/clothes";
 import { TokenContext } from "../TokenContext";
-import { getClothes } from "../../lib/clothes/clothes";
+import { getClothes, getClothesHousehold } from "../../lib/clothes/clothes";
 
 const makeLaundry = () => {
   const [selectedColor, setSelectedColor] = useState(null);
   const { token, setToken } = useContext(TokenContext);
   const {clothes, setClothes} = useContext(TokenContext);
 
-  let dirtyClothes = useDirtyClothes() || [];
+  let [dirtyClothes, setDirtyClothes] = useState([]);
   const params = useLocalSearchParams();
   const screenWidth = Dimensions.get("window").width;
 
@@ -19,6 +19,14 @@ const makeLaundry = () => {
     if (Object.keys(params).length > 0) {
       setSelectedColor(params.color);
     }
+    const fetchDirtyClothes = async () => {
+      const dirtyClothesData = await getClothesHousehold(token);
+      console.log("Brudne ubrania:", dirtyClothesData);
+      const onlyDirty = (dirtyClothesData || []).filter(item => !item.clean);
+      console.log("Tylko brudne ubrania:", onlyDirty);
+      setDirtyClothes(onlyDirty);
+    };
+    fetchDirtyClothes();
   }, []);
 
   dirtyClothes = dirtyClothes.filter((item) => item.color === selectedColor);

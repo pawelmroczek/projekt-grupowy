@@ -2,6 +2,7 @@ package com.fashionassistant.rest;
 
 import com.fashionassistant.entities.ClothesCreate;
 import com.fashionassistant.entities.ClothesGet;
+import com.fashionassistant.entities.ClothesHouseholdGet;
 import com.fashionassistant.entities.ClothesUpdate;
 import com.fashionassistant.services.ClothesService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,11 @@ public class ClothesController {
     @GetMapping
     public List<ClothesGet> getAllClothes() {
         return clothesService.getClothes();
+    }
+
+    @GetMapping("/household")
+    public List<ClothesHouseholdGet> getAllClothesFromHousehold() {
+        return clothesService.getClothesFromHousehold();
     }
 
     @PutMapping
