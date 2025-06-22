@@ -44,3 +44,23 @@ export const fetchOutfits = async (token) => {
     console.error("Błąd podczas pobierania strojów:", error);
   }
 }
+
+export const outfitDeleting = async (id, token) => {
+  try {
+    const response = await fetch(`${ipAddress}/fashion/outfits/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authentication: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP status ${response.status}`);
+    }
+
+    return 1;
+  } catch (error) {
+    console.error("Błąd podczas usuwania stroju:", error);
+  }
+}

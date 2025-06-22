@@ -25,15 +25,16 @@ const Home = () => {
 
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
+  const { outfits, setOutfits } = useContext(TokenContext);
+  
 
-  const [outfits, setOutfits] = useState([]);
+  
   const [filteredOutfits, setFilteredOutfits] = useState([]);
 
   useEffect(() => {
     fetchOutfits(token).then((data) => {
       setOutfits(data);
-      console.log("Fetched outfits:", data);
-      setOutfits([]);
+      
     });
   }, [token]);
 

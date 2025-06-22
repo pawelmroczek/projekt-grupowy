@@ -15,19 +15,21 @@ import { TokenContext } from "./TokenContext";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { getClothes } from "../lib/clothes/clothes";
 import OutfitDetailsTile from "../components/features/outfits/OutfitsDetails";
+import { fetchOutfits, outfitDeleting } from "../lib/outfits/outfits";
 
 const outfitDetails = () => {
   const outfit = useLocalSearchParams();
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
+  const {outfits, setOutfits} = useContext(TokenContext);
 
-  // const handleDelete = async (id) => {
-  //   console.log("Usuwam outfit o id:", id);
-  //   const serverresponse = await clothesDeleting(id, token);
-  //   const clothesData = await getClothes(token);
-  //   setClothes(clothesData);
-  //   router.push("/wardrobe");
-  // };
+  const handleDelete = async (id) => {
+    console.log("Usuwam outfit o id:", id);
+    const serverresponse = await outfitDeleting(id, token);
+    const outfitsData = await fetchOutfits(token);
+    setOutfits(outfitsData);
+    router.push("/outfits");
+  };
 
   const outfitClothes = clothes.filter((cloth) =>
     outfit.clothesIds?.includes(cloth.id)
@@ -95,7 +97,7 @@ const outfitDetails = () => {
               <View className="items-center space-y-3   py-3.5 rounded-xl w-full flex justify-center bg-white-100 pb-40">
                 <TouchableOpacity
                   onPress={() => {
-                    // handleDelete(cloth.id);
+                    handleDelete(outfit.id);
                   }}
                   className="px-4 py-2 w-full flex items-center bg-red-500 rounded-lg"
                 >

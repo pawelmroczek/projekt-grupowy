@@ -12,6 +12,8 @@ export default function Index() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
+  console.log("Clothes", clothes);
+
   const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
   const dictionary = {
     "Nakrycie głowy": ["Nakrycie głowy"],

@@ -10,14 +10,16 @@ import FormField from "../../../common/FormField";
 import VerticalSelector from "../../../common/VerticalSelector";
 import { outfitsTypes } from "../../../../lib/outfitsTypes";
 import { TokenContext } from "../../../../app/TokenContext";
-import { outfitsSending } from "../../../../lib/outfits/outfits";
+import { fetchOutfits, outfitsSending } from "../../../../lib/outfits/outfits";
+import {router} from "expo-router";
 
 const ModalBox = ({ modalVisible, setModalVisible, selectedItems }) => {
   const [outfitName, setOutfitName] = useState("");
   const [selectType, setSelectType] = useState("ide");
   const { token } = useContext(TokenContext);
+  const { outfits, setOutfits } = useContext(TokenContext);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const dataToSend = {
       name: outfitName,
       type: selectType,
@@ -26,8 +28,11 @@ const ModalBox = ({ modalVisible, setModalVisible, selectedItems }) => {
 
     console.log("Dane do wysłania:", dataToSend);
     const dataJson =  JSON.stringify(dataToSend);
-    outfitsSending(dataJson, token);
+    await outfitsSending(dataJson, token);
+    const outfitsData = await fetchOutfits(token);
+    setOutfits(outfitsData);
     setModalVisible(false);
+    router.push("/outfits");
   };
 
   return (
