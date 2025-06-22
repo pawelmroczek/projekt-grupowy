@@ -17,20 +17,11 @@ import { TokenContext } from "../TokenContext";
 import VerticalSelector from "../../components/common/VerticalSelector";
 import { useFocusEffect } from "@react-navigation/core";
 import { getClothes, toggleClean } from "../../lib/clothes/clothes";
+import { typeOptions } from "../../lib/typeOptions";
 
 export default function index() {
   const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
-  const typeOptions = [
-    "wszystkie",
-    "Koszulka",
-    "Koszula",
-    "Spodnie",
-    "Sweter",
-    "Kurtka",
-    "Buty",
-    "Sukienka",
-    "Spódnica",
-  ];
+
 
   const [filteredClothes, setFilteredClothes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);

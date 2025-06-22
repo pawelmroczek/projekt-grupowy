@@ -1,25 +1,20 @@
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  Text,
-  Modal,
-  SafeAreaView,
-} from "react-native";
-import React from "react";
+import { View, TextInput, TouchableOpacity, SafeAreaView } from "react-native";
 import { useState } from "react";
 import { router } from "expo-router";
 
 import { Search, LayoutGrid, SlidersHorizontal, X } from "lucide-react-native";
 import VerticalSelector from "../VerticalSelector";
-import { typeOptions } from "../../../lib/typeOptions";
+import { outfitsTypes } from "../../../lib/outfitsTypes";
 
-const SearchBarWardrobe = ({ displayMode, onDisplayPress, selectedCategory, setSelectedCategory, filters }) => {
+const SearchBarOutfits = ({
+  displayMode,
+  onDisplayPress,
+  selectedCategory,
+  setSelectedCategory,
+  filters,
+}) => {
   const [searchMode, setSearchMode] = useState(false);
   const [searchText, setSearchText] = useState("");
-  
-
 
   return (
     <SafeAreaView style={{ backgroundColor: "white" }}>
@@ -44,12 +39,9 @@ const SearchBarWardrobe = ({ displayMode, onDisplayPress, selectedCategory, setS
               <TouchableOpacity onPress={() => onDisplayPress(!displayMode)}>
                 <LayoutGrid className="text-black" size={30} />
               </TouchableOpacity>
+
               <View className="flex-row gap-4">
-                <TouchableOpacity onPress={() => 
-                router.push({ pathname: "/filterClothes", params: filters })
-              }>
-                  <SlidersHorizontal className="text-black" size={30} />
-                </TouchableOpacity>
+                
                 <TouchableOpacity onPress={() => setSearchMode(true)}>
                   <Search className="text-black" size={30} />
                 </TouchableOpacity>
@@ -60,7 +52,7 @@ const SearchBarWardrobe = ({ displayMode, onDisplayPress, selectedCategory, setS
         <View className=" border-t border-[#d8d8d8] bg-gray-100">
           {searchMode ? null : (
             <VerticalSelector
-              options={typeOptions}
+              options={outfitsTypes}
               setValue={setSelectedCategory}
               value={selectedCategory}
             />
@@ -71,4 +63,4 @@ const SearchBarWardrobe = ({ displayMode, onDisplayPress, selectedCategory, setS
   );
 };
 
-export default SearchBarWardrobe;
+export default SearchBarOutfits;

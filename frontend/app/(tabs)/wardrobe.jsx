@@ -30,6 +30,8 @@ const Wardrobe = () => {
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
 
+  console.log(clothes);
+
   const filteredClothes = useMemo(() => {
     console.log("Filtering clothes...");
     let result = clothes;

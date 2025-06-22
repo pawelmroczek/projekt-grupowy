@@ -22,6 +22,7 @@ public class InvitationServiceImpl implements InvitationService {
     private final AuthService authService;
     private final HouseholdRepository householdRepository;
 
+
     @Override
     public InvitationGet sendInvitation(InvitationCreate invitationCreate) {
         User toUser = userRepository.findById(invitationCreate.toUser())
@@ -117,7 +118,7 @@ public class InvitationServiceImpl implements InvitationService {
         invitation.setFromUser(null);
         invitationRepository.deleteById(invitationId);
     }
-
+  
     private Invitation getInvitationById(int invitationId) {
         Invitation invitation = invitationRepository.findById(invitationId)
                 .orElseThrow(() -> new NotFoundException("Invitation not found"));
