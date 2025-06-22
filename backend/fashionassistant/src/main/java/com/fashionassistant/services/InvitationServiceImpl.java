@@ -30,14 +30,15 @@ public class InvitationServiceImpl implements InvitationService {
         if (toUser.getId() == fromUser.getId()) {
             throw new BadRequestException("You can't send invitation to yourself");
         }
+        fromUser = userRepository.findById(fromUser.getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
         Invitation invitation = new Invitation(0, fromUser, toUser, invitationCreate.type(), 0);
         if (invitation.getType().equals("HOUSEHOLDS")) {
             Household household;
             if (fromUser.getHousehold() == null) {
-                household= householdRepository.save(new Household( 0, new HashSet<>(Set.of(fromUser))));
+                household = householdRepository.save(new Household(0, new HashSet<>(Set.of(fromUser))));
                 fromUser.setHousehold(household);
-            }
-            else {
+            } else {
                 household = householdRepository.findById(fromUser.getHousehold().getId())
                         .orElseThrow(() -> new NotFoundException("Household not found"));
             }
