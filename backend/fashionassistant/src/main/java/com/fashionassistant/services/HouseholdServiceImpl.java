@@ -21,7 +21,7 @@ public class HouseholdServiceImpl implements HouseholdService {
     @Override
     public List<UserFriendGet> getUsersFromHousehold() {
         User currentUser = authService.getCurrentUser();
-        Household household = householdRepository.findById(currentUser.getId())
+        Household household = householdRepository.findById(currentUser.getHousehold().getId())
                 .orElseThrow(() -> new NotFoundException("Household not found"));
         List<UserFriendGet> usersFromHousehold = household.getUsers().stream()
                 .map(user -> new UserFriendGet(user.getId(), user.getUsername()))

@@ -39,7 +39,7 @@ public class ClothesServiceImpl implements ClothesService {
     @Override
     public List<ClothesHouseholdGet> getClothesFromHousehold() {
         User currentUser = authService.getCurrentUser();
-        if(currentUser.getHousehold() != null) {
+        if (currentUser.getHousehold() != null) {
             Household household = householdRepository.findById(currentUser.getHousehold().getId())
                     .orElseThrow(() -> new NotFoundException("Household not found"));
             Set<Clothes> clothes = new HashSet<>();
@@ -53,9 +53,7 @@ public class ClothesServiceImpl implements ClothesService {
                         currentUser.getId() == singleClothes.getUser().getId()));
             });
             return clothesGets;
-        }
-        else
-        {
+        } else {
             List<ClothesHouseholdGet> clothesGets = new ArrayList<>();
             List<Clothes> clothes = clothesRepository.findClothesByUserId(currentUser.getId());
             clothes.forEach(singleClothes -> {
@@ -111,7 +109,8 @@ public class ClothesServiceImpl implements ClothesService {
             Clothes clothes = clothesRepository.findById(id)
                     .orElseThrow(() -> new BadRequestException("Clothes not found"));
             User user = authService.getCurrentUser();
-            if (clothes.getUser().getId() == user.getId()) {
+            if (clothes.getUser().getId() == user.getId() ||
+                    clothes.getUser().getHousehold().getId() == user.getHousehold().getId()) {
                 clothes.setClean(!clothes.isClean());
                 Clothes changedClothes = clothesRepository.save(clothes);
                 response.add(new ClothesGet(changedClothes));
