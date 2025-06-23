@@ -1,4 +1,4 @@
-FROM maven:3.9.6-eclipse-temurin-17-alpine
+FROM maven:3.9.9-amazoncorretto-17-alpine
 COPY . /fashion
 WORKDIR /fashion
 RUN mvn package -DskipTests
