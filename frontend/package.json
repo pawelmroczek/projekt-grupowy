@@ -1,0 +1,35 @@
+{
+  "name": "projekt-grupowy",
+  "version": "1.0.0",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "^53.0.0",
+    "expo-blur": "~14.1.5",
+    "expo-constants": "~17.1.6",
+    "expo-font": "~13.3.1",
+    "expo-image-picker": "~16.1.4",
+    "expo-linking": "~7.1.5",
+    "expo-router": "~5.1.0",
+    "expo-splash-screen": "~0.30.9",
+    "expo-status-bar": "~2.2.3",
+    "lucide-react-native": "^0.468.0",
+    "nativewind": "^2.0.11",
+    "react": "19.0.0",
+    "react-native": "0.79.3",
+    "react-native-chart-kit": "^6.12.0",
+    "react-native-safe-area-context": "5.4.0",
+    "react-native-screens": "~4.11.1",
+    "react-native-select-dropdown": "^4.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "tailwindcss": "^3.3.2"
+  },
+  "private": true
+}
