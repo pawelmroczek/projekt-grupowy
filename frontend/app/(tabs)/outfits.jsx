@@ -27,6 +27,7 @@ const Home = () => {
   const { clothes, setClothes } = useContext(TokenContext);
   const { outfits, setOutfits } = useContext(TokenContext);
   
+  console.log("Outfits:", outfits);
 
   
   const [filteredOutfits, setFilteredOutfits] = useState([]);

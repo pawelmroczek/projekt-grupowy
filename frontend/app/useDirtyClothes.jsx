@@ -16,6 +16,7 @@ const useDirtyClothes = () => {
 
     setDirtyClothes(dirty);
   }, [clothes]); // Efekt odpala się tylko, gdy zmienią się `clothes`
+  
   return dirtyClothes;
 };
 

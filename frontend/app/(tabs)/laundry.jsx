@@ -23,8 +23,7 @@ const Laundry = () => {
   return (
     <SafeAreaView>
       <View className="p-2 mt-24">
-        {/* <SuggestedLaundry /> */}
-        
+        <SuggestedLaundry />
         <PlanLaundryButton />
         <DirtyClothes />
         <MakeLaundryButton />
