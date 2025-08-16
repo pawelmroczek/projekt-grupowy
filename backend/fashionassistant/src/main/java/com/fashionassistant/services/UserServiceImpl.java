@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
                 new HashSet<>(),
                 null,
                 new ArrayList<>(),
+                new ArrayList<>(),
                 new ArrayList<>()
         );
         User createdUser = userRepository.save(user);

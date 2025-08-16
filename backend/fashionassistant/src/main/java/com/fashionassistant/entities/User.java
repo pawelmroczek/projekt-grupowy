@@ -48,6 +48,8 @@ public class User implements UserDetails {
     private List<Invitation> sentInvitations;
     @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Invitation> receivedInvitations;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Laundry> laundries;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
