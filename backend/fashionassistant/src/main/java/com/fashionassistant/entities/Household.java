@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,9 +23,11 @@ public class Household {
     private int id;
     @OneToMany(mappedBy = "household")
     private Set<User> users;
+    @OneToMany(mappedBy = "household", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Laundry> laundries;
 
-    public void addUser(User user){
-        if(users == null){
+    public void addUser(User user) {
+        if (users == null) {
             users = new HashSet<>();
         }
         users.add(user);

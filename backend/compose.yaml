@@ -25,6 +25,8 @@ services:
       - 'SPRING_JPA_HIBERNATE_DDL_AUTO=update'
       - 'JWT_KEY=${JWT_KEY}'
       - 'JWT_EXPIRATION_TIME=${JWT_EXPIRATION_TIME}'
+      - 'SPRING_MAIL_EMAIL=${EMAIL}'
+      - 'SPRING_MAIL_PASSWORD=${EMAIL_PASSWORD}'
     volumes:
       - ./fashionassistant/uploads:/app/uploads
     ports:
@@ -33,7 +35,7 @@ services:
       db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "8080"]
+      test: [ "CMD", "nc", "-z", "localhost", "8080" ]
       interval: 6s
       timeout: 5s
       retries: 5

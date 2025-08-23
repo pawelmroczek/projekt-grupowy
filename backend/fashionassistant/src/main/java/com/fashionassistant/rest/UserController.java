@@ -24,12 +24,17 @@ public class UserController {
     }
 
     @PostMapping("/signUp")
-    public Token signUp(@RequestBody UserCreate user) {
+    public UserFriendGet signUp(@RequestBody UserCreate user) {
         return userService.signUp(user);
     }
 
     @GetMapping("/{username}")
     public List<UserFriendGet> getUsersByUsername(@PathVariable String username) {
         return userService.getUsersByUsername(username);
+    }
+
+    @GetMapping("/verify/{token}")
+    public void verify(@PathVariable String token) {
+        userService.verify(token);
     }
 }
