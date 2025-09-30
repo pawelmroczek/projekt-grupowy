@@ -22,8 +22,10 @@ import { registerUser } from "../../lib/authorization/authorization";
 import { TokenContext } from "../TokenContext";
 import { getClothes } from "../../lib/clothes/clothes";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import EmailConfirmation from "../../components/features/auth/EmailConfirmation";
 
 const SignUp = () => {
+  const [emailNotificationVisible, setEmailNotificationVisible] = useState(false);
   const [registryStatus, setRegistryStatus] = useState(false);
   const [error, setError] = useState(null);
   const { token, setToken } = useContext(TokenContext);
@@ -71,6 +73,7 @@ const SignUp = () => {
   }
 
   const handleRegister = async () => {
+    console.log("Próba rejestracji z danymi:", form);
     validate = validateForm();
     if (validate === 0) {
       setRegistryStatus(true)
@@ -81,10 +84,11 @@ const SignUp = () => {
       
       if (response.success) {
         console.log("✅ Sukces:");
-        setToken(token);
-        const clothesData = await getClothes(token);
-        setClothes(clothesData);
-        router.push("/outfits"); 
+        // setToken(token);
+        // const clothesData = await getClothes(token);
+        // setClothes(clothesData);
+        setEmailNotificationVisible(true);
+
       } else {
         console.log("❌ Błąd:", response.message);
         setError(response.message); 
@@ -180,10 +184,12 @@ const SignUp = () => {
                   </Text>
                 </TouchableOpacity>
               </View>
+              <EmailConfirmation visible={emailNotificationVisible} setVisible={setEmailNotificationVisible}/>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
       </InitialBackground>
+      
     </TouchableWithoutFeedback>
   );
 };
