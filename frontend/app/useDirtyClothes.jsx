@@ -3,8 +3,7 @@ import { getClothes } from "../lib/clothes/clothes";
 import { TokenContext } from "./TokenContext";
 
 const useDirtyClothes = () => {
-  const [dirtyClothes, setDirtyClothes] = useState(null);
-  const { token } = useContext(TokenContext);
+  const [dirtyClothes, setDirtyClothes] = useState([]);
   const { clothes } = useContext(TokenContext);
 
   useEffect(() => {
