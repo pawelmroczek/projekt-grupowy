@@ -17,8 +17,8 @@ const SignIn = () => {
   const [loginStatus, setLoginStatus] = useState(false);
   const [error, setError] = useState(null);
   const [form, setForm] = useState({
-    email: "",
-    password: "",
+    email: "admin@gmail.com", //tymczasowe dane do logowania
+    password: "admin", //tymczasowe dane do logowania
   });
 
   const { token, setToken } = useContext(TokenContext);
