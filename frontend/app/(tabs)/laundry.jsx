@@ -1,11 +1,13 @@
 import { View, Text, SafeAreaView, ScrollView } from "react-native";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import WardrobeStatus from "../../components/features/laundry/WardrobeStatus";
 import PlanLaundryButton from "../../components/features/laundry/PlanLaundryButton";
 import LaundryHistory from "../../components/features/laundry/LaundryHistory";
 import SuggestedLaundry from "../../components/features/laundry/SuggestedLaundry";
 import DirtyClothes from "../../components/features/laundry/DirtyClothes";
 import MakeLaundryButton from "../../components/features/laundry/MakeLaundryButton";
+import { fetchLaundries } from "../../lib/laundry/fetchLaundries";
+import { TokenContext } from "../TokenContext";
 
 {
   /*
@@ -24,15 +26,28 @@ const Laundry = () => {
   */
   }
 
+  const [laundries, setLaundries] = useState([]);
+  const { token } = useContext(TokenContext);
+
+  const fetchData = async () => {
+    const data = await fetchLaundries(token);
+    console.log("historia prania",data);
+    setLaundries(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <SafeAreaView>
       <ScrollView>
         <View className="p-2">
-          <SuggestedLaundry /> {/* Proponowane pranie i przycisk do zmiany preferencji */}
+          <SuggestedLaundry />
           <PlanLaundryButton />
           <DirtyClothes />
           <MakeLaundryButton />
-          <LaundryHistory />
+          <LaundryHistory laundries={laundries} />
         </View>
       </ScrollView>
     </SafeAreaView>

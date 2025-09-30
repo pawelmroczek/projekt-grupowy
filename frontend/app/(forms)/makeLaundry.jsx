@@ -1,15 +1,23 @@
-import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions,
+} from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { useLocalSearchParams, router } from "expo-router";
 import useDirtyClothes from "../useDirtyClothes";
 import { toggleClean } from "../../lib/clothes/clothes";
 import { TokenContext } from "../TokenContext";
 import { getClothes, getClothesHousehold } from "../../lib/clothes/clothes";
+import { addLaundry } from "../../lib/laundry/addLaundry";
 
 const makeLaundry = () => {
   const [selectedColor, setSelectedColor] = useState(null);
   const { token, setToken } = useContext(TokenContext);
-  const {clothes, setClothes} = useContext(TokenContext);
+  const { clothes, setClothes } = useContext(TokenContext);
 
   let [dirtyClothes, setDirtyClothes] = useState([]);
   const params = useLocalSearchParams();
@@ -22,7 +30,7 @@ const makeLaundry = () => {
     const fetchDirtyClothes = async () => {
       const dirtyClothesData = await getClothesHousehold(token);
       console.log("Brudne ubrania:", dirtyClothesData);
-      const onlyDirty = (dirtyClothesData || []).filter(item => !item.clean);
+      const onlyDirty = (dirtyClothesData || []).filter((item) => !item.clean);
       console.log("Tylko brudne ubrania:", onlyDirty);
       setDirtyClothes(onlyDirty);
     };
@@ -41,18 +49,25 @@ const makeLaundry = () => {
 
   const handleSubmit = async () => {
     const serverresponse = await toggleClean(selected, token);
+    const laundryResponse = await addLaundry(selected, token);
     const clothesData = await getClothes(token);
     setClothes(clothesData);
     router.push("/laundry");
-  }
+  };
 
   return (
     <View className="flex-1 items-center justify-center">
-      <Text className="text-2xl font-bold mt-12 mb-2">Wybierz brudne ubrania</Text>
-      <ScrollView 
-      contentContainerStyle={{ alignItems: "center", paddingVertical: 20, paddingHorizontal: 10 }}
-      horizontal
-      showsHorizontalScrollIndicator={false}
+      <Text className="text-2xl font-bold mt-12 mb-2">
+        Wybierz brudne ubrania
+      </Text>
+      <ScrollView
+        contentContainerStyle={{
+          alignItems: "center",
+          paddingVertical: 20,
+          paddingHorizontal: 10,
+        }}
+        horizontal
+        showsHorizontalScrollIndicator={false}
       >
         <View className="flex-row flex-wrap justify-center">
           {dirtyClothes.map((item) => (
@@ -98,7 +113,6 @@ const makeLaundry = () => {
           <Text className="text-white text-lg font-bold">Anuluj</Text>
         </TouchableOpacity>
       </View>
-
     </View>
   );
 };
