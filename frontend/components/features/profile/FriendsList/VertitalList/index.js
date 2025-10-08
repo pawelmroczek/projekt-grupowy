@@ -4,7 +4,7 @@ import { CircleUser, UserX } from "lucide-react-native";
 import { TokenContext } from "../../../../../app/TokenContext";
 import { iviteSending } from "../../../../../lib/friends/friends";
 
-export default function VerticalList({friends,  household}) {
+export default function VerticalList({friends = [],  household = []}) {
 
 
   const [selectedFriend, setSelectedFriend] = useState(null);

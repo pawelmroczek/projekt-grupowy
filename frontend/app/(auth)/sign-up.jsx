@@ -71,7 +71,7 @@ const SignUp = () => {
   }
 
   const handleRegister = async () => {
-    validate = validateForm();
+    const validate = validateForm();
     if (validate === 0) {
       setRegistryStatus(true)
       const response = await registerUser(form);

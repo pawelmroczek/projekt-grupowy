@@ -1,11 +1,14 @@
 import { View, Text, TouchableOpacity, Modal, ScrollView, Image } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { LAUNDRY_ICONS, LAUNDRY_ICONS_NAMES } from "../../../../assets/constants/laundry_icons/laundry_icons";
 import { X, ListTodo, Camera, Eraser } from "lucide-react-native";
+import { captureImage } from "../../../../lib/clothes/picture_logic";
+import { laundryIconsClassification } from "../../../../lib/ml";
+import { TokenContext } from "../../../../app/TokenContext";
 
 export default function LaundryIconsSelector({ selectedIcons, setSelectedIcons }) {
     const [modalVisible, setModalVisible] = useState(false);
-
+    const { token, setToken } = useContext(TokenContext);
     return (
         <View className="my-2">
             <View className="flex-row items-center justify-between">
@@ -13,7 +16,22 @@ export default function LaundryIconsSelector({ selectedIcons, setSelectedIcons }
                     Piktogramy z metki:
                 </Text>
                 <View className="flex-row space-x-3">
-                    <TouchableOpacity className="w-10 h-10 bg-gray-200 rounded-lg items-center justify-center">
+                    <TouchableOpacity 
+                        onPress={async () => {
+                            const imageResult = await captureImage();
+                            const formData = new FormData();
+                            formData.append("file", {
+                                uri: imageResult.uri,
+                                name: "photo.jpg",
+                                type: imageResult.type,
+                            });
+                            const mlResult = await laundryIconsClassification(formData, token);
+                            const detectedIndexes = mlResult.detections.map(det => 
+                                LAUNDRY_ICONS_NAMES.indexOf(det.class)
+                            );
+                            setSelectedIcons(detectedIndexes.sort((a, b) => a - b));
+                        }}
+                        className="w-10 h-10 bg-gray-200 rounded-lg items-center justify-center">
                         <Camera />
                     </TouchableOpacity>
 

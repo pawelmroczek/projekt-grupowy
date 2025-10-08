@@ -194,7 +194,7 @@ export default function index() {
                 setSelectedColor={setSelectedColor}
               />
             </View>
-            { selectedCategory === 0 && imageUri ? (
+            { selectedCategory === 0 ? (
               <View>
                 <LaundryIconsSelector
                   selectedIcons={selectedIcons}
