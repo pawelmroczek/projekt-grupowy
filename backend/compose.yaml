@@ -16,6 +16,7 @@ services:
       retries: 3
     networks:
       - app-network
+
   app:
     container_name: 'fashion-app'
     build: ./fashionassistant
@@ -25,6 +26,9 @@ services:
       - 'SPRING_JPA_HIBERNATE_DDL_AUTO=update'
       - 'JWT_KEY=${JWT_KEY}'
       - 'JWT_EXPIRATION_TIME=${JWT_EXPIRATION_TIME}'
+      - 'SPRING_MAIL_EMAIL=${EMAIL}'
+      - 'SPRING_MAIL_PASSWORD=${EMAIL_PASSWORD}'
+      - PYTHON_ML_URL=http://python-ml:8000
     volumes:
       - ./fashionassistant/uploads:/app/uploads
     ports:
@@ -33,12 +37,13 @@ services:
       db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "8080"]
+      test: [ "CMD", "nc", "-z", "localhost", "8080" ]
       interval: 6s
       timeout: 5s
       retries: 5
     networks:
       - app-network
+
   nginx:
     container_name: 'images-server'
     image: nginx:latest
@@ -52,5 +57,19 @@ services:
         condition: service_healthy
     networks:
       - app-network
+
+  python-ml:
+    container_name: 'fashion-ml'
+    build: ../python-model
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 6s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
 networks:
   app-network:

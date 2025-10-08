@@ -4,40 +4,51 @@ import com.fashionassistant.entities.*;
 import com.fashionassistant.exceptions.BadRequestException;
 import com.fashionassistant.exceptions.NotFoundException;
 import com.fashionassistant.repositories.UserRepository;
+import com.fashionassistant.repositories.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final VerificationTokenRepository verificationTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
+    private final EmailService emailService;
 
     @Override
-    public Token signUp(UserCreate userCreate) {
+    public UserFriendGet signUp(UserCreate userCreate) {
         throwIfUserExists(userCreate);
         User user = new User(
                 0,
                 userCreate.username(),
                 userCreate.email(),
                 passwordEncoder.encode(userCreate.password()),
+                false,
                 new ArrayList<Clothes>(),
                 new ArrayList<Outfit>(),
                 new HashSet<>(),
                 null,
                 new ArrayList<>(),
+                new ArrayList<>(),
                 new ArrayList<>()
         );
-        userRepository.save(user);
-        return authService.logIn(new UserAuth(userCreate.email(), userCreate.password()));
+        User createdUser = userRepository.save(user);
+        String token = UUID.randomUUID().toString();
+        VerificationToken verificationToken =
+                new VerificationToken(0, token, LocalDateTime.now().plusHours(24), user);
+        verificationTokenRepository.save(verificationToken);
+        String verificationUrl = "http://localhost:8080/fashion/users/verify/" + token;
+        emailService.sendVerificationEmail(user.getEmail(),
+                "Fashion Buddy email verification",
+                "Click link to activate your account: " + verificationUrl);
+        return new UserFriendGet(createdUser.getId(), createdUser.getUsername());
     }
 
     @Override
@@ -67,6 +78,18 @@ public class UserServiceImpl implements UserService {
             usersGet.add(new UserFriendGet(user.getId(), user.getUsername()));
         });
         return usersGet;
+    }
+
+    @Override
+    public void verify(String token) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token)
+                .orElseThrow(() -> new NotFoundException("Verification token not found"));
+        if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new BadRequestException("Token is expired");
+        }
+        User user = verificationToken.getUser();
+        user.setEnabled(true);
+        userRepository.save(user);
     }
 
     private void throwIfUserExists(UserCreate userCreate) {

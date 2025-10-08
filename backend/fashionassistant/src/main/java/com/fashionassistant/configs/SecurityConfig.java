@@ -23,8 +23,11 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("fashion/users/**",
-                                        "fashion/clothes/**", "fashion/invitations/**", "/fashion/outfits/**")
+                                .requestMatchers("/fashion/users/**",
+                                        "fashion/clothes/**",
+                                        "fashion/invitations/**",
+                                        "/fashion/outfits/**",
+                                        "/fashion/laundries/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
@@ -34,6 +37,7 @@ public class SecurityConfig {
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                
         return http.build();
     }
 }

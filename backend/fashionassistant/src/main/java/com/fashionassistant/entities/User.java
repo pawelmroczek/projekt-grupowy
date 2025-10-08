@@ -27,6 +27,8 @@ public class User implements UserDetails {
     private String email;
     @Column(name = "password")
     private String password;
+    @Column(name = "is_enabled")
+    private boolean isEnabled;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Clothes> clothes;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -46,6 +48,8 @@ public class User implements UserDetails {
     private List<Invitation> sentInvitations;
     @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Invitation> receivedInvitations;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Laundry> laundries;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -69,7 +73,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 
     public void addClothes(Clothes newClothes) {
@@ -86,6 +90,7 @@ public class User implements UserDetails {
         outfits.add(outfit);
         outfit.setUser(this);
     }
+
     public void addSentInvitation(Invitation invitation) {
         if (invitation == null) {
             sentInvitations = new ArrayList<>();
@@ -108,6 +113,7 @@ public class User implements UserDetails {
             receivedInvitations.remove(invitation);
         }
     }
+
     public void addFriend(User user) {
         if (friends == null) {
             friends = new HashSet<>();
