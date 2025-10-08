@@ -11,6 +11,7 @@ export default function AddPhoto({
   setImageUri,
   setImageName,
   setImageType,
+  setPredictedType,
 }) {
   return (
     <View className="flex justify-center items-stretch flex-row space-x-4 ">
@@ -30,6 +31,7 @@ export default function AddPhoto({
             setImageUri(imageResult.uri);
             setImageName(imageResult.fileName);
             setImageType(imageResult.type);
+            setPredictedType(null);
           }}
           className="px-3 py-2 rounded-lg items-center border border-secondary-300"
         >
@@ -43,6 +45,7 @@ export default function AddPhoto({
             setImageUri(imageResult.uri);
             setImageName("photo.jpg");
             setImageType(imageResult.type);
+            setPredictedType(null);
           }}
           className="px-3 py-2 rounded-lg items-center border border-secondary-300"
         >
@@ -51,7 +54,10 @@ export default function AddPhoto({
 
         {/* Przycisk "Usuń zdjęcie" */}
         <TouchableOpacity
-          onPress={() => setImageUri(null)}
+          onPress={() => {
+            setImageUri(null);
+            setPredictedType(null);
+          }}
           className="px-3 py-2 rounded-lg items-center border border-secondary-300"
         >
           <Trash2 size={24} color={"#828282"} />

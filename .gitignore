@@ -44,3 +44,8 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+ML/.venv/
+ML/__pycache__/
+ML/yolov8/
+ML/yolov8n.pt

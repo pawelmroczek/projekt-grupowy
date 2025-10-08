@@ -2,11 +2,11 @@ package com.fashionassistant.entities;
 
 import java.time.LocalDate;
 
-public record ClothesGet(int id, String name, String type,
+public record ClothesGet(int id, Integer category, String name, String type,
                          String color, String size, LocalDate createdAt,
                          boolean clean, String picture, String user) {
     public ClothesGet(Clothes clothes) {
-        this(clothes.getId(), clothes.getName(), clothes.getType(), clothes.getColor(),
+        this(clothes.getId(), clothes.getCategory(), clothes.getName(), clothes.getType(), clothes.getColor(),
                 clothes.getSize(), clothes.getCreatedAt(), clothes.isClean(),
                 clothes.getPicture().getUrl(), clothes.getUser().getEmail());
     }
