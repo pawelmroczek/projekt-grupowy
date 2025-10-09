@@ -13,13 +13,14 @@ import { toggleClean } from "../../lib/clothes/clothes";
 import { TokenContext } from "../TokenContext";
 import { getClothes, getClothesHousehold } from "../../lib/clothes/clothes";
 import { addLaundry } from "../../lib/laundry/addLaundry";
+import CareSymbolsDisplay from "../../components/features/laundry/CareSymbolsDisplay";
 
 const makeLaundry = () => {
   const [selectedColor, setSelectedColor] = useState(null);
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
 
-  let [dirtyClothes, setDirtyClothes] = useState([]);
+  const allDirtyClothes = useDirtyClothes(); // Używamy hook z symbolami prania
   const params = useLocalSearchParams();
   const screenWidth = Dimensions.get("window").width;
 
@@ -27,17 +28,12 @@ const makeLaundry = () => {
     if (Object.keys(params).length > 0) {
       setSelectedColor(params.color);
     }
-    const fetchDirtyClothes = async () => {
-      const dirtyClothesData = await getClothesHousehold(token);
-      console.log("Brudne ubrania:", dirtyClothesData);
-      const onlyDirty = (dirtyClothesData || []).filter((item) => !item.clean);
-      console.log("Tylko brudne ubrania:", onlyDirty);
-      setDirtyClothes(onlyDirty);
-    };
-    fetchDirtyClothes();
   }, []);
 
-  dirtyClothes = dirtyClothes.filter((item) => item.color === selectedColor);
+  // Filtruj według koloru jeśli został wybrany
+  const dirtyClothes = selectedColor 
+    ? allDirtyClothes.filter((item) => item.color === selectedColor)
+    : allDirtyClothes;
 
   const [selected, setSelected] = useState([]);
 
@@ -73,22 +69,32 @@ const makeLaundry = () => {
           {dirtyClothes.map((item) => (
             <TouchableOpacity
               key={item.id}
-              className={`rounded-xl p-2 border-2 m-2 ${
+              className={`rounded-xl p-2 border-2 m-2 bg-white ${
                 selected.includes(item.id)
                   ? "border-secondary-300"
-                  : "bg-white-200 border-gray-200"
+                  : "border-gray-200"
               }`}
               onPress={() => handleSelect(item.id)}
+              style={{ width: screenWidth * 0.85 }}
             >
               <Image
                 source={{ uri: item.picture }}
                 style={{
-                  width: screenWidth * 0.8, // 90% szerokości ekranu
-                  height: screenWidth * 0.8, // Przykładowy stosunek wysokości (dostosuj według potrzeb)
+                  width: screenWidth * 0.75,
+                  height: screenWidth * 0.75,
                   resizeMode: "contain",
                   borderRadius: 10,
                 }}
               />
+              <View className="mt-2 p-2">
+                <Text className="font-pmedium text-gray-800 text-center">
+                  {item.name}
+                </Text>
+                <Text className="text-sm text-gray-600 text-center">
+                  {item.color} • {item.size}
+                </Text>
+                <CareSymbolsDisplay careSymbols={item.careSymbols} compact={true} />
+              </View>
             </TouchableOpacity>
           ))}
         </View>
