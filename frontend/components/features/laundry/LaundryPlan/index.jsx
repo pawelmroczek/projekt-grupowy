@@ -20,8 +20,7 @@ export default function LaundryPlan() {
   const [expandedLoad, setExpandedLoad] = useState(null);
   const [settingsVisible, setSettingsVisible] = useState(false);
   const [options, setOptions] = useState({
-    maxItemsPerLoad: 8,
-    minItemsPerLoad: 2,
+    minItemsPerLoad: 1,
     useTemperatureMatching: true,
     useRestrictionMatching: true,
     temperatureTolerance: 20,

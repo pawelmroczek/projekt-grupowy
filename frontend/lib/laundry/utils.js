@@ -16,10 +16,10 @@ export const getColorGroup = (color) => {
 };
 
 // Funkcja do określenia temperatury prania na podstawie symboli
-export const getWashTemperature = (careSymbols, careSymbolOptions) => {
+export const getWashTemperature = (careSymbols) => {
 
   if (!careSymbols || !Array.isArray(careSymbols) || careSymbols.length === 0) {
-    return careSymbolOptions.treatEmptyAsCompatible ? 40 : 40; // domyślna temperatura
+    return 40; // domyślna temperatura
   }
 
   // Znajdź symbol temperatury
