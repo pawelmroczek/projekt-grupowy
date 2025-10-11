@@ -3,6 +3,7 @@ package com.fashionassistant.services;
 import com.fashionassistant.entities.*;
 import com.fashionassistant.exceptions.BadRequestException;
 import com.fashionassistant.exceptions.NotFoundException;
+import com.fashionassistant.repositories.UserPreferencesRepository;
 import com.fashionassistant.repositories.UserRepository;
 import com.fashionassistant.repositories.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,22 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
     private final EmailService emailService;
+    private final UserPreferencesRepository userPreferencesRepository;
 
     @Override
     public UserFriendGet signUp(UserCreate userCreate) {
         throwIfUserExists(userCreate);
+        UserPreferences userPreferences = new UserPreferences(
+                0,
+                1,
+                true,
+                true,
+                20,
+                true,
+                false,
+                true,
+                null
+        );
         User user = new User(
                 0,
                 userCreate.username(),
@@ -37,8 +50,10 @@ public class UserServiceImpl implements UserService {
                 null,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                new ArrayList<>()
+                new ArrayList<>(),
+                userPreferences
         );
+        userPreferences.setUser(user);
         User createdUser = userRepository.save(user);
         String token = UUID.randomUUID().toString();
         VerificationToken verificationToken =
