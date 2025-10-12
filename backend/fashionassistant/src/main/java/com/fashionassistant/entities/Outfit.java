@@ -1,8 +1,6 @@
 package com.fashionassistant.entities;
-
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,22 +15,17 @@ public class Outfit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-
     @Column(name = "name")
     private String name;
-
     @Column(name = "type")
     private String type;
-
     @Column(name = "createdAt")
     private LocalDate createdAt;
-
-    // Stylizacja należy do użytkownika
+    @Column(name = "visible")
+    private boolean visible;
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
-
-    // Stylizacja składa się z wielu ubrań
     @ManyToMany
     @JoinTable(
         name = "outfit_clothes",

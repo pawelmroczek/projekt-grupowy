@@ -32,6 +32,7 @@ public class OutfitServiceImpl implements OutfitService {
                 outfitRequest.name(),
                 outfitRequest.type(),
                 LocalDate.now(),
+                outfitRequest.visible(),
                 user,
                 selectedClothes
         );
@@ -59,6 +60,7 @@ public class OutfitServiceImpl implements OutfitService {
         if (outfit.getUser().getId() == user.getId()) {
             outfit.setName(outfitRequest.name());
             outfit.setType(outfitRequest.type());
+            outfit.setVisible(outfitRequest.visible());
 
             List<Clothes> selectedClothes = clothesRepository.findAllById(outfitRequest.clothesIds());
             outfit.setClothes(selectedClothes);
