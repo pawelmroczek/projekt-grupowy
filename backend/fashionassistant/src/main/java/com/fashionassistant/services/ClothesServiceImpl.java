@@ -65,6 +65,19 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
+    public List<Clothes> getFriendsClothes() {
+        User currentUser = authService.getCurrentUser();
+        User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        List<Clothes> friendsClothes = new ArrayList<>();
+        Set<User> friends = user.getFriends();
+        friends.forEach(friend -> {
+            friendsClothes.addAll(friend.getClothes());
+        });
+        return friendsClothes;
+    }
+
+    @Override
     public ClothesGet updateClothes(ClothesUpdate clothesRequest) {
         MultipartFile file = clothesRequest.file();
         User user = authService.getCurrentUser();
