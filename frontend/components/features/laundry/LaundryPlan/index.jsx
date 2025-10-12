@@ -15,31 +15,18 @@ import { TokenContext } from "../../../../app/TokenContext";
 import LaundrySettings from "../LaundrySettings";
 import { wichStrictnessIsActive } from "../../../../lib/laundry/utils";
 
-export default function LaundryPlan() {
-  const { clothes, outfits } = useContext(TokenContext);
+const LaundryPlan =({suggestLaundry, options, setOptions}) =>{
+  
   const [expandedLoad, setExpandedLoad] = useState(null);
   const [settingsVisible, setSettingsVisible] = useState(false);
-  const [options, setOptions] = useState({
-    minItemsPerLoad: 1,
-    useTemperatureMatching: true,
-    useRestrictionMatching: true,
-    temperatureTolerance: 20,
-    treatEmptyAsCompatible: true,
-    allowHandWashWithMachine: false,
-    allowDelicateWithNormal: true,
-  });
+  
 
   const strictnessLevel = wichStrictnessIsActive(options);
 
-  const laundryHistory = []; // Na razie pusta historia
-  const laundryPlan = planLaundry(
-    clothes || [],
-    laundryHistory,
-    outfits || [],
-    options
-  );
+  
 
-  laundryPlan.map(load=>{
+
+  suggestLaundry.map(load=>{
     console.log("washGroup",load.washGroup);
   })
 
@@ -47,7 +34,7 @@ export default function LaundryPlan() {
     setExpandedLoad(expandedLoad === index ? null : index);
   };
 
-  if (!laundryPlan || laundryPlan.length === 0) {
+  if (!suggestLaundry || suggestLaundry.length === 0) {
     return (
       <View className="p-4 bg-white rounded-xl shadow mt-4 mb-4">
         <View className="flex-row items-center justify-between mb-4">
@@ -88,7 +75,7 @@ export default function LaundryPlan() {
             Plan Prania
           </Text>
           <Text className="text-sm text-gray-500 ml-2">
-            ({laundryPlan.length} ładunków)
+            ({suggestLaundry.length} ładunków)
           </Text>
         </View>
         <TouchableOpacity
@@ -100,7 +87,7 @@ export default function LaundryPlan() {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {laundryPlan.map((load, index) => (
+        {suggestLaundry.map((load, index) => (
           <View
             key={index}
             className="border border-gray-200 rounded-lg mb-3 overflow-hidden"
@@ -242,3 +229,6 @@ export default function LaundryPlan() {
     </View>
   );
 }
+
+
+export default LaundryPlan;

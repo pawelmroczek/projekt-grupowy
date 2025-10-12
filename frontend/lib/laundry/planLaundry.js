@@ -85,7 +85,7 @@ const planLaundry = (allClothes, laundryHistory, outfits, options) => {
 
   const getLastWashDate = (clothingId) => {
     const washes = laundryHistory
-      .filter((entry) => entry.clothesIds.includes(clothingId))
+      .filter((entry) => entry.clothes.includes(clothingId))
       .map((entry) => new Date(entry.date));
     return washes.length > 0 ? new Date(Math.max(...washes)) : null;
   };

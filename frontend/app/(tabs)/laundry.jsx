@@ -1,5 +1,5 @@
 import { View, Text, SafeAreaView, ScrollView } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import WardrobeStatus from "../../components/features/laundry/WardrobeStatus";
 import PlanLaundryButton from "../../components/features/laundry/PlanLaundryButton";
 import LaundryHistory from "../../components/features/laundry/LaundryHistory";
@@ -9,6 +9,7 @@ import LaundryPlan from "../../components/features/laundry/LaundryPlan";
 import DebugCareSymbols from "../../components/features/laundry/DebugCareSymbols";
 import { fetchLaundries } from "../../lib/laundry/fetchLaundries";
 import { TokenContext } from "../TokenContext";
+import planLaundry from "../../lib/laundry/planLaundry";
 
 {
   /*
@@ -28,28 +29,49 @@ const Laundry = () => {
   }
 
   const [laundries, setLaundries] = useState([]);
-  const { token } = useContext(TokenContext);
+
+  const [laundryPlan, setLaundryPlan] = useState([]);
+
+  const { token, clothes, outfits } = useContext(TokenContext);
 
   const fetchData = async () => {
     const data = await fetchLaundries(token);
-    console.log("historia prania",data);
     setLaundries(data);
   };
 
+  const [options, setOptions] = useState({
+    minItemsPerLoad: 1,
+    useTemperatureMatching: true,
+    useRestrictionMatching: true,
+    temperatureTolerance: 20,
+    treatEmptyAsCompatible: true,
+    allowHandWashWithMachine: false,
+    allowDelicateWithNormal: true,
+  });
+
   useEffect(() => {
-    fetchData();
+    fetchData();    
   }, []);
+
+
+  useEffect(() => {
+    setLaundryPlan(planLaundry(clothes || [], laundries, outfits || [], options));
+  }, [options, clothes, laundries, outfits]);
 
   return (
     <SafeAreaView>
       <ScrollView>
         <View className="p-2 pt-0">
           {/* <SuggestedLaundry /> */}
-          <LaundryPlan />
+          <LaundryPlan
+            suggestLaundry={laundryPlan}
+            options={options}
+            setOptions={setOptions}
+          />
           {/* <DebugCareSymbols /> */}
           <PlanLaundryButton />
           <DirtyClothes />
-          <MakeLaundryButton />
+          <MakeLaundryButton suggestedLaundry={laundryPlan} />
           <LaundryHistory laundries={laundries} />
         </View>
       </ScrollView>
