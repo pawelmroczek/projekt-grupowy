@@ -2,15 +2,19 @@ package com.fashionassistant.services;
 
 import com.fashionassistant.entities.*;
 import com.fashionassistant.exceptions.BadRequestException;
+import com.fashionassistant.exceptions.NotFoundException;
 import com.fashionassistant.repositories.ClothesRepository;
 import com.fashionassistant.repositories.OutfitRepository;
 import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +53,21 @@ public class OutfitServiceImpl implements OutfitService {
         List<OutfitGet> outfitGets = new ArrayList<>();
         outfits.forEach(outfit -> outfitGets.add(new OutfitGet(outfit)));
         return outfitGets;
+    }
+
+    @Override
+    public List<Outfit> getFriendsOutfits() {
+        User currentUser = authService.getCurrentUser();
+        User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        List<Outfit> friendsOutfits = new ArrayList<>();
+        Set<User> friends = user.getFriends();
+        friends.forEach(friend -> {
+            friend.getOutfits().stream()
+                .filter(Outfit::isVisible)
+                .forEach(friendsOutfits::add);
+        });
+        return friendsOutfits;
     }
 
     @Override
