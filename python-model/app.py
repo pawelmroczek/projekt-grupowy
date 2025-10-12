@@ -1,10 +1,15 @@
 from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import StreamingResponse, JSONResponse
 from ultralytics import YOLO
 from PIL import Image
 import io
+from rembg import remove
 
 app = FastAPI()
 model = YOLO("model/best.pt")
+
+def remove_background(image_bytes: bytes) -> bytes:
+    return remove(image_bytes)
 
 @app.get("/")
 def root():
@@ -33,3 +38,18 @@ async def predict(image: UploadFile = File(...)):
         return {"detections": [], "message": "No symbols detected"}
 
     return {"detections": detections}
+
+@app.post("/remove/bg")
+async def remove_bg(image: UploadFile = File(...)):
+    try:
+        image_bytes = await image.read()
+
+        output_data = remove_background(image_bytes)
+
+        return StreamingResponse(
+            io.BytesIO(output_data),
+            media_type="image/png",
+            headers={"Content-Disposition": "attachment; filename=no_bg.png"}
+        )
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})

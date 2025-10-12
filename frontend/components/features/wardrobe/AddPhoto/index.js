@@ -5,6 +5,7 @@ import {
   captureImage,
   selectImageFromLibrary,
 } from "../../../../lib/clothes/picture_logic";
+import { removeBackground } from "../../../../lib/clothes/remove_background";
 
 export default function AddPhoto({
   imageUri,
@@ -13,6 +14,22 @@ export default function AddPhoto({
   setImageType,
   setPredictedType,
 }) {
+  const removeImageBackground = async (imageUri) => {
+    const formData = new FormData();
+    formData.append("image", {
+      uri: imageUri,
+      name: "photo.jpg",
+      type: "image/jpeg",
+    });
+    try {
+      const response = await removeBackground(formData);
+      return response;
+    } catch (error) {
+      console.error("Błąd podczas usuwania tła:", error);
+      return null;
+    }
+  }
+
   return (
     <View className="flex justify-center items-stretch flex-row space-x-4 ">
       {/* Wyświetlanie zdjęcia */}
@@ -27,7 +44,9 @@ export default function AddPhoto({
         {/* Przycisk "Dodaj z galerii" */}
         <TouchableOpacity
           onPress={async () => {
-            const imageResult = await selectImageFromLibrary(); // Czekamy na wynik
+            let imageResult = await selectImageFromLibrary(); // Czekamy na wynik
+            //imageResult = await removeImageBackground(imageResult.uri);
+            //console.log(imageResult);
             setImageUri(imageResult.uri);
             setImageName(imageResult.fileName);
             setImageType(imageResult.type);
@@ -41,9 +60,10 @@ export default function AddPhoto({
         {/* Przycisk "Zrób zdjęcie" */}
         <TouchableOpacity
           onPress={async () => {
-            const imageResult = await captureImage(); // Czekamy na wynik
+            //let imageResult = await captureImage(); // Czekamy na wynik
+            //imageResult = await removeImageBackground(imageResult.uri);
             setImageUri(imageResult.uri);
-            setImageName("photo.jpg");
+            setImageName(imageResult.fileName);
             setImageType(imageResult.type);
             setPredictedType(null);
           }}

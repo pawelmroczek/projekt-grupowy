@@ -15,6 +15,7 @@ export default function FriendsList() {
 
   useFocusEffect(
     React.useCallback(() => {
+      if(!token) return;
       const fetchFriends = async () => {
         const friendsData = await getFriendsList(token);
         setFriends(friendsData);
@@ -33,7 +34,7 @@ export default function FriendsList() {
 
 
   return (
-    <View className="w-full bg-white rounded-xl  mt-4">
+    <View className="w-full bg-white rounded-xl">
       <Text className="text-xl font-bold p-2">Znajomi:</Text>
       <VerticalList friends={friends} household={homies}/>
       <View className="flex-row items-center justify-between p-2">

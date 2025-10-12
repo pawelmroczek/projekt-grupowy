@@ -11,6 +11,7 @@ const formsLayout = () => {
       <Stack.Screen name="findFriends" options={{ headerShown: false }} />
       <Stack.Screen name="invites" options={{ headerShown: false }} />
       <Stack.Screen name="addOutfits" options={{ headerShown: false }} />
+      <Stack.Screen name="profileDetails" options={{ headerShown: false }} />
     </Stack>
   );
 };
