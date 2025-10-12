@@ -31,6 +31,7 @@ CREATE TABLE `clothes` (
   `size` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
   `user_id` int DEFAULT NULL,
+  `priority` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK9v7gut79d5gafwodlxbpv5y2x` (`user_id`),
   CONSTRAINT `FK9v7gut79d5gafwodlxbpv5y2x` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
@@ -320,7 +321,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'wiktor5@gmail.com','$2a$10$26gTeDT8kaoNkgmRfwbN5.siOO/OuSSkvwZuD4xaWZoDYHD2AIbSm','wiktor',NULL,NULL,NULL),(2,'maciek@gmail.com','$2a$10$5PvNytX7q3ojymnUuI35E.daP/qc0nnWetQOGoWKolVxgkvXF.CyG','maciek',NULL,NULL,NULL),(3,'admin@gmailc.com','$2a$10$buhLnWjuTl5AUH6B42IJmecsQpDj8n9UdLBqjicvi2PmsYQ/AoG56','admin',NULL,_binary '',1);
+INSERT INTO `users` VALUES (1,'wiktor5@gmail.com','$2a$10$26gTeDT8kaoNkgmRfwbN5.siOO/OuSSkvwZuD4xaWZoDYHD2AIbSm','wiktor',NULL,NULL,NULL),(2,'maciek@gmail.com','$2a$10$5PvNytX7q3ojymnUuI35E.daP/qc0nnWetQOGoWKolVxgkvXF.CyG','maciek',NULL,NULL,NULL),(3,'admin@gmail.com','$2a$10$buhLnWjuTl5AUH6B42IJmecsQpDj8n9UdLBqjicvi2PmsYQ/AoG56','admin',NULL,_binary '',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -362,4 +363,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-11 14:07:14
+-- Dump completed on 2025-10-12  8:48:54

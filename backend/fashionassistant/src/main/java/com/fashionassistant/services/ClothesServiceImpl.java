@@ -79,6 +79,7 @@ public class ClothesServiceImpl implements ClothesService {
             clothes.setColor(clothesRequest.color());
             clothes.setSize(clothesRequest.size());
             clothes.setClean(clothesRequest.clean());
+            clothes.setPriority(clothesRequest.priority());
             clothes.setPicture(picture);
             picture.setClothes(clothes);
             Clothes clothesNew = clothesRepository.save(clothes);
@@ -132,6 +133,7 @@ public class ClothesServiceImpl implements ClothesService {
                 clothesRequest.size(),
                 LocalDate.now(),
                 clothesRequest.clean(),
+                clothesRequest.priority(),
                 picture,
                 user
         );

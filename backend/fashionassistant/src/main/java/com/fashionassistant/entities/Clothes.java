@@ -31,6 +31,8 @@ public class Clothes {
     private LocalDate createdAt;
     @Column(name = "clean")
     private boolean clean;
+    @Column(name = "priority")
+    private int priority;
     @OneToOne(mappedBy = "clothes", cascade = CascadeType.ALL)
     private Picture picture;
     @ManyToOne
