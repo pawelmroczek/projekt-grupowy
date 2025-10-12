@@ -72,7 +72,9 @@ public class ClothesServiceImpl implements ClothesService {
         List<Clothes> friendsClothes = new ArrayList<>();
         Set<User> friends = user.getFriends();
         friends.forEach(friend -> {
-            friendsClothes.addAll(friend.getClothes());
+            friend.getClothes().stream()
+                .filter(Clothes::isVisible)
+                .forEach(friendsClothes::add);
         });
         return friendsClothes;
     }
