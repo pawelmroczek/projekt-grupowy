@@ -107,13 +107,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void resetPassword(String email) {
-        User currentUser = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
         String newPassword = UUID.randomUUID().toString();
-        currentUser.setPassword(passwordEncoder.encode(newPassword));
-        emailService.sendVerificationEmail(currentUser.getEmail(),
+        user.setPassword(passwordEncoder.encode(newPassword));
+        emailService.sendVerificationEmail(user.getEmail(),
                 "Fashion Buddy password reset",
                 "This is your new temporary password: " + newPassword);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void changePassword(ChangePasswordRequest newPassword) {
+        int currentUserId = authService.getCurrentUser().getId();
+        User currentUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        currentUser.setPassword(passwordEncoder.encode(newPassword.password()));
         userRepository.save(currentUser);
     }
 
