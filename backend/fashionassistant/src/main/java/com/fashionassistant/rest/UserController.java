@@ -37,4 +37,9 @@ public class UserController {
     public void verify(@PathVariable String token) {
         userService.verify(token);
     }
+
+    @PostMapping("/reset-password/{email}")
+    public void resetPassword(@PathVariable String email) {
+        userService.resetPassword(email);
+    }
 }

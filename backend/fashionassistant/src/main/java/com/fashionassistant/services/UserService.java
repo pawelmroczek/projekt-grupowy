@@ -11,4 +11,6 @@ public interface UserService {
     List<UserFriendGet> getUsersByUsername(String username);
 
     void verify(String token);
+
+    void resetPassword(String email);
 }

@@ -3,7 +3,6 @@ package com.fashionassistant.services;
 import com.fashionassistant.entities.*;
 import com.fashionassistant.exceptions.BadRequestException;
 import com.fashionassistant.exceptions.NotFoundException;
-import com.fashionassistant.repositories.UserPreferencesRepository;
 import com.fashionassistant.repositories.UserRepository;
 import com.fashionassistant.repositories.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
     private final EmailService emailService;
-    private final UserPreferencesRepository userPreferencesRepository;
 
     @Override
     public UserFriendGet signUp(UserCreate userCreate) {
@@ -105,6 +103,18 @@ public class UserServiceImpl implements UserService {
         User user = verificationToken.getUser();
         user.setEnabled(true);
         userRepository.save(user);
+    }
+
+    @Override
+    public void resetPassword(String email) {
+        User currentUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        String newPassword = UUID.randomUUID().toString();
+        currentUser.setPassword(passwordEncoder.encode(newPassword));
+        emailService.sendVerificationEmail(currentUser.getEmail(),
+                "Fashion Buddy password reset",
+                "This is your new temporary password: " + newPassword);
+        userRepository.save(currentUser);
     }
 
     private void throwIfUserExists(UserCreate userCreate) {
