@@ -3,9 +3,7 @@ package com.fashionassistant.rest;
 import com.fashionassistant.entities.UserFriendGet;
 import com.fashionassistant.services.FriendService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,5 +16,10 @@ public class FriendController {
     @GetMapping
     public List<UserFriendGet> getAllFriends() {
         return friendService.getAllFriends();
+    }
+
+    @DeleteMapping("/{friendId}")
+    public void removeFriend(@PathVariable int friendId) {
+        friendService.removeFriend(friendId);
     }
 }
