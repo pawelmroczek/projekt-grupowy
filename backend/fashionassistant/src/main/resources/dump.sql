@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS `clothes`;
 CREATE TABLE `clothes` (
   `id` int NOT NULL AUTO_INCREMENT,
   `clean` bit(1) DEFAULT NULL,
+  `visible` bit(1) DEFAULT NULL,
   `color` varchar(255) DEFAULT NULL,
   `created_at` date DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
