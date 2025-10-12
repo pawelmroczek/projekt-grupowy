@@ -16,17 +16,23 @@ export default function MakeLaundryButton({ suggestedLaundry }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
 
-  const [expandedLoad, setExpandedLoad] = useState(null);
+  const [selectedLoad, setSelectedLoad] = useState(null);
 
-  const toggleExpanded = (index) => {
-    setExpandedLoad(expandedLoad === index ? null : index);
+  const selectLoad = (index) => {
+    setSelectedLoad(index === selectedLoad ? null : index);
   };
 
   const handleSubmit = () => {
     setModalVisible(false);
+
+    const dataToPass =
+      selectedLoad !== null
+        ? { laundry: JSON.stringify(suggestedLaundry[selectedLoad]) }
+        : { color: selectedColor };
+
     router.push({
       pathname: "/makeLaundry",
-      params: { color: selectedColor },
+      params: dataToPass,
     });
     setSelectedColor(null);
   };
@@ -60,13 +66,16 @@ export default function MakeLaundryButton({ suggestedLaundry }) {
                           marginRight:
                             index === suggestedLaundry.length - 1 ? 0 : 12,
                         }}
+                        onPress={() => {
+                          selectLoad(index);
+                          setSelectedColor(null);
+                        }}
                         key={index}
-                        className="border border-gray-200 rounded-lg mb-3 overflow-hidden"
+                        className={`border border-gray-200 rounded-lg mb-3 overflow-hidden ${
+                          selectedLoad === index ? " border-secondary-300" : ""
+                        }`}
                       >
-                        <View
-                          onPress={() => toggleExpanded(index)}
-                          className="p-3 bg-gray-50 flex-row items-center justify-between"
-                        >
+                        <View className="p-3 bg-gray-50 flex-row items-center justify-between">
                           <View className="flex-1">
                             <View className="flex-row items-center">
                               <View
@@ -129,7 +138,10 @@ export default function MakeLaundryButton({ suggestedLaundry }) {
                   </Text>
                   <ColorSelector
                     selectColor={selectedColor}
-                    setSelectededColor={setSelectedColor}
+                    setSelectededColor={(color) => {
+                      setSelectedColor(color);
+                      setSelectedLoad(null);
+                    }}
                   />
                   <View className="items-center   py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4 ">
                     <TouchableOpacity
