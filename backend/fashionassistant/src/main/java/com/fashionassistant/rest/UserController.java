@@ -30,6 +30,11 @@ public class UserController {
         return userService.getUsersByUsername(username);
     }
 
+    @GetMapping("/info")
+    public UserGet getUserInfo() {
+        return new UserGet(userService.getUserInfo());
+    }
+
     @GetMapping("/verify/{token}")
     public void verify(@PathVariable String token) {
         userService.verify(token);

@@ -1,6 +1,7 @@
 package com.fashionassistant.services;
 
 import com.fashionassistant.entities.ChangePasswordRequest;
+import com.fashionassistant.entities.User;
 import com.fashionassistant.entities.UserCreate;
 import com.fashionassistant.entities.UserFriendGet;
 
@@ -14,6 +15,8 @@ public interface UserService {
     void verify(String token);
 
     void resetPassword(String email);
+
+    User getUserInfo();
 
     void changePassword(ChangePasswordRequest newPassword);
 }

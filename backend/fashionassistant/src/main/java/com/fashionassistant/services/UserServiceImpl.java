@@ -118,6 +118,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserInfo() {
+        int currentUserId = authService.getCurrentUser().getId();
+        User currentUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        return currentUser;
+    }
+
+    @Override
     public void changePassword(ChangePasswordRequest newPassword) {
         int currentUserId = authService.getCurrentUser().getId();
         User currentUser = userRepository.findById(currentUserId)
