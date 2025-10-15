@@ -1,9 +1,6 @@
 package com.fashionassistant.rest;
 
-import com.fashionassistant.entities.Token;
-import com.fashionassistant.entities.UserAuth;
-import com.fashionassistant.entities.UserCreate;
-import com.fashionassistant.entities.UserFriendGet;
+import com.fashionassistant.entities.*;
 import com.fashionassistant.services.AuthService;
 import com.fashionassistant.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +30,23 @@ public class UserController {
         return userService.getUsersByUsername(username);
     }
 
+    @GetMapping("/info")
+    public UserGet getUserInfo() {
+        return new UserGet(userService.getUserInfo());
+    }
+
     @GetMapping("/verify/{token}")
     public void verify(@PathVariable String token) {
         userService.verify(token);
+    }
+
+    @PostMapping("/change-password")
+    public void changePassword(@RequestBody ChangePasswordRequest password) {
+        userService.changePassword(password);
+    }
+
+    @PostMapping("/reset-password/{email}")
+    public void resetPassword(@PathVariable String email) {
+        userService.resetPassword(email);
     }
 }

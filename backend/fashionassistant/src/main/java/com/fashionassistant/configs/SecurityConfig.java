@@ -27,7 +27,8 @@ public class SecurityConfig {
                                         "fashion/clothes/**",
                                         "fashion/invitations/**",
                                         "/fashion/outfits/**",
-                                        "/fashion/laundries/**")
+                                        "/fashion/laundries/**",
+                                        "/fashion/user-preferences/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
@@ -37,7 +38,7 @@ public class SecurityConfig {
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-                
+
         return http.build();
     }
 }

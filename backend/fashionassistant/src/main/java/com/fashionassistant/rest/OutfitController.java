@@ -32,6 +32,12 @@ public class OutfitController {
         return outfitService.getOutfits();
     }
 
+    @GetMapping("/friends")
+    public List<OutfitGet> getAllOutfitsFromFriends() {
+        return outfitService.getFriendsOutfits().stream()
+                .map(OutfitGet::new).toList();
+    }
+
     @PutMapping
     public OutfitGet updateOutfit(@RequestBody OutfitUpdate outfit) {
         return outfitService.updateOutfit(outfit);
