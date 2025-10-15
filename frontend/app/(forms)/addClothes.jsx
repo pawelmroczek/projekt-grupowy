@@ -99,6 +99,10 @@ export default function index() {
       name: imageName,
       type: imageType,
     });
+    console.log("Dane formularza:");
+    console.log(imageUri);
+    console.log(imageName);
+    console.log(imageType);
     formData.append("size", selectedSize);
     formData.append("color", selectedColor);
     formData.append("clean", cleanStatus);

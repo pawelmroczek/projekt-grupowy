@@ -45,11 +45,10 @@ export default function AddPhoto({
         <TouchableOpacity
           onPress={async () => {
             let imageResult = await selectImageFromLibrary(); // Czekamy na wynik
-            //imageResult = await removeImageBackground(imageResult.uri);
-            //console.log(imageResult);
+            imageResult.uri = await removeImageBackground(imageResult.uri);
             setImageUri(imageResult.uri);
-            setImageName(imageResult.fileName);
-            setImageType(imageResult.type);
+            setImageName("ml_output.png");
+            setImageType("image/png");
             setPredictedType(null);
           }}
           className="px-3 py-2 rounded-lg items-center border border-secondary-300"
@@ -60,11 +59,11 @@ export default function AddPhoto({
         {/* Przycisk "Zrób zdjęcie" */}
         <TouchableOpacity
           onPress={async () => {
-            //let imageResult = await captureImage(); // Czekamy na wynik
-            //imageResult = await removeImageBackground(imageResult.uri);
+            let imageResult = await captureImage(); // Czekamy na wynik
+            imageResult.uri = await removeImageBackground(imageResult.uri);
             setImageUri(imageResult.uri);
-            setImageName(imageResult.fileName);
-            setImageType(imageResult.type);
+            setImageName("ml_output.png");
+            setImageType("image/png");
             setPredictedType(null);
           }}
           className="px-3 py-2 rounded-lg items-center border border-secondary-300"

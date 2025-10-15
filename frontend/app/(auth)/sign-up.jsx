@@ -21,7 +21,6 @@ import ErrorText from "../../components/common/ErrorText";
 import { registerUser } from "../../lib/authorization/authorization";
 import { TokenContext } from "../TokenContext";
 import { getClothes } from "../../lib/clothes/clothes";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 const SignUp = () => {
   const [registryStatus, setRegistryStatus] = useState(false);
