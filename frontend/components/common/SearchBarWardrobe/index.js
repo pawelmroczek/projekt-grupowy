@@ -13,7 +13,7 @@ import { router } from "expo-router";
 
 import { Search, LayoutGrid, SlidersHorizontal, X } from "lucide-react-native";
 import VerticalSelector from "../VerticalSelector";
-import { typeOptions } from "../../../lib/typeOptions";
+import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../../assets/constants/types/types";
 
 const SearchBarWardrobe = ({ displayMode, onDisplayPress, selectedCategory, setSelectedCategory, filters }) => {
   const [searchMode, setSearchMode] = useState(false);
@@ -60,7 +60,7 @@ const SearchBarWardrobe = ({ displayMode, onDisplayPress, selectedCategory, setS
         <View className=" border-t border-[#d8d8d8] bg-gray-100">
           {searchMode ? null : (
             <VerticalSelector
-              options={typeOptions}
+              options={[...clothingTypeOptions, ...shoesTypeOptions, ...accessoryTypeOptions]}
               setValue={setSelectedCategory}
               value={selectedCategory}
             />

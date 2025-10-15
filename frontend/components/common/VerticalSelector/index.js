@@ -10,9 +10,9 @@ const VerticalSelector = ({ options, value, setValue }) => {
       contentContainerStyle={{ paddingHorizontal: 0 }}
     >
       <View className="flex-row space-x-2 m-2">
-        {options.map((opt) => (
+        {options.map((opt, index) => (
           <TouchableOpacity
-            key={opt}
+            key={index}
             className={`px-4 py-2 rounded-full border ${
               value === opt
                 ? " border-secondary-300"

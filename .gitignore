@@ -6,6 +6,7 @@
 
 # dependencies
 frontend/node_modules/
+backend/fashionassistant/uploads
 
 # Expo
 .expo/
@@ -44,3 +45,8 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+ML/.venv/
+ML/__pycache__/
+ML/yolov8/
+ML/yolov8n.pt

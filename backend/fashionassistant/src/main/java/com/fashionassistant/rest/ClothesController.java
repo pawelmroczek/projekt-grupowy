@@ -36,6 +36,12 @@ public class ClothesController {
         return clothesService.getClothesFromHousehold();
     }
 
+    @GetMapping("/friends")
+    public List<ClothesGet> getAllClothesFromFriends() {
+        return clothesService.getFriendsClothes().stream()
+                .map(ClothesGet::new).toList();
+    }
+
     @PutMapping
     public ClothesGet updateClothes(@ModelAttribute ClothesUpdate clothes) {
         return clothesService.updateClothes(clothes);

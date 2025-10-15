@@ -131,3 +131,71 @@ export const getHomiesList = async (token) => {
       console.error('Błąd:', error);
     }
 }
+
+export const leaveHousehold = async (token) => {
+  try {
+    const response = await fetch(ipAddress + "/fashion/household/leave", {
+      method: "POST",
+      headers: {
+        "Authentication": `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const text = await response.text();
+    if (!text) return []; 
+
+    const data = JSON.parse(text);
+    return data;
+  } catch (error) {
+    console.error('Błąd:', error);
+    return [];
+  }
+}
+
+export const deleteFriend = async (token, friendId) => {
+  try {
+    const response = await fetch(ipAddress + "/fashion/friends/" + friendId, {
+      method: "DELETE",
+      headers: {
+        "Authentication": `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const text = await response.text();
+    if (!text) return []; 
+
+    const data = JSON.parse(text);
+    return data;
+  } catch (error) {
+    console.error('Błąd:', error);
+    return [];
+  }
+}
+
+
+export const getUserInfo = async (token) => {
+    try {
+      const response = await fetch(ipAddress+"/fashion/users/info", {
+          method: "GET",
+          headers: {
+              "Authentication": `Bearer ${token}`
+          }
+      });
+      if (!response.ok) {
+          throw new Error(`HTTP status ${response.status}`);
+      }
+      const data = await response.json();   
+      console.log("Odpowiedź serwera:", data);
+      return data;
+    } catch (error) {
+      console.error('Błąd:', error);
+    }
+}

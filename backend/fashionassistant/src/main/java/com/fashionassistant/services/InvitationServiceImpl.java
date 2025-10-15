@@ -37,7 +37,8 @@ public class InvitationServiceImpl implements InvitationService {
         if (invitation.getType().equals("HOUSEHOLDS")) {
             Household household;
             if (fromUser.getHousehold() == null) {
-                household = householdRepository.save(new Household(0, new HashSet<>(Set.of(fromUser))));
+                household = householdRepository.save(new Household(0, new HashSet<>(Set.of(fromUser)),
+                        new ArrayList<>()));
                 fromUser.setHousehold(household);
             } else {
                 household = householdRepository.findById(fromUser.getHousehold().getId())
@@ -118,7 +119,7 @@ public class InvitationServiceImpl implements InvitationService {
         invitation.setFromUser(null);
         invitationRepository.deleteById(invitationId);
     }
-  
+
     private Invitation getInvitationById(int invitationId) {
         Invitation invitation = invitationRepository.findById(invitationId)
                 .orElseThrow(() -> new NotFoundException("Invitation not found"));

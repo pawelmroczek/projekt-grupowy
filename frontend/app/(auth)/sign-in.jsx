@@ -17,8 +17,8 @@ const SignIn = () => {
   const [loginStatus, setLoginStatus] = useState(false);
   const [error, setError] = useState(null);
   const [form, setForm] = useState({
-    email: "",
-    password: "",
+    email: "admin@gmail.com", //tymczasowe dane do logowania
+    password: "admin", //tymczasowe dane do logowania
   });
 
   const { token, setToken } = useContext(TokenContext);
@@ -46,7 +46,7 @@ const SignIn = () => {
 
   const handleSubmit = async () => {
     setError(null);
-    validate = validateForm();
+    const validate = validateForm();
     if(validate == 0){
       setLoginStatus(true);
       const data = await loginUser(form.email, form.password);
@@ -59,7 +59,7 @@ const SignIn = () => {
         setToken(token);
         const clothesData = await getClothes(token);
         setClothes(clothesData);
-        router.push("/outfits");
+        router.replace("/outfits");
       } else {
         console.log("❌ Błąd:",data.message.message);
         setError(data.message.message);

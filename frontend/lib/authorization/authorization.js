@@ -80,3 +80,41 @@ export const registerUser = async (form) => {
     };
   }
 };
+
+export const changePassword = async (token, password) => {
+  const body = {
+    password: password,
+  };
+  try {
+    const response = await fetch(ipAddress + "/fashion/users/change-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authentication": `Bearer ${token}`
+      },
+      body: JSON.stringify(body),
+    });
+    console.log(JSON.stringify({ password }));
+    console.log(response);
+    //const data = await response.json();
+    console.log(response.ok);
+    //console.log(data);
+    console.log("?");
+    if (response.ok) {
+      return {
+        success: true,
+        message: "Hasło zostało zmienione pomyślnie!"
+      };
+    } else {
+      return {
+        success: false,
+        message: "Błąd zmiany hasła",
+      };
+    } 
+  } catch (error) {
+    return {
+      success: false,
+      message: "Błąd połączenia z serwerem. Spróbuj ponownie później.",
+    };
+  }
+}
