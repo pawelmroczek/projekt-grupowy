@@ -17,7 +17,7 @@ import { TokenContext } from "../TokenContext";
 import VerticalSelector from "../../components/common/VerticalSelector";
 import { useFocusEffect } from "@react-navigation/core";
 import { getClothes, toggleClean } from "../../lib/clothes/clothes";
-import { typeOptions } from "../../lib/typeOptions";
+import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
 
 export default function index() {
   const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
@@ -116,7 +116,7 @@ export default function index() {
             />
             <Text className="text-lg font-pmedium ml-2">Rodzaj</Text>
             <VerticalSelector
-              options={typeOptions}
+              options={[...clothingTypeOptions, ...shoesTypeOptions, ...accessoryTypeOptions]}
               setValue={setSelectedCategory}
               value={selectedCategory}
             />

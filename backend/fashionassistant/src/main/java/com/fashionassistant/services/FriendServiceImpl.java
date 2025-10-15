@@ -27,4 +27,17 @@ public class FriendServiceImpl implements FriendService {
                 .toList();
         return friendsGet;
     }
+
+    @Override
+    public void removeFriend(int friendId) {
+        User currentUser = authService.getCurrentUser();
+        currentUser = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        User friend = userRepository.findById(friendId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        friend.getFriends().remove(currentUser);
+        currentUser.getFriends().remove(friend);
+        userRepository.save(friend);
+        userRepository.save(currentUser);
+    }
 }

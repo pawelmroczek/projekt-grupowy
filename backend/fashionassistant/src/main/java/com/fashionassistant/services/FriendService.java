@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface FriendService {
     List<UserFriendGet> getAllFriends();
+
+    void removeFriend(int friendId);
 }

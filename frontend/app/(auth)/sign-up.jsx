@@ -21,8 +21,8 @@ import ErrorText from "../../components/common/ErrorText";
 import { registerUser } from "../../lib/authorization/authorization";
 import { TokenContext } from "../TokenContext";
 import { getClothes } from "../../lib/clothes/clothes";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import EmailConfirmation from "../../components/features/auth/EmailConfirmation";
+
 
 const SignUp = () => {
   const [emailNotificationVisible, setEmailNotificationVisible] = useState(false);

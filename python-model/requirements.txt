@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+pillow
+python-multipart
+ultralytics
+rembg
+onnxruntime

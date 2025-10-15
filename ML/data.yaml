@@ -1,0 +1,5 @@
+train: yolov8/images/train
+val: yolov8/images/val
+
+nc: 3                   # liczba klas
+names: ['Bluzka', 'Koszula', 'T-shirt']

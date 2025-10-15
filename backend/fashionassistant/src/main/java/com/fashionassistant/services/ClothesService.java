@@ -1,9 +1,6 @@
 package com.fashionassistant.services;
 
-import com.fashionassistant.entities.ClothesCreate;
-import com.fashionassistant.entities.ClothesGet;
-import com.fashionassistant.entities.ClothesHouseholdGet;
-import com.fashionassistant.entities.ClothesUpdate;
+import com.fashionassistant.entities.*;
 
 import java.util.List;
 
@@ -13,6 +10,8 @@ public interface ClothesService {
     List<ClothesGet> getClothes();
 
     List<ClothesHouseholdGet> getClothesFromHousehold();
+
+    List<Clothes> getFriendsClothes();
 
     ClothesGet updateClothes(ClothesUpdate clothes);
 

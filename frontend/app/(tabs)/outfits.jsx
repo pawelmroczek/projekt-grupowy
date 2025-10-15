@@ -33,10 +33,11 @@ const Home = () => {
   const [filteredOutfits, setFilteredOutfits] = useState([]);
 
   useEffect(() => {
-    fetchOutfits(token).then((data) => {
-      setOutfits(data);
-      
-    });
+    if(!token) return;
+      fetchOutfits(token).then((data) => {
+        setOutfits(data);
+        
+      });
   }, [token]);
 
   useEffect(() => {

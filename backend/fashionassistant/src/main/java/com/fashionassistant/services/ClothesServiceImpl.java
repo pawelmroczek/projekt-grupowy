@@ -65,6 +65,21 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
+    public List<Clothes> getFriendsClothes() {
+        User currentUser = authService.getCurrentUser();
+        User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        List<Clothes> friendsClothes = new ArrayList<>();
+        Set<User> friends = user.getFriends();
+        friends.forEach(friend -> {
+            friend.getClothes().stream()
+                .filter(Clothes::isVisible)
+                .forEach(friendsClothes::add);
+        });
+        return friendsClothes;
+    }
+
+    @Override
     public ClothesGet updateClothes(ClothesUpdate clothesRequest) {
         MultipartFile file = clothesRequest.file();
         User user = authService.getCurrentUser();
@@ -79,6 +94,8 @@ public class ClothesServiceImpl implements ClothesService {
             clothes.setColor(clothesRequest.color());
             clothes.setSize(clothesRequest.size());
             clothes.setClean(clothesRequest.clean());
+            clothes.setVisible(clothesRequest.visible());
+            clothes.setPriority(clothesRequest.priority());
             clothes.setPicture(picture);
             picture.setClothes(clothes);
             Clothes clothesNew = clothesRepository.save(clothes);
@@ -127,11 +144,14 @@ public class ClothesServiceImpl implements ClothesService {
         Clothes clothes = new Clothes(
                 0,
                 clothesRequest.name(),
+                clothesRequest.category(),
                 clothesRequest.type(),
                 clothesRequest.color(),
                 clothesRequest.size(),
                 LocalDate.now(),
                 clothesRequest.clean(),
+                clothesRequest.visible(),
+                clothesRequest.priority(),
                 picture,
                 user
         );

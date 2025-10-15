@@ -50,6 +50,9 @@ public class User implements UserDetails {
     private List<Invitation> receivedInvitations;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Laundry> laundries;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "preferences_id")
+    private UserPreferences userPreferences;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -25,12 +25,14 @@ DROP TABLE IF EXISTS `clothes`;
 CREATE TABLE `clothes` (
   `id` int NOT NULL AUTO_INCREMENT,
   `clean` bit(1) DEFAULT NULL,
+  `visible` bit(1) DEFAULT NULL,
   `color` varchar(255) DEFAULT NULL,
   `created_at` date DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `size` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
   `user_id` int DEFAULT NULL,
+  `priority` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK9v7gut79d5gafwodlxbpv5y2x` (`user_id`),
   CONSTRAINT `FK9v7gut79d5gafwodlxbpv5y2x` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
@@ -262,6 +264,36 @@ LOCK TABLES `user_friends` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user_preferences`
+--
+
+DROP TABLE IF EXISTS `user_preferences`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_preferences` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `allow_delicate_with_normal` bit(1) DEFAULT NULL,
+  `allow_hand_wash_with_machine` bit(1) DEFAULT NULL,
+  `min_items_per_load` int DEFAULT NULL,
+  `temeprature_tolerance` int DEFAULT NULL,
+  `treat_empty_as_compatible` bit(1) DEFAULT NULL,
+  `use_restriction_matching` bit(1) DEFAULT NULL,
+  `use_temperature_matching` bit(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_preferences`
+--
+
+LOCK TABLES `user_preferences` WRITE;
+/*!40000 ALTER TABLE `user_preferences` DISABLE KEYS */;
+INSERT INTO `user_preferences` VALUES (1,_binary '',_binary '\0',2,30,_binary '',_binary '',_binary '\0');
+/*!40000 ALTER TABLE `user_preferences` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -275,9 +307,13 @@ CREATE TABLE `users` (
   `username` varchar(255) DEFAULT NULL,
   `household_id` int DEFAULT NULL,
   `is_enabled` bit(1) DEFAULT NULL,
+  `preferences_id` int DEFAULT NULL,
+
   PRIMARY KEY (`id`),
+  UNIQUE KEY `UKp500u51iqqij1u0b4eqv13lwx` (`preferences_id`),
   KEY `FKlacr3nkhlm93hgc5d32ukqim9` (`household_id`),
-  CONSTRAINT `FKlacr3nkhlm93hgc5d32ukqim9` FOREIGN KEY (`household_id`) REFERENCES `households` (`id`)
+  CONSTRAINT `FKlacr3nkhlm93hgc5d32ukqim9` FOREIGN KEY (`household_id`) REFERENCES `households` (`id`),
+  CONSTRAINT `FKoh9mlbfg6d4e2k8p2qhcxm1kh` FOREIGN KEY (`preferences_id`) REFERENCES `user_preferences` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -287,7 +323,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'wiktor5@gmail.com','$2a$10$26gTeDT8kaoNkgmRfwbN5.siOO/OuSSkvwZuD4xaWZoDYHD2AIbSm','wiktor',NULL,NULL),(2,'maciek@gmail.com','$2a$10$5PvNytX7q3ojymnUuI35E.daP/qc0nnWetQOGoWKolVxgkvXF.CyG','maciek',NULL,NULL),(3,'admin@gmail.com','$2a$10$veKz08QwC/xmuPhCQYd7medbyK8u1PZqW0bC4hhPhowTu/5iuveXu','admin',NULL,_binary '');
+INSERT INTO `users` VALUES (1,'wiktor5@gmail.com','$2a$10$26gTeDT8kaoNkgmRfwbN5.siOO/OuSSkvwZuD4xaWZoDYHD2AIbSm','wiktor',NULL,NULL,NULL),(2,'maciek@gmail.com','$2a$10$5PvNytX7q3ojymnUuI35E.daP/qc0nnWetQOGoWKolVxgkvXF.CyG','maciek',NULL,NULL,NULL),(3,'admin@gmail.com','$2a$10$buhLnWjuTl5AUH6B42IJmecsQpDj8n9UdLBqjicvi2PmsYQ/AoG56','admin',NULL,_binary '',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -316,7 +352,7 @@ CREATE TABLE `verification_tokens` (
 
 LOCK TABLES `verification_tokens` WRITE;
 /*!40000 ALTER TABLE `verification_tokens` DISABLE KEYS */;
-INSERT INTO `verification_tokens` VALUES (1,'2025-08-27 17:34:24.821432','465a9a14-3044-4363-bc33-a7f805aa2b73',3);
+INSERT INTO `verification_tokens` VALUES (1,'2025-10-12 14:04:19.809151','65193100-14ff-4552-8d4f-56ec0a6a178e',3);
 /*!40000 ALTER TABLE `verification_tokens` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -329,4 +365,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-26 17:38:21
+-- Dump completed on 2025-10-12  8:48:54

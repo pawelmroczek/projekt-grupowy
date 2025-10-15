@@ -25,6 +25,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserFriendGet signUp(UserCreate userCreate) {
         throwIfUserExists(userCreate);
+        UserPreferences userPreferences = new UserPreferences(
+                0,
+                1,
+                true,
+                true,
+                20,
+                true,
+                false,
+                true,
+                null
+        );
         User user = new User(
                 0,
                 userCreate.username(),
@@ -37,8 +48,10 @@ public class UserServiceImpl implements UserService {
                 null,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                new ArrayList<>()
+                new ArrayList<>(),
+                userPreferences
         );
+        userPreferences.setUser(user);
         User createdUser = userRepository.save(user);
         String token = UUID.randomUUID().toString();
         VerificationToken verificationToken =
@@ -90,6 +103,35 @@ public class UserServiceImpl implements UserService {
         User user = verificationToken.getUser();
         user.setEnabled(true);
         userRepository.save(user);
+    }
+
+    @Override
+    public void resetPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        String newPassword = UUID.randomUUID().toString();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        emailService.sendVerificationEmail(user.getEmail(),
+                "Fashion Buddy password reset",
+                "This is your new temporary password: " + newPassword);
+        userRepository.save(user);
+    }
+
+    @Override
+    public User getUserInfo() {
+        int currentUserId = authService.getCurrentUser().getId();
+        User currentUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        return currentUser;
+    }
+
+    @Override
+    public void changePassword(ChangePasswordRequest newPassword) {
+        int currentUserId = authService.getCurrentUser().getId();
+        User currentUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        currentUser.setPassword(passwordEncoder.encode(newPassword.password()));
+        userRepository.save(currentUser);
     }
 
     private void throwIfUserExists(UserCreate userCreate) {
