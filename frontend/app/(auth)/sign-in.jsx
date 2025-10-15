@@ -17,8 +17,8 @@ const SignIn = () => {
   const [loginStatus, setLoginStatus] = useState(false);
   const [error, setError] = useState(null);
   const [form, setForm] = useState({
-    email: "v@o.p",
-    password: "12345678",
+    email: "admin@gmail.com",
+    password: "admin",
   });
 
   const { token, setToken } = useContext(TokenContext);

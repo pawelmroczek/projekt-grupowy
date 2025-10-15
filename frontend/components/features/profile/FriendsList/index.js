@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity  } from "react-native";
+import { View, Text, TouchableOpacity, Modal  } from "react-native";
 import VerticalList from "./VertitalList";
 import { getHomiesList, getFriendsList } from "../../../../lib/friends/friends";
 import React, { useEffect, useState, useContext} from "react";
@@ -11,6 +11,7 @@ export default function FriendsList() {
 
   const [friends, setFriends] = useState([]);
   const [homies, setHomies] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
   const { token, setToken } = useContext(TokenContext);
 
   useFocusEffect(
@@ -42,16 +43,46 @@ export default function FriendsList() {
         {homies.length !== 0 && (
           <TouchableOpacity
             className="mx-4 px-4 py-2 bg-red-500 rounded-lg"
-            onPress={async () => {
-              await leaveHousehold(token);
-              setHomies([]);
-            }}
+            onPress={() => setModalVisible(true)}
           >
             <Text className="text-white text-l font-pregular">Opuść</Text>
           </TouchableOpacity>
         )}
       </View>
       <VerticalList friends={homies} household={homies} />
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        animationType="fade"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View className="flex-1 justify-center items-center bg-black/50">
+          <View className="bg-white p-6 rounded-2xl w-4/5">
+            <Text className="text-lg font-semibold text-center mb-4">
+              Czy na pewno chcesz opuścić domostwo?
+            </Text>
+
+            <View className="flex-row justify-around mt-4">
+              <TouchableOpacity
+                className="bg-gray-300 px-4 py-2 rounded-lg"
+                onPress={() => setModalVisible(false)}
+              >
+                <Text className="text-black font-pregular">Anuluj</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className="bg-red-500 px-4 py-2 rounded-lg"
+                onPress={async () => {
+                  setModalVisible(false);
+                  await leaveHousehold(token);
+                  setHomies([]);
+                }}
+              >
+                <Text className="text-white font-pregular">Tak</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

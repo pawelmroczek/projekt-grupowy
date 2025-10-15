@@ -1,14 +1,33 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
+import { useState, useContext, useEffect } from "react";
 import React from "react";
 import { router } from "expo-router";
+import { getUserInfo } from "../../../../lib/friends/friends";
+import { TokenContext } from "../../../../app/TokenContext";
+
+
 
 export default function ProfileBlock() {
 
-    //imageSource = backgroundImage;
-    const userName = "User";
+    const [userName, setUserName] = useState("User");
+    
+    const { token, setToken } = useContext(TokenContext);
+
+    useEffect(() => {
+        const fetchData = async () => {
+        try {
+            const response = await getUserInfo(token);
+            setUserName(response.username);
+        } catch (error) {
+            console.error("Błąd przy pobieraniu danych:", error);
+        }
+    };
+
+    fetchData();
+  }, []);
 
     return (
-        <TouchableOpacity className="flex-row justify-between items-center bg-white p-4 rounded-xl m-2" onPress={() => {router.push('/profileDetails')}}>
+        <TouchableOpacity className="flex-row justify-between items-center bg-white p-4 rounded-xl m-2" onPress={() => {router.push('profile/profileDetails')}}>
             <View className="w-16 h-16 bg-gray-300 rounded-full overflow-hidden">
                 <Image source={{ uri: 'https://via.placeholder.com/100' }}/>
             </View>

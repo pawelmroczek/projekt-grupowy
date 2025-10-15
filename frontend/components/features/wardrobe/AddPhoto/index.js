@@ -1,4 +1,6 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, ActivityIndicator} from "react-native";
+import { useState } from "react";
+
 import React from "react";
 import { Camera, ImagePlus, Images, Trash2 } from "lucide-react-native";
 import {
@@ -14,6 +16,7 @@ export default function AddPhoto({
   setImageType,
   setPredictedType,
 }) {
+  const [loadingImage, setLoadingImage] = useState(false);
   const removeImageBackground = async (imageUri) => {
     const formData = new FormData();
     formData.append("image", {
@@ -37,7 +40,11 @@ export default function AddPhoto({
         <Image source={{ uri: imageUri }} className="w-40 h-40 rounded-full " />
       ) : (
         <View className="bg-gray-200 border border-gray-500 w-40 h-40 flex items-center justify-center rounded-xl">
-          <ImagePlus size={80} color={"#9a9ca0"} />
+          {loadingImage ? (
+            <ActivityIndicator size="large" color="#0000ff" />
+          ) : (
+            <ImagePlus size={80} color={"#9a9ca0"} />
+          )}
         </View>
       )}
       <View className="items-center  flex justify-between  bg-white-100 ">
@@ -45,7 +52,9 @@ export default function AddPhoto({
         <TouchableOpacity
           onPress={async () => {
             let imageResult = await selectImageFromLibrary(); // Czekamy na wynik
+            setLoadingImage(true);
             imageResult.uri = await removeImageBackground(imageResult.uri);
+            setLoadingImage(false);
             setImageUri(imageResult.uri);
             setImageName("ml_output.png");
             setImageType("image/png");
@@ -60,7 +69,9 @@ export default function AddPhoto({
         <TouchableOpacity
           onPress={async () => {
             let imageResult = await captureImage(); // Czekamy na wynik
+            setLoadingImage(true);
             imageResult.uri = await removeImageBackground(imageResult.uri);
+            setLoadingImage(false);
             setImageUri(imageResult.uri);
             setImageName("ml_output.png");
             setImageType("image/png");
