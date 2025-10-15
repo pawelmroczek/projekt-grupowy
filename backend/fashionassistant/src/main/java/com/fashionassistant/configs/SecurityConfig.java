@@ -28,7 +28,10 @@ public class SecurityConfig {
                                         "fashion/invitations/**",
                                         "/fashion/outfits/**",
                                         "/fashion/laundries/**",
-                                        "/fashion/user-preferences/**")
+                                        "/fashion/user-preferences/**",
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
