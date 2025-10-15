@@ -21,6 +21,8 @@ public class Clothes {
     private int id;
     @Column(name = "name")
     private String name;
+    @Column(name = "category")
+    private Integer category;
     @Column(name = "type")
     private String type;
     @Column(name = "color")

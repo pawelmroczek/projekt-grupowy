@@ -19,14 +19,14 @@ export default function App() {
           Wykorzystaj pełen potencjał swojej szafy z Fashion Buddy!
         </Text>
         <TouchableOpacity
-          onPress={() => router.push("/sign-in")}
+          onPress={() => router.replace("/sign-in")}
           className="bg-primary-100 p-2 px-8 rounded-md mt-4"
         >
           <Text className="text-white text-xl font-pregular ">ZALOGUJ SIĘ</Text>
         </TouchableOpacity>
         <View className="pt-2 flex-row gap-2">
           <Text className=" text-base font-pregular ">lub</Text>
-          <TouchableOpacity onPress={() => router.push("/sign-up")}>
+          <TouchableOpacity onPress={() => router.replace("/sign-up")}>
             <Text className=" text-base font-pmedium underline">
               Zarejestruj się
             </Text>

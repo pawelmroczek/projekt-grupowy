@@ -13,6 +13,7 @@ export default function AddFriend() {
 
   useFocusEffect(
     React.useCallback(() => {
+      if(!token) return;
       const fetchInvites = async () => {
         setLoading(true);
         const response = await getInvites(token);

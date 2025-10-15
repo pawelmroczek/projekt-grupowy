@@ -17,31 +17,44 @@ import { router, useLocalSearchParams} from "expo-router";
 
 import AddPhoto from "../../components/features/wardrobe/AddPhoto";
 import ColorSelector from "../../components/features/wardrobe/ColorSelector";
+import LaundryIconsSelector from "../../components/features/wardrobe/LaundryIconsSelector";
 import { TokenContext } from "../TokenContext";
 import VerticalSelector from "../../components/common/VerticalSelector";
 import { getClothes } from "../../lib/clothes/clothes";
-import { typeOptions } from "../../lib/typeOptions";
+import ThreeOptionSelector from "../../components/common/ThreeOptionSelector";
+import { CLOTHING_SIZES, SHOES_SIZES, ACCESSORY_SIZES } from "../../assets/constants/sizes/sizes";
+import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
+import ClassifyButton from "../../components/common/ClassifyButton";
 
 export default function index() {
   const [modalVisible, setModalVisible] = useState(false);
-  const [imageUri, setImageUri] = useState(false);
-  const [imageName, setImageName] = useState(false);
-  const [imageType, setImageType] = useState(false);
+  const [imageUri, setImageUri] = useState(null);
+  const [imageName, setImageName] = useState(null);
+  const [imageType, setImageType] = useState(null);
   const [form, setForm] = useState({
     name: "",
     type: "",
   });
 
-  const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+  const [selectedCategory, setSelectedCategory] = useState(0);
 
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
 
-  const [selectedColor, setSelectedColor] = useState("idle");
-  const [selectedSize, setSelectedSize] = useState("idle");
-  const [selectedType, setSelectedType] = useState("idle");
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedIcons, setSelectedIcons] = useState([]);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
+  const [predictedType, setPredictedType] = useState(null);
   const [cleanStatus, setCleanStatus] = useState(true);
   const [editing, setEditing] = useState(false);
+
+  const sizesByCategory = [CLOTHING_SIZES, SHOES_SIZES, ACCESSORY_SIZES];
+  const typeOptions = [
+    clothingTypeOptions,
+    shoesTypeOptions,
+    accessoryTypeOptions
+  ];
 
   const params = useLocalSearchParams();
   useEffect(() => {
@@ -64,14 +77,32 @@ export default function index() {
   }, []);
 
   const handleSubmit = async () => {
+
+    const isValid =
+    form.name &&
+    selectedType &&
+    imageUri &&
+    selectedSize &&
+    selectedColor
+
+  if (!isValid) {
+    console.warn("Wypełnij wszystkie pola przed wysłaniem formularza.");
+    return;
+  }
+
     const formData = new FormData();
     formData.append("name", form.name);
+    formData.append("category", selectedCategory);
     formData.append("type", selectedType);
     formData.append("file", {
       uri: imageUri,
       name: imageName,
       type: imageType,
     });
+    console.log("Dane formularza:");
+    console.log(imageUri);
+    console.log(imageName);
+    console.log(imageType);
     formData.append("size", selectedSize);
     formData.append("color", selectedColor);
     formData.append("clean", cleanStatus);
@@ -107,12 +138,29 @@ export default function index() {
           </View>
 
           <View className="flex-1 w-full pt-5">
+            <ThreeOptionSelector
+              options={["Ubrania", "Buty", "Akcesoria"]}
+              onSelect={(value, index) => {
+                setSelectedCategory(index);
+              }}
+            />
             <AddPhoto
               imageUri={imageUri}
               setImageName={setImageName}
               setImageType={setImageType}
               setImageUri={setImageUri}
+              setPredictedType={setPredictedType}
             />
+            { selectedCategory === 0 && imageUri ? (
+              <ClassifyButton
+                imageUri={imageUri}
+                imageType={imageType}
+                imageName={imageName}
+                predictedType={predictedType}
+                setPredictedType={setPredictedType}
+                setSelectedType={setSelectedType}
+              />
+            ) : null}  
             <FormField
               value={form.name}
               handleChangeText={(e) => setForm({ ...form, name: e })}
@@ -126,7 +174,7 @@ export default function index() {
             </Text>
             <View>
               <VerticalSelector
-                options={sizes}
+                options={sizesByCategory[selectedCategory] || []}
                 setValue={setSelectedSize}
                 value={selectedSize}
               />
@@ -136,7 +184,7 @@ export default function index() {
             </Text>
             <View>
               <VerticalSelector
-                options={typeOptions}
+                options={typeOptions[selectedCategory] || []}
                 setValue={setSelectedType}
                 value={selectedType}
               />
@@ -150,7 +198,14 @@ export default function index() {
                 setSelectedColor={setSelectedColor}
               />
             </View>
-
+            { selectedCategory === 0 ? (
+              <View>
+                <LaundryIconsSelector
+                  selectedIcons={selectedIcons}
+                  setSelectedIcons={setSelectedIcons}
+                />
+              </View>
+            ) : null}
             <View className="items-center   py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4 ">
               <TouchableOpacity
                 onPress={() => {

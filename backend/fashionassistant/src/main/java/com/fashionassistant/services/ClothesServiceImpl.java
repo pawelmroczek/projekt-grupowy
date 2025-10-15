@@ -144,6 +144,7 @@ public class ClothesServiceImpl implements ClothesService {
         Clothes clothes = new Clothes(
                 0,
                 clothesRequest.name(),
+                clothesRequest.category(),
                 clothesRequest.type(),
                 clothesRequest.color(),
                 clothesRequest.size(),

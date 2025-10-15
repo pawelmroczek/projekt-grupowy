@@ -5,13 +5,31 @@ import {
   captureImage,
   selectImageFromLibrary,
 } from "../../../../lib/clothes/picture_logic";
+import { removeBackground } from "../../../../lib/clothes/remove_background";
 
 export default function AddPhoto({
   imageUri,
   setImageUri,
   setImageName,
   setImageType,
+  setPredictedType,
 }) {
+  const removeImageBackground = async (imageUri) => {
+    const formData = new FormData();
+    formData.append("image", {
+      uri: imageUri,
+      name: "photo.jpg",
+      type: "image/jpeg",
+    });
+    try {
+      const response = await removeBackground(formData);
+      return response;
+    } catch (error) {
+      console.error("Błąd podczas usuwania tła:", error);
+      return null;
+    }
+  }
+
   return (
     <View className="flex justify-center items-stretch flex-row space-x-4 ">
       {/* Wyświetlanie zdjęcia */}
@@ -26,10 +44,12 @@ export default function AddPhoto({
         {/* Przycisk "Dodaj z galerii" */}
         <TouchableOpacity
           onPress={async () => {
-            const imageResult = await selectImageFromLibrary(); // Czekamy na wynik
+            let imageResult = await selectImageFromLibrary(); // Czekamy na wynik
+            imageResult.uri = await removeImageBackground(imageResult.uri);
             setImageUri(imageResult.uri);
-            setImageName(imageResult.fileName);
-            setImageType(imageResult.type);
+            setImageName("ml_output.png");
+            setImageType("image/png");
+            setPredictedType(null);
           }}
           className="px-3 py-2 rounded-lg items-center border border-secondary-300"
         >
@@ -39,10 +59,12 @@ export default function AddPhoto({
         {/* Przycisk "Zrób zdjęcie" */}
         <TouchableOpacity
           onPress={async () => {
-            const imageResult = await captureImage(); // Czekamy na wynik
+            let imageResult = await captureImage(); // Czekamy na wynik
+            imageResult.uri = await removeImageBackground(imageResult.uri);
             setImageUri(imageResult.uri);
-            setImageName("photo.jpg");
-            setImageType(imageResult.type);
+            setImageName("ml_output.png");
+            setImageType("image/png");
+            setPredictedType(null);
           }}
           className="px-3 py-2 rounded-lg items-center border border-secondary-300"
         >
@@ -51,7 +73,10 @@ export default function AddPhoto({
 
         {/* Przycisk "Usuń zdjęcie" */}
         <TouchableOpacity
-          onPress={() => setImageUri(null)}
+          onPress={() => {
+            setImageUri(null);
+            setPredictedType(null);
+          }}
           className="px-3 py-2 rounded-lg items-center border border-secondary-300"
         >
           <Trash2 size={24} color={"#828282"} />

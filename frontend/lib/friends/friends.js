@@ -131,3 +131,27 @@ export const getHomiesList = async (token) => {
       console.error('Błąd:', error);
     }
 }
+
+export const leaveHousehold = async (token) => {
+  try {
+    const response = await fetch(ipAddress + "/fashion/household/leave", {
+      method: "POST",
+      headers: {
+        "Authentication": `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const text = await response.text();
+    if (!text) return []; 
+
+    const data = JSON.parse(text);
+    return data;
+  } catch (error) {
+    console.error('Błąd:', error);
+    return [];
+  }
+}
