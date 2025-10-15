@@ -22,7 +22,6 @@ import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../
 export default function index() {
   const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
 
-
   const [filteredClothes, setFilteredClothes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
@@ -63,7 +62,6 @@ export default function index() {
 
   useEffect(() => {
     if (clothes) {
-      
       let filtered = clothes.filter((item) => item.clean);
 
       if (selectedCategory && selectedCategory !== "wszystkie") {
@@ -134,16 +132,28 @@ export default function index() {
             style={{ flex: 1 }}
           />
         </View>
-        <TouchableOpacity
-          onPress={() => {
-            handleSubmit();
-          }}
-          className="bg-primary-100 w-[95%] p-2 px-8 rounded-md mb-4"
-        >
-          <Text className="text-center   text-base text-white font-plight uppercase">
-            Zapisz zmiany
-          </Text>
-        </TouchableOpacity>
+        <View className="w-full items-center flex-row justify-center px-3 space-x-2">
+          <TouchableOpacity
+            onPress={() => {
+              router.push("/laundry");
+            }}
+            className="bg-gray-400 w-[40%] p-2 px-8 rounded-md mb-4"
+          >
+            <Text className="text-center   text-base text-white font-plight uppercase">
+              Anuluj
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handleSubmit();
+            }}
+            className="bg-primary-100 w-[60%] p-2 px-8 rounded-md mb-4"
+          >
+            <Text className="text-center   text-base text-white font-plight uppercase">
+              Zapisz zmiany
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );

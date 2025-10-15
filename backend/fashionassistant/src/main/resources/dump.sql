@@ -308,6 +308,7 @@ CREATE TABLE `users` (
   `household_id` int DEFAULT NULL,
   `is_enabled` bit(1) DEFAULT NULL,
   `preferences_id` int DEFAULT NULL,
+
   PRIMARY KEY (`id`),
   UNIQUE KEY `UKp500u51iqqij1u0b4eqv13lwx` (`preferences_id`),
   KEY `FKlacr3nkhlm93hgc5d32ukqim9` (`household_id`),
