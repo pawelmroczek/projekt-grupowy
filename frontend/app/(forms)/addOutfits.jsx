@@ -6,6 +6,7 @@ import OutfitSelector from "../../components/features/outfits/OutfitSelector";
 import { router, useLocalSearchParams } from "expo-router";
 import { TokenContext } from "../TokenContext";
 import ModalBox from "../../components/features/outfits/ModalBox";
+import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
 
 export default function Index() {
   const { clothes, setClothes } = useContext(TokenContext);
@@ -16,11 +17,17 @@ export default function Index() {
 
   const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
   const dictionary = {
-    "Nakrycie głowy": ["Nakrycie głowy"],
-    "Górna część": ["Koszulka", "Koszula", "Sweter", "Kurtka", "Sukienka"],
-    "Dolna część": ["Spodnie", "Spódnica"],
-    Buty: ["Buty"],
-    Akcesoria: ["Akcesoria"],
+    "Nakrycie głowy": clothingTypeOptions
+      .filter(item => item.type === "HAT")
+      .map(item => item.label),
+    "Górna część": clothingTypeOptions
+      .filter(item => item.type === "TOP" || item.type === "FULLBODY")
+      .map(item => item.label), 
+    "Dolna część": clothingTypeOptions
+      .filter(item => item.type === "BOTTOM")
+      .map(item => item.label),
+    Buty: shoesTypeOptions.map(item => item.label),
+    Akcesoria: accessoryTypeOptions.map(item => item.label),
   };
 
 

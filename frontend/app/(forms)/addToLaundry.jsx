@@ -39,7 +39,7 @@ export default function index() {
         getClothes(token).then((response) => {
           if (response) {
             setClothes(response);
-            router.push("/laundry");
+            router.replace("/laundry");
           } else {
             console.error("Error fetching clothes:", response.status);
           }
@@ -116,7 +116,7 @@ export default function index() {
             />
             <Text className="text-lg font-pmedium ml-2">Rodzaj</Text>
             <VerticalSelector
-              options={[...clothingTypeOptions, ...shoesTypeOptions, ...accessoryTypeOptions]}
+              options={[...clothingTypeOptions.map(item => item.label), ...shoesTypeOptions.map(item => item.label), ...accessoryTypeOptions.map(item => item.label)]}
               setValue={setSelectedCategory}
               value={selectedCategory}
             />
@@ -135,7 +135,7 @@ export default function index() {
         <View className="w-full items-center flex-row justify-center px-3 space-x-2">
           <TouchableOpacity
             onPress={() => {
-              router.push("/laundry");
+              router.replace("/laundry");
             }}
             className="bg-gray-400 w-[40%] p-2 px-8 rounded-md mb-4"
           >

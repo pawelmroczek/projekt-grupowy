@@ -66,7 +66,7 @@ const makeLaundry = () => {
     const laundryResponse = await addLaundry(selected, token);
     const clothesData = await getClothes(token);
     setClothes(clothesData);
-    router.push("/laundry");
+    router.replace("/laundry");
   };
 
   return (
@@ -161,7 +161,7 @@ const makeLaundry = () => {
           <TouchableOpacity
             className="bg-gray-400 rounded-md py-2 px-4"
             onPress={() => {
-              router.push("/laundry");
+              router.replace("/laundry");
             }}
           >
             <Text className="text-white text-lg font-pregular ">Anuluj</Text>

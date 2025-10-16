@@ -46,7 +46,7 @@ const SearchBarWardrobe = ({ displayMode, onDisplayPress, selectedCategory, setS
               </TouchableOpacity>
               <View className="flex-row gap-4">
                 <TouchableOpacity onPress={() => 
-                router.push({ pathname: "/filterClothes", params: filters })
+                router.replace({ pathname: "/filterClothes", params: filters })
               }>
                   <SlidersHorizontal className="text-black" size={30} />
                 </TouchableOpacity>
@@ -60,7 +60,7 @@ const SearchBarWardrobe = ({ displayMode, onDisplayPress, selectedCategory, setS
         <View className=" border-t border-[#d8d8d8] bg-gray-100">
           {searchMode ? null : (
             <VerticalSelector
-              options={[...clothingTypeOptions, ...shoesTypeOptions, ...accessoryTypeOptions]}
+              options={[...clothingTypeOptions.map(item => item.label), ...shoesTypeOptions.map(item => item.label), ...accessoryTypeOptions.map(item => item.label)]}
               setValue={setSelectedCategory}
               value={selectedCategory}
             />

@@ -20,7 +20,7 @@ export default function EmailConfirmation({ visible, setVisible }) {
             className="bg-primary-100 px-6 py-3 rounded-lg"
             onPress={() => {
               setVisible(false);
-              router.push("/sign-in");
+              router.replace("/sign-in");
             }}
           >
             <Text className="text-white font-semibold">Zamknij</Text>

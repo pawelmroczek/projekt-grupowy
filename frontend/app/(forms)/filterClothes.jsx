@@ -37,19 +37,19 @@ const FilterClothes = () => {
     };
 
     const applyFilters = () => {
-        router.push({ pathname: "/wardrobe", params: filters });
+        router.replace({ pathname: "/wardrobe", params: filters });
     };
 
     const resetFilters = () => {
         setFilters({ sortBy: "Newest", size: [], cleanliness: "all" });
-        //router.push("/wardrobe");
+        //router.replace("/wardrobe");
     };
 
     return (
         <View className="flex-1 bg-white p-6">
             <View className="flex-row justify-between items-center mb-6">
                 <Text className="text-lg font-bold">Filter Options</Text>
-                <TouchableOpacity onPress={() => router.push("/wardrobe")}> 
+                <TouchableOpacity onPress={() => router.replace("/wardrobe")}> 
                     <X className="text-black" size={30} />
                 </TouchableOpacity>
             </View>

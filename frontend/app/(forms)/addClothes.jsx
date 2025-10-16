@@ -51,11 +51,10 @@ export default function index() {
 
   const sizesByCategory = [CLOTHING_SIZES, SHOES_SIZES, ACCESSORY_SIZES];
   const typeOptions = [
-    clothingTypeOptions,
-    shoesTypeOptions,
-    accessoryTypeOptions
+    (clothingTypeOptions?.map(item => item.label) || []),
+    (shoesTypeOptions?.map(item => item.label) || []),
+    (accessoryTypeOptions?.map(item => item.label) || []),
   ];
-
   const params = useLocalSearchParams();
   useEffect(() => {
     console.log(params);

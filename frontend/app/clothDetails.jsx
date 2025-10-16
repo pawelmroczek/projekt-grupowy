@@ -24,7 +24,7 @@ const clothDetails = () => {
     const serverresponse = await clothesDeleting(id, token);
     const clothesData = await getClothes(token);
     setClothes(clothesData);
-    router.push("/wardrobe");
+    router.replace("/wardrobe");
   };
 
   return (
@@ -56,7 +56,7 @@ const clothDetails = () => {
               </Text>
               <View className="items-center space-y-3   py-3.5 rounded-xl w-full flex justify-center bg-white-100 pb-40">
                 <TouchableOpacity
-                  onPress={() => router.push({
+                  onPress={() => router.replace({
                     pathname: "/addClothes",
                     params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "size": cloth.size, "clean": cloth.clean}
                 })}

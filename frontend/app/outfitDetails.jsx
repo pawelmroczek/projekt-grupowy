@@ -27,7 +27,7 @@ const outfitDetails = () => {
     const serverresponse = await outfitDeleting(id, token);
     const outfitsData = await fetchOutfits(token);
     setOutfits(outfitsData);
-    router.push("/outfits");
+    router.replace("/outfits");
   };
 
   const outfitClothes = clothes.filter((cloth) =>

@@ -176,7 +176,7 @@ const SignUp = () => {
                 </Text>
                 <TouchableOpacity
                   onPress={() => {
-                    router.push("/sign-in");
+                    router.replace("/sign-in");
                   }}
                 >
                   <Text className=" text-base font-pmedium underline">
