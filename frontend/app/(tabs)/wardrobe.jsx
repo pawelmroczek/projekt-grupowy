@@ -67,7 +67,7 @@ const Wardrobe = () => {
       style={[styles.item, displayMode ? styles.single : styles.double]}
       onPress={() => router.push({
         pathname: "/clothDetails",
-        params: { "name": item.name, "picture": item.picture, "id": item.id, "type": item.type, "color": item.color, "size": item.size, "clean": item.clean}
+        params: { "name": item.name, "picture": item.picture, "id": item.id, "type": item.type, "color": item.color, "size": item.size, "clean": item.clean, "visibility": item.visibility, "priority": item.priority, "category": item.category}
       })
     }
     >

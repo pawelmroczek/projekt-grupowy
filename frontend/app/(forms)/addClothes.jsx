@@ -25,6 +25,8 @@ import ThreeOptionSelector from "../../components/common/ThreeOptionSelector";
 import { CLOTHING_SIZES, SHOES_SIZES, ACCESSORY_SIZES } from "../../assets/constants/sizes/sizes";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
 import ClassifyButton from "../../components/common/ClassifyButton";
+import VisibiltySelector from "../../components/common/VisibiltySelector";
+import PioritySelector from "../../components/common/PioritySelector";
 
 export default function index() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -49,6 +51,9 @@ export default function index() {
   const [cleanStatus, setCleanStatus] = useState(true);
   const [editing, setEditing] = useState(false);
 
+  const [visible, setVisible] = useState(2);
+  const [priority, setPriority] = useState(0);
+
   const sizesByCategory = [CLOTHING_SIZES, SHOES_SIZES, ACCESSORY_SIZES];
   const typeOptions = [
     (clothingTypeOptions?.map(item => item.label) || []),
@@ -67,6 +72,9 @@ export default function index() {
       setSelectedColor(params.color);
       setSelectedSize(params.size);
       setSelectedType(params.type);
+      setVisible(parseInt(params.visible));
+      setSelectedCategory(parseInt(params.category));
+      setPriority(parseInt(params.priority));
       setImageUri(params.picture);
       setImageName(".jpg");
       setImageType("image/jpeg");
@@ -106,7 +114,8 @@ export default function index() {
     formData.append("color", selectedColor);
     formData.append("clean", cleanStatus);
     formData.append("visible", true);
-    formData.append("priority", 0);
+    //formData.append("visible", visible);
+    formData.append("priority", priority);
     //console.log(formData);
     console.log(formData.get("file").uri);
     console.log(formData.get("file").name);
@@ -141,9 +150,8 @@ export default function index() {
           <View className="flex-1 w-full pt-5">
             <ThreeOptionSelector
               options={["Ubrania", "Buty", "Akcesoria"]}
-              onSelect={(value, index) => {
-                setSelectedCategory(index);
-              }}
+              setSelectedOption={setSelectedCategory}
+              selectedOption={selectedCategory}
             />
             <AddPhoto
               imageUri={imageUri}
@@ -207,6 +215,14 @@ export default function index() {
                 />
               </View>
             ) : null}
+            <VisibiltySelector
+              value={visible}
+              setValue={setVisible}
+            />
+            <PioritySelector
+              value={priority}
+              setValue={setPriority}
+            />
             <View className="items-center   py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4 ">
               <TouchableOpacity
                 onPress={() => {

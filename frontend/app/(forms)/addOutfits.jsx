@@ -7,11 +7,13 @@ import { router, useLocalSearchParams } from "expo-router";
 import { TokenContext } from "../TokenContext";
 import ModalBox from "../../components/features/outfits/ModalBox";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
+import VisibiltySelector from "../../components/common/VisibiltySelector";
 
 export default function Index() {
   const { clothes, setClothes } = useContext(TokenContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [visibility, setVisibility] = useState(0);
 
   console.log("Clothes", clothes);
 
@@ -85,7 +87,10 @@ export default function Index() {
             onSelect={(item) => handleSelect(item, category)}
           />
         ))}
-
+          <VisibiltySelector
+            value={visibility}
+            setValue={setVisibility}
+          />
         <TouchableOpacity onPress={handleSave}>
           <View className="bg-primary-200 rounded-lg p-2 m-2 items-center justify-center flex-row space-x-2">
             <CirclePlus size={20} color={"#fff"} />
@@ -98,6 +103,7 @@ export default function Index() {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         selectedItems={selectedItems}
+        visible={visibility}
       />
     </SafeAreaView>
   );

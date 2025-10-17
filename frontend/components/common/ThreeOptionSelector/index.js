@@ -3,21 +3,15 @@ import { View, Text, TouchableOpacity } from 'react-native';
 
 const ThreeOptionSelector = ({
   options,
-  onSelect,
+  setSelectedOption,
+  selectedOption,
 }) => {
-  const [selected, setSelected] = useState(0);
-
-  const handlePress = (value, index) => {
-    setSelected(index);
-    onSelect?.(value, index);
-  };
-
   const renderOption = (value, index) => {
-    const isSelected = selected === index;
+    const isSelected = selectedOption === index;
     return (
       <TouchableOpacity
         key={index}
-        onPress={() => handlePress(value, index)}
+        onPress={() => setSelectedOption(index)}
         className={`flex-1 items-center justify-center py-3 ${
           isSelected ? " border-secondary-300" : "bg-gray-200 border-gray-200 "
         }`}

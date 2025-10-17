@@ -33,7 +33,7 @@ const clothDetails = () => {
         <View className=" w-full flex-row items-center justify-between p-4 bg-white shadow-md pt-14 px-6">
           <TouchableOpacity onPress={() => router.push({
                   pathname: "/addClothes",
-                  params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "size": cloth.size, "clean": cloth.clean}
+                  params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "size": cloth.size, "clean": cloth.clean, "visible": cloth.visible, "category": cloth.category, "priority": cloth.priority}
                 })}>
             <Pencil className="text-black" size={30} />
           </TouchableOpacity>
@@ -58,7 +58,7 @@ const clothDetails = () => {
                 <TouchableOpacity
                   onPress={() => router.replace({
                     pathname: "/addClothes",
-                    params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "size": cloth.size, "clean": cloth.clean}
+                    params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "size": cloth.size, "clean": cloth.clean, "visible": cloth.visible, "category": cloth.category, "priority": cloth.priority}
                 })}
                   className="px-4  w-full flex items-center py-2 border text-black border-primary-100 rounded-lg"
                 >

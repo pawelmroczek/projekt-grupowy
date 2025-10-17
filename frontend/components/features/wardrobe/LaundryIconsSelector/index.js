@@ -63,7 +63,7 @@ export default function LaundryIconsSelector({ selectedIcons, setSelectedIcons }
                         </View>
                     ))
                 ) : (
-                    <View className="w-full items-center justify-center">
+                    <View className="w-full items-center justify-center m-3 h-8">
                         <Text className="text-gray-500">Nie wybrano piktogramów</Text>
                     </View> 
                 )}

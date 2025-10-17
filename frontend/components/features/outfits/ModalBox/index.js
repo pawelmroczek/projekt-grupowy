@@ -13,7 +13,7 @@ import { TokenContext } from "../../../../app/TokenContext";
 import { fetchOutfits, outfitsSending } from "../../../../lib/outfits/outfits";
 import {router} from "expo-router";
 
-const ModalBox = ({ modalVisible, setModalVisible, selectedItems }) => {
+const ModalBox = ({ modalVisible, setModalVisible, selectedItems, visible }) => {
   const [outfitName, setOutfitName] = useState("");
   const [selectType, setSelectType] = useState("ide");
   const { token } = useContext(TokenContext);
@@ -23,6 +23,7 @@ const ModalBox = ({ modalVisible, setModalVisible, selectedItems }) => {
     const dataToSend = {
       name: outfitName,
       type: selectType,
+      //visible: visible,
       clothesIds: selectedItems.map((item) => item.id),
     };
 
