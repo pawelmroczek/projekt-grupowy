@@ -11,7 +11,7 @@ public interface ClothesService {
 
     List<ClothesHouseholdGet> getClothesFromHousehold();
 
-    List<Clothes> getFriendsClothes();
+    List<Clothes> getFriendsClothes(Integer page, Integer pageSize);
 
     ClothesGet updateClothes(ClothesUpdate clothes);
 

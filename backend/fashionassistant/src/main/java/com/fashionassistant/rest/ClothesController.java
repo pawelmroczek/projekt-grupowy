@@ -38,8 +38,9 @@ public class ClothesController {
     }
 
     @GetMapping("/friends")
-    public List<ClothesGet> getAllClothesFromFriends() {
-        return clothesService.getFriendsClothes().stream()
+    public List<ClothesGet> getAllClothesFromFriends(@RequestParam(required = false) Integer page,
+                                                     @RequestParam(required = false) Integer size) {
+        return clothesService.getFriendsClothes(page, size).stream()
                 .map(ClothesGet::new).toList();
     }
 

@@ -68,17 +68,20 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
-    public List<Clothes> getFriendsClothes() {
+    public List<Clothes> getFriendsClothes(Integer page, Integer pageSize) {
         User currentUser = authService.getCurrentUser();
         User user = userRepository.findById(currentUser.getId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
-        List<Clothes> friendsClothes = new ArrayList<>();
+        List<Clothes> friendsClothes;
         Set<User> friends = user.getFriends();
-        friends.forEach(friend -> {
-            friend.getClothes().stream()
-                    .filter(Clothes::isVisible)
-                    .forEach(friendsClothes::add);
-        });
+        List<Integer> userIds = friends.stream().map(User::getId).toList();
+        if (page != null && pageSize != null) {
+            PageRequest pageRequest = PageRequest.of(page, pageSize);
+            Page<Clothes> clothesPage = clothesRepository.findByUserIdInAndVisible(userIds, true, pageRequest);
+            friendsClothes = clothesPage.getContent();
+        } else {
+            friendsClothes = clothesRepository.findByUserIdInAndVisible(userIds, true);
+        }
         return friendsClothes;
     }
 
