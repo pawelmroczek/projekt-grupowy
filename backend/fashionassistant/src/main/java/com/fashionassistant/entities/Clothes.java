@@ -34,7 +34,7 @@ public class Clothes {
     @Column(name = "clean")
     private boolean clean;
     @Column(name = "visible")
-    private boolean visible;
+    private Integer visible;
     @Column(name = "priority")
     private int priority;
     @OneToOne(mappedBy = "clothes", cascade = CascadeType.ALL)

@@ -74,13 +74,14 @@ public class ClothesServiceImpl implements ClothesService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
         List<Clothes> friendsClothes;
         Set<User> friends = user.getFriends();
+        List<Integer> visibleValues = List.of(Visibility.PUBLIC, Visibility.FRIENDS);
         List<Integer> userIds = friends.stream().map(User::getId).toList();
         if (page != null && pageSize != null) {
             PageRequest pageRequest = PageRequest.of(page, pageSize);
-            Page<Clothes> clothesPage = clothesRepository.findByUserIdInAndVisible(userIds, true, pageRequest);
+            Page<Clothes> clothesPage = clothesRepository.findByUserIdInAndVisibleIn(userIds, visibleValues, pageRequest);
             friendsClothes = clothesPage.getContent();
         } else {
-            friendsClothes = clothesRepository.findByUserIdInAndVisible(userIds, true);
+            friendsClothes = clothesRepository.findByUserIdInAndVisibleIn(userIds, visibleValues);
         }
         return friendsClothes;
     }
