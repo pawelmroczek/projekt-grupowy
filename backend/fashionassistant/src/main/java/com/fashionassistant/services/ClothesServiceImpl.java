@@ -6,12 +6,15 @@ import com.fashionassistant.exceptions.NotFoundException;
 import com.fashionassistant.repositories.ClothesRepository;
 import com.fashionassistant.repositories.HouseholdRepository;
 import com.fashionassistant.repositories.UserRepository;
+import com.fashionassistant.repositories.PictogramsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.stream.Collectors;
+import java.util.HashSet;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,7 @@ public class ClothesServiceImpl implements ClothesService {
     private final AuthService authService;
     private final UserRepository userRepository;
     private final HouseholdRepository householdRepository;
+    private final PictogramsRepository pictogramsRepository;
 
     @Override
     public List<ClothesGet> getClothes(Integer page, Integer pageSize) {
@@ -105,6 +109,15 @@ public class ClothesServiceImpl implements ClothesService {
             clothes.setPriority(clothesRequest.priority());
             clothes.setPicture(picture);
             picture.setClothes(clothes);
+
+            if (clothesRequest.pictogramIds() != null) {
+                Set<Pictograms> pictograms = clothesRequest.pictogramIds().stream()
+                        .map(id -> pictogramsRepository.findById(id)
+                                .orElseThrow(() -> new NotFoundException("Pictogram not found with id: " + id)))
+                        .collect(Collectors.toSet());
+                clothes.setPictograms(pictograms);
+            }
+    
             Clothes clothesNew = clothesRepository.save(clothes);
             return new ClothesGet(clothesNew);
         }
@@ -160,8 +173,18 @@ public class ClothesServiceImpl implements ClothesService {
                 clothesRequest.visible(),
                 clothesRequest.priority(),
                 picture,
-                user
+                user, 
+                new HashSet<>() // this is empty list of pictograms
         );
+
+        if (clothesRequest.pictogramIds() != null && !clothesRequest.pictogramIds().isEmpty()) {
+            Set<Pictograms> pictograms = clothesRequest.pictogramIds().stream()
+                    .map(id -> pictogramsRepository.findById(id)
+                            .orElseThrow(() -> new NotFoundException("Pictogram not found with id: " + id)))
+                    .collect(Collectors.toSet());
+            clothes.setPictograms(pictograms);
+        }
+
         picture.setClothes(clothes);
         user.addClothes(clothes);
         Clothes addedClothes = clothesRepository.save(clothes);
