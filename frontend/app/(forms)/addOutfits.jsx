@@ -11,6 +11,9 @@ import VisibiltySelector from "../../components/common/VisibiltySelector";
 
 export default function Index() {
   const { clothes, setClothes } = useContext(TokenContext);
+
+  const [nonValidAlert, setNonValidAlert] = useState("");
+
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const [visibility, setVisibility] = useState(0);
@@ -37,6 +40,10 @@ export default function Index() {
     clothes.filter((item) => dictionary[type].includes(item.type));
 
   const handleSave = () => {
+    if(selectedItems.length === 0) {
+      setNonValidAlert("Wybierz przynajmniej jeden element");
+      return;
+    }
     setModalVisible(true);
   };
 
@@ -87,11 +94,19 @@ export default function Index() {
             onSelect={(item) => handleSelect(item, category)}
           />
         ))}
-          <VisibiltySelector
-            value={visibility}
-            setValue={setVisibility}
-          />
-        <TouchableOpacity onPress={handleSave}>
+        <VisibiltySelector
+          value={visibility}
+          setValue={setVisibility}
+        />
+        {nonValidAlert !== "" ? (
+          <Text className="text-red-500 mt-2 mb-2 text-center">{nonValidAlert}</Text>
+        ) : null}
+        <TouchableOpacity 
+          disabled={modalVisible}
+          onPress={ () => {
+            handleSave();
+          }}
+        >
           <View className="bg-primary-200 rounded-lg p-2 m-2 items-center justify-center flex-row space-x-2">
             <CirclePlus size={20} color={"#fff"} />
             <Text className="text-lg text-white text-center">Zapisz</Text>

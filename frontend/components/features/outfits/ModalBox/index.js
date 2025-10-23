@@ -19,7 +19,20 @@ const ModalBox = ({ modalVisible, setModalVisible, selectedItems, visible }) => 
   const { token } = useContext(TokenContext);
   const { outfits, setOutfits } = useContext(TokenContext);
 
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
+
   const handleSave = async () => {
+    if(outfitName.trim() === "") {
+      alert("Nazwa nie może być pusta");
+      setSaveButtonDisabled(false);
+      return;
+    }
+    if(selectType === "ide") {
+      alert("Wybierz typ outfitu");
+      setSaveButtonDisabled(false);
+      return;
+    }
+
     const dataToSend = {
       name: outfitName,
       type: selectType,
@@ -59,7 +72,11 @@ const ModalBox = ({ modalVisible, setModalVisible, selectedItems, visible }) => 
 
               <View className="items-center py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4">
                 <TouchableOpacity
-                  onPress={handleSave}
+                  disabled={saveButtonDisabled}
+                  onPress={() => {
+                    setSaveButtonDisabled(true);
+                    handleSave(); 
+                  }}
                   className="px-4 py-2 bg-primary-100 rounded-lg"
                 >
                   <Text className="text-white text-sm font-pregular">
