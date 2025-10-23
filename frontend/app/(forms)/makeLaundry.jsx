@@ -25,6 +25,9 @@ const makeLaundry = () => {
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
 
+  const [MakeLaundryButtonDisabled, setMakeLaundryButtonDisabled] = useState(false);
+  const [nonValidMessage, setNonValidMessage] = useState("");
+
   const allDirtyClothes = useDirtyClothes(); // Używamy hook z symbolami prania
   const params = useLocalSearchParams();
   const screenWidth = Dimensions.get("window").width;
@@ -62,6 +65,11 @@ const makeLaundry = () => {
   };
 
   const handleSubmit = async () => {
+    if(selected.length === 0){
+      setNonValidMessage("Wybierz przynajmniej jedno ubranie do prania.");
+      setMakeLaundryButtonDisabled(false);
+      return;
+    }
     const serverresponse = await toggleClean(selected, token);
     const laundryResponse = await addLaundry(selected, token);
     const clothesData = await getClothes(token);
@@ -131,6 +139,11 @@ const makeLaundry = () => {
       </ScrollView>
 
       <View>
+        {nonValidMessage !== "" && (
+          <Text className="text-red-600 font-pmedium mb-2 text-center">
+            {nonValidMessage}
+          </Text>
+        )}
         {/* Przycisk instrukcji prania dla sugerowanych prań */}
         {isSuggestedLaundry && laundryData && (
           <TouchableOpacity
@@ -149,7 +162,9 @@ const makeLaundry = () => {
         <View className="flex-row justify-center space-x-2 mt-4 mb-4">
           <TouchableOpacity
             className="bg-primary-100 w-[65%] rounded-md py-2 px-4"
+            disabled={MakeLaundryButtonDisabled}
             onPress={() => {
+              setMakeLaundryButtonDisabled(true);
               handleSubmit();
             }}
           >

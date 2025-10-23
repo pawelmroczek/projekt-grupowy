@@ -31,6 +31,8 @@ export default function index() {
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
 
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
+
   const handleSubmit = () => {
     const selectedClothesIds = selectedClothes.map((item) => item.id);
 
@@ -144,7 +146,9 @@ export default function index() {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={saveButtonDisabled}
             onPress={() => {
+              setSaveButtonDisabled(true);
               handleSubmit();
             }}
             className="bg-primary-100 w-[60%] p-2 px-8 rounded-md mb-4"
