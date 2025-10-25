@@ -59,7 +59,7 @@ const SignIn = () => {
         setToken(token);
         const clothesData = await getClothes(token);
         setClothes(clothesData);
-        router.replace("/outfits");
+        router.replace("/discover");
       } else {
         console.log("❌ Błąd:",data.message.message);
         setError(data.message.message);

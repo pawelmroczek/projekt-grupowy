@@ -1,22 +1,31 @@
+import React, { useState, useContext, useEffect } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
-  Text,
   FlatList,
-  StyleSheet,
-  TouchableOpacity,
   Image,
+  Text,
+  TouchableOpacity,
+  StyleSheet
 } from "react-native";
-import React, { use, useContext, useEffect, useMemo, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
-import { useLocalSearchParams } from "expo-router";
-import { TokenContext } from "../TokenContext";
-import SearchBarOutfits from "../../components/common/SearchBarOutfits";
-import AddButton from "../../components/features/wardrobe/AddButton";
-import { router } from "expo-router";
-import { fetchOutfits } from "../../lib/outfits/outfits";
 
-const Home = () => {
+import { router } from "expo-router";
+
+
+
+
+import { useLocalSearchParams } from "expo-router";
+import { useMemo } from "react";
+import { TokenContext } from "../../../app/TokenContext";
+
+
+import SearchBarOutfits from "../../common/SearchBarOutfits";
+import AddButton from "../wardrobe/AddButton";
+import { fetchOutfits } from "../../../lib/outfits/outfits";
+
+
+
+const OutfitsDiscover = () => {
   const rawFilters = useLocalSearchParams();
   const filters = useMemo(() => rawFilters, [JSON.stringify(rawFilters)]);
 
@@ -92,14 +101,7 @@ const Home = () => {
   };
 
   return (
-    <>
-      <SearchBarOutfits
-        displayMode={displayMode}
-        onDisplayPress={setDisplayMode}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        filters={filters}
-      />
+    <View className="flex-1 bg-gray-100">
       <View className="flex-1">
         {filteredOutfits.length > 0 ? (
           <FlatList
@@ -120,8 +122,8 @@ const Home = () => {
           </View>
         )}
       </View>
-      <AddButton onPress={() => router.push("/addOutfits")} />
-    </>
+     
+    </View>
   );
 };
 
@@ -169,4 +171,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default OutfitsDiscover;
+

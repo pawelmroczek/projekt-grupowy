@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import { X } from "lucide-react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";  
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const FilterClothes = () => {
     const params = useLocalSearchParams(); // Pobieramy parametry z routera
@@ -46,7 +47,7 @@ const FilterClothes = () => {
     };
 
     return (
-        <View className="flex-1 bg-white p-6">
+        <SafeAreaView className="flex-1 bg-white p-6">
             <View className="flex-row justify-between items-center mb-6">
                 <Text className="text-lg font-bold">Filter Options</Text>
                 <TouchableOpacity onPress={() => router.replace("/wardrobe")}> 
@@ -101,7 +102,7 @@ const FilterClothes = () => {
             >
                 <Text className="text-center text-white font-bold">Reset Filters</Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     );
 };
 
