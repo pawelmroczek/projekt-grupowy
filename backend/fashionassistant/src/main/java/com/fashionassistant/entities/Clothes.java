@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "clothes")
@@ -34,7 +38,7 @@ public class Clothes {
     @Column(name = "clean")
     private boolean clean;
     @Column(name = "visible")
-    private boolean visible;
+    private Integer visible;
     @Column(name = "priority")
     private int priority;
     @OneToOne(mappedBy = "clothes", cascade = CascadeType.ALL)
@@ -42,4 +46,11 @@ public class Clothes {
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
+    @ManyToMany
+    @JoinTable(
+        name = "clothes_pictograms",
+        joinColumns = @JoinColumn(name = "clothes_id"),
+        inverseJoinColumns = @JoinColumn(name = "pictogram_id")
+    )
+    private Set<Pictograms> pictograms = new HashSet<>();
 }

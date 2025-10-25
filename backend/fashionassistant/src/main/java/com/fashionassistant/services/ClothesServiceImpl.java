@@ -6,13 +6,17 @@ import com.fashionassistant.exceptions.NotFoundException;
 import com.fashionassistant.repositories.ClothesRepository;
 import com.fashionassistant.repositories.HouseholdRepository;
 import com.fashionassistant.repositories.UserRepository;
+import com.fashionassistant.repositories.PictogramsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.stream.Collectors;
+import java.util.HashSet;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,12 +28,20 @@ public class ClothesServiceImpl implements ClothesService {
     private final AuthService authService;
     private final UserRepository userRepository;
     private final HouseholdRepository householdRepository;
+    private final PictogramsRepository pictogramsRepository;
 
     @Override
-    public List<ClothesGet> getClothes() {
+    public List<ClothesGet> getClothes(Integer page, Integer pageSize) {
         User user = authService.getCurrentUser();
+        List<Clothes> clothes;
         List<ClothesGet> clothesGets = new ArrayList<>();
-        List<Clothes> clothes = clothesRepository.findClothesByUserId(user.getId());
+        if (page != null && pageSize != null) {
+            PageRequest pageRequest = PageRequest.of(page, pageSize);
+            Page<Clothes> clothesPage = clothesRepository.findClothesByUserId(user.getId(), pageRequest);
+            clothes = clothesPage.getContent();
+        } else {
+            clothes = clothesRepository.findClothesByUserId(user.getId());
+        }
         clothes.forEach(singleClothes -> {
             clothesGets.add(new ClothesGet(singleClothes));
         });
@@ -39,43 +51,42 @@ public class ClothesServiceImpl implements ClothesService {
     @Override
     public List<ClothesHouseholdGet> getClothesFromHousehold() {
         User currentUser = authService.getCurrentUser();
+        List<ClothesHouseholdGet> clothesGets = new ArrayList<>();
+        List<Clothes> clothes;
         if (currentUser.getHousehold() != null) {
             Household household = householdRepository.findById(currentUser.getHousehold().getId())
                     .orElseThrow(() -> new NotFoundException("Household not found"));
-            Set<Clothes> clothes = new HashSet<>();
             Set<User> users = household.getUsers();
+            clothes = new ArrayList<>();
             users.forEach(
                     user -> clothes.addAll(user.getClothes())
             );
-            List<ClothesHouseholdGet> clothesGets = new ArrayList<>();
-            clothes.forEach(singleClothes -> {
-                clothesGets.add(new ClothesHouseholdGet(singleClothes,
-                        currentUser.getId() == singleClothes.getUser().getId()));
-            });
-            return clothesGets;
         } else {
-            List<ClothesHouseholdGet> clothesGets = new ArrayList<>();
-            List<Clothes> clothes = clothesRepository.findClothesByUserId(currentUser.getId());
-            clothes.forEach(singleClothes -> {
-                clothesGets.add(new ClothesHouseholdGet(singleClothes,
-                        currentUser.getId() == singleClothes.getUser().getId()));
-            });
-            return clothesGets;
+            clothes = clothesRepository.findClothesByUserId(currentUser.getId());
         }
+        clothes.forEach(singleClothes -> {
+            clothesGets.add(new ClothesHouseholdGet(singleClothes,
+                    currentUser.getId() == singleClothes.getUser().getId()));
+        });
+        return clothesGets;
     }
 
     @Override
-    public List<Clothes> getFriendsClothes() {
+    public List<Clothes> getFriendsClothes(Integer page, Integer pageSize) {
         User currentUser = authService.getCurrentUser();
         User user = userRepository.findById(currentUser.getId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
-        List<Clothes> friendsClothes = new ArrayList<>();
+        List<Clothes> friendsClothes;
         Set<User> friends = user.getFriends();
-        friends.forEach(friend -> {
-            friend.getClothes().stream()
-                .filter(Clothes::isVisible)
-                .forEach(friendsClothes::add);
-        });
+        List<Integer> visibleValues = List.of(Visibility.PUBLIC, Visibility.FRIENDS);
+        List<Integer> userIds = friends.stream().map(User::getId).toList();
+        if (page != null && pageSize != null) {
+            PageRequest pageRequest = PageRequest.of(page, pageSize);
+            Page<Clothes> clothesPage = clothesRepository.findByUserIdInAndVisibleIn(userIds, visibleValues, pageRequest);
+            friendsClothes = clothesPage.getContent();
+        } else {
+            friendsClothes = clothesRepository.findByUserIdInAndVisibleIn(userIds, visibleValues);
+        }
         return friendsClothes;
     }
 
@@ -98,6 +109,15 @@ public class ClothesServiceImpl implements ClothesService {
             clothes.setPriority(clothesRequest.priority());
             clothes.setPicture(picture);
             picture.setClothes(clothes);
+
+            if (clothesRequest.pictogramIds() != null) {
+                Set<Pictograms> pictograms = clothesRequest.pictogramIds().stream()
+                        .map(id -> pictogramsRepository.findById(id)
+                                .orElseThrow(() -> new NotFoundException("Pictogram not found with id: " + id)))
+                        .collect(Collectors.toSet());
+                clothes.setPictograms(pictograms);
+            }
+    
             Clothes clothesNew = clothesRepository.save(clothes);
             return new ClothesGet(clothesNew);
         }
@@ -153,8 +173,18 @@ public class ClothesServiceImpl implements ClothesService {
                 clothesRequest.visible(),
                 clothesRequest.priority(),
                 picture,
-                user
+                user, 
+                new HashSet<>() // this is empty list of pictograms
         );
+
+        if (clothesRequest.pictogramIds() != null && !clothesRequest.pictogramIds().isEmpty()) {
+            Set<Pictograms> pictograms = clothesRequest.pictogramIds().stream()
+                    .map(id -> pictogramsRepository.findById(id)
+                            .orElseThrow(() -> new NotFoundException("Pictogram not found with id: " + id)))
+                    .collect(Collectors.toSet());
+            clothes.setPictograms(pictograms);
+        }
+
         picture.setClothes(clothes);
         user.addClothes(clothes);
         Clothes addedClothes = clothesRepository.save(clothes);

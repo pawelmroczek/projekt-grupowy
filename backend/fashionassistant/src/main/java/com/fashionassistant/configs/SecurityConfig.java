@@ -29,6 +29,7 @@ public class SecurityConfig {
                                         "/fashion/outfits/**",
                                         "/fashion/laundries/**",
                                         "/fashion/user-preferences/**",
+                                        "/fashion/pictograms/**",
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html")

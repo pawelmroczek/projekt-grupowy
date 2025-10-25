@@ -22,7 +22,7 @@ public class Outfit {
     @Column(name = "createdAt")
     private LocalDate createdAt;
     @Column(name = "visible")
-    private boolean visible;
+    private Integer visible;
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;

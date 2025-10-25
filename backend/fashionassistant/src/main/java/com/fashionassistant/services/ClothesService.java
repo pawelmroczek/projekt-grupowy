@@ -7,11 +7,11 @@ import java.util.List;
 public interface ClothesService {
     ClothesGet addClothes(ClothesCreate clothes);
 
-    List<ClothesGet> getClothes();
+    List<ClothesGet> getClothes(Integer page, Integer pageSize);
 
     List<ClothesHouseholdGet> getClothesFromHousehold();
 
-    List<Clothes> getFriendsClothes();
+    List<Clothes> getFriendsClothes(Integer page, Integer pageSize);
 
     ClothesGet updateClothes(ClothesUpdate clothes);
 
