@@ -43,6 +43,9 @@ export default function index() {
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
 
+  const [addButtonDisabled, setAddButtonDisabled] = useState(false);
+  const [nonValidAlert, setNonValidAlert] = useState("");
+
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedIcons, setSelectedIcons] = useState([]);
   const [selectedSize, setSelectedSize] = useState(null);
@@ -93,7 +96,8 @@ export default function index() {
     selectedColor
 
   if (!isValid) {
-    console.warn("Wypełnij wszystkie pola przed wysłaniem formularza.");
+    setNonValidAlert("Uzupełnij wszystkie pola!");
+    setAddButtonDisabled(false);
     return;
   }
 
@@ -223,10 +227,15 @@ export default function index() {
               value={priority}
               setValue={setPriority}
             />
+            {nonValidAlert !== "" ? (
+              <Text className="text-red-500 mt-2 mb-2 text-center">{nonValidAlert}</Text>
+            ) : null}
             <View className="items-center   py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4 ">
               <TouchableOpacity
+                disabled={addButtonDisabled}
                 onPress={() => {
                   //console.log("submit");
+                  setAddButtonDisabled(true);
                   handleSubmit();
                 }}
                 className="px-4 py-2 bg-primary-100 rounded-lg"

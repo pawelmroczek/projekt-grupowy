@@ -7,6 +7,8 @@ import { TokenContext } from "../../../../app/TokenContext";
 export default function LaundryHistory({ laundries }) {
   // Tutaj można dodać fetch do pobrania historii prania
 
+  laundries = laundries.sort((a, b) => new Date(b.date) - new Date(a.date)); // do poprawy bo godzina nie działa nie wiem czy ważne
+
   return (
     <View className="mt-4">
       <View className="flex flex-row items-center mb-4">

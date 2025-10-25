@@ -21,7 +21,7 @@ const FilterClothes = () => {
     }, [filters]);
 
     const toggleSort = (option) => {
-        setFilters(prev => ({ ...prev, sortBy: prev.sortBy === option ? null : option }));
+        setFilters(prev => ({ ...prev, sortBy: option }));
     };
 
     const toggleSize = (option) => {
