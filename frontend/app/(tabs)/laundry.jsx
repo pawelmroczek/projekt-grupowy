@@ -10,6 +10,7 @@ import DebugCareSymbols from "../../components/features/laundry/DebugCareSymbols
 import { fetchLaundries } from "../../lib/laundry/fetchLaundries";
 import { TokenContext } from "../TokenContext";
 import planLaundry from "../../lib/laundry/planLaundry";
+import { fetchLaundyPreferences } from "../../lib/laundry/fetchLaundyPreferences";
 
 {
   /*
@@ -34,11 +35,6 @@ const Laundry = () => {
 
   const { token, clothes, outfits } = useContext(TokenContext);
 
-  const fetchData = async () => {
-    const data = await fetchLaundries(token);
-    setLaundries(data);
-  };
-
   const [options, setOptions] = useState({
     minItemsPerLoad: 1,
     useTemperatureMatching: true,
@@ -48,6 +44,15 @@ const Laundry = () => {
     allowHandWashWithMachine: false,
     allowDelicateWithNormal: true,
   });
+
+   const fetchData = async () => {
+    const data = await fetchLaundries(token);
+    const preferences = await fetchLaundyPreferences(token);
+    setOptions(preferences);
+    setLaundries(data);
+  };
+
+
 
   useEffect(() => {
     fetchData();    
