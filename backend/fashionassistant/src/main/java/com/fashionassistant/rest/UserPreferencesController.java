@@ -1,7 +1,7 @@
 package com.fashionassistant.rest;
 
-import com.fashionassistant.entities.UserPreferences;
 import com.fashionassistant.entities.UserPreferencesGet;
+import com.fashionassistant.entities.UserPreferencesPut;
 import com.fashionassistant.services.UserPreferencesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class UserPreferencesController {
     }
 
     @PutMapping
-    public UserPreferencesGet updateUserPreferences(@RequestBody UserPreferences userPreferences) {
+    public UserPreferencesGet updateUserPreferences(@RequestBody UserPreferencesPut userPreferences) {
         return new UserPreferencesGet(userPreferencesService.setUserPreferences(userPreferences));
     }
 }

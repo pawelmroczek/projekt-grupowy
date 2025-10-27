@@ -2,6 +2,7 @@ package com.fashionassistant.services;
 
 import com.fashionassistant.entities.User;
 import com.fashionassistant.entities.UserPreferences;
+import com.fashionassistant.entities.UserPreferencesPut;
 import com.fashionassistant.exceptions.NotFoundException;
 import com.fashionassistant.repositories.UserPreferencesRepository;
 import com.fashionassistant.repositories.UserRepository;
@@ -25,13 +26,13 @@ public class UserPreferencesServiceImpl implements UserPreferencesService {
     }
 
     @Override
-    public UserPreferences setUserPreferences(UserPreferences userPreferences) {
+    public UserPreferences setUserPreferences(UserPreferencesPut userPreferencesRequest) {
         User user = authService.getCurrentUser();
         user = userRepository.findById(user.getId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
-        userPreferences.setId(user.getUserPreferences().getId());
+        UserPreferences userPreferences = new UserPreferences(user.getUserPreferences().getId(),
+                userPreferencesRequest, user);
         user.setUserPreferences(userPreferences);
-        userPreferences.setUser(user);
         userPreferencesRepository.save(userPreferences);
         return userPreferences;
     }
