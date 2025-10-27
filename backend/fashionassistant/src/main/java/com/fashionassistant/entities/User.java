@@ -53,6 +53,10 @@ public class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "preferences_id")
     private UserPreferences userPreferences;
+    @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<TradeOffer> sentTrades;
+    @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<TradeOffer> receivedTrades;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

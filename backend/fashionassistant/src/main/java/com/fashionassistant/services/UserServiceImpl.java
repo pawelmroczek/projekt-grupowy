@@ -49,7 +49,9 @@ public class UserServiceImpl implements UserService {
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
-                userPreferences
+                userPreferences,
+                new ArrayList<>(),
+                new ArrayList<>()
         );
         userPreferences.setUser(user);
         User createdUser = userRepository.save(user);
