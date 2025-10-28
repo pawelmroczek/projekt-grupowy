@@ -112,6 +112,20 @@ public class User implements UserDetails {
         receivedInvitations.add(invitation);
     }
 
+    public void addSentTradeOffer(TradeOffer tradeOffer) {
+        if (tradeOffer == null) {
+            sentTrades = new ArrayList<>();
+        }
+        sentTrades.add(tradeOffer);
+    }
+
+    public void addReceivedTradeOffer(TradeOffer tradeOffer) {
+        if (tradeOffer == null) {
+            receivedTrades = new ArrayList<>();
+        }
+        receivedTrades.add(tradeOffer);
+    }
+
     public void deleteInvitation(Invitation invitation) {
         if (sentInvitations != null) {
             sentInvitations.remove(invitation);
