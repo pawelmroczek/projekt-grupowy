@@ -57,6 +57,30 @@ public class TradeOfferServiceImpl implements TradeOfferService {
         return currentUser.getReceivedTrades();
     }
 
+    @Override
+    public void acceptTradeOffer(int tradeOfferId) {
+        TradeOffer tradeOffer = getTradeOfferById(tradeOfferId);
+        User fromUser = userRepository.findById(tradeOffer.getFromUser().getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        User toUser = userRepository.findById(tradeOffer.getToUser().getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        tradeOffer.getFromUserClothes().forEach(clothes -> {
+            clothes.setUser(toUser);
+            toUser.addClothes(clothes);
+            fromUser.getClothes().remove(clothes);
+        });
+        tradeOffer.getToUserClothes().forEach(clothes -> {
+            clothes.setUser(fromUser);
+            fromUser.addClothes(clothes);
+            toUser.getClothes().remove(clothes);
+        });
+        fromUser.deleteTradeOffer(tradeOffer);
+        toUser.deleteTradeOffer(tradeOffer);
+        tradeOffer.setFromUserClothes(null);
+        tradeOffer.setToUserClothes(null);
+        tradeOfferRepository.delete(tradeOffer);
+    }
+
     private Set<Clothes> getSetOfClothesByIds(Set<Integer> clothesIds, int userId) {
         return clothesIds.stream().map(
                 clothesId -> {
@@ -68,5 +92,15 @@ public class TradeOfferServiceImpl implements TradeOfferService {
                     return clothes;
                 }
         ).collect(Collectors.toSet());
+    }
+
+    private TradeOffer getTradeOfferById(int tradeOfferId) {
+        TradeOffer tradeOffer = tradeOfferRepository.findById(tradeOfferId)
+                .orElseThrow(() -> new NotFoundException("Trade offer not found"));
+        User currentUser = authService.getCurrentUser();
+        if (currentUser.getId() != tradeOffer.getToUser().getId()) {
+            throw new BadRequestException("You don't have access to this trade offer");
+        }
+        return tradeOffer;
     }
 }

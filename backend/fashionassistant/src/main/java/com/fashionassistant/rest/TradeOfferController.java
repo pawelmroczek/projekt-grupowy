@@ -23,4 +23,9 @@ public class TradeOfferController {
     public List<TradeOfferGet> getAllTradeOffers() {
         return tradeOfferService.getAllTradeOffers().stream().map(TradeOfferGet::new).toList();
     }
+
+    @PostMapping("/accept/{id}")
+    public void acceptTradeOffer(@PathVariable int id) {
+        tradeOfferService.acceptTradeOffer(id);
+    }
 }

@@ -10,7 +10,7 @@ public interface TradeOfferService {
 
     List<TradeOffer> getAllTradeOffers();
 
-    //void acceptInvitation(int invitationId);
+    void acceptTradeOffer(int tradeOfferId);
 
     //void rejectInvitation(int invitationId);
 }

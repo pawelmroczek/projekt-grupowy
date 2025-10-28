@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private String password;
     @Column(name = "is_enabled")
     private boolean isEnabled;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Clothes> clothes;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Outfit> outfits;
@@ -124,6 +124,15 @@ public class User implements UserDetails {
             receivedTrades = new ArrayList<>();
         }
         receivedTrades.add(tradeOffer);
+    }
+
+    public void deleteTradeOffer(TradeOffer tradeOffer) {
+        if (sentTrades != null) {
+            sentTrades.remove(tradeOffer);
+        }
+        if (receivedTrades != null) {
+            receivedTrades.remove(tradeOffer);
+        }
     }
 
     public void deleteInvitation(Invitation invitation) {
