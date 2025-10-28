@@ -3,10 +3,12 @@ package com.fashionassistant.services;
 import com.fashionassistant.entities.TradeOffer;
 import com.fashionassistant.entities.TradeOfferCreate;
 
+import java.util.List;
+
 public interface TradeOfferService {
     TradeOffer sendTradeOffer(TradeOfferCreate tradeOfferCreate);
 
-    //List<InvitationGet> getAllInvitations();
+    List<TradeOffer> getAllTradeOffers();
 
     //void acceptInvitation(int invitationId);
 

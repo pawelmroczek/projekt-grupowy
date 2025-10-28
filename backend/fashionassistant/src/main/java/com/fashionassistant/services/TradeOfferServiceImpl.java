@@ -12,6 +12,7 @@ import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,14 @@ public class TradeOfferServiceImpl implements TradeOfferService {
         fromUser.addSentTradeOffer(tradeOffer);
         toUser.addReceivedTradeOffer(tradeOffer);
         return tradeOffer;
+    }
+
+    @Override
+    public List<TradeOffer> getAllTradeOffers() {
+        User currentUser = authService.getCurrentUser();
+        currentUser = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        return currentUser.getReceivedTrades();
     }
 
     private Set<Clothes> getSetOfClothesByIds(Set<Integer> clothesIds, int userId) {

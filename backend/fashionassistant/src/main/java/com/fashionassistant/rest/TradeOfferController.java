@@ -4,10 +4,9 @@ import com.fashionassistant.entities.TradeOfferCreate;
 import com.fashionassistant.entities.TradeOfferGet;
 import com.fashionassistant.services.TradeOfferService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("fashion/trade-offers")
@@ -18,5 +17,10 @@ public class TradeOfferController {
     @PostMapping("/send")
     public TradeOfferGet sendInvitation(@RequestBody TradeOfferCreate tradeOfferCreate) {
         return new TradeOfferGet(tradeOfferService.sendTradeOffer(tradeOfferCreate));
+    }
+
+    @GetMapping
+    public List<TradeOfferGet> getAllTradeOffers() {
+        return tradeOfferService.getAllTradeOffers().stream().map(TradeOfferGet::new).toList();
     }
 }
