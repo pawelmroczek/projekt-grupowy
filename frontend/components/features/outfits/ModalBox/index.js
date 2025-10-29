@@ -46,7 +46,7 @@ const ModalBox = ({ modalVisible, setModalVisible, selectedItems, visible }) => 
     const outfitsData = await fetchOutfits(token);
     setOutfits(outfitsData);
     setModalVisible(false);
-    router.replace("/outfits");
+    router.replace("/wardrobe");
   };
 
   return (

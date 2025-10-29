@@ -31,7 +31,8 @@ export default function LaundrySettings({
   const handleSave = async () => {
     onOptionsChange(localOptions);
     // cos nie dziala na backendzie?
-    // await saveLaundryPreferences(token, localOptions);
+    await saveLaundryPreferences(token, localOptions);
+    console.log("Saved options:", localOptions);
     onClose();
   };
 
@@ -74,7 +75,6 @@ export default function LaundrySettings({
           allowDelicateWithNormal: false,
         };
       }
-      console.log(`New options after setting ${level}:`, newOptions);
       return newOptions;
     });
   };

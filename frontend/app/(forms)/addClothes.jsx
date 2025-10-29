@@ -117,10 +117,10 @@ export default function index() {
     formData.append("size", selectedSize);
     formData.append("color", selectedColor);
     formData.append("clean", cleanStatus);
-    formData.append("visible", true);
-    //formData.append("visible", visible);
+    // formData.append("visible", true);
+    formData.append("visible", visible);
     formData.append("priority", priority);
-    //console.log(formData);
+    console.log(formData);
     console.log(formData.get("file").uri);
     console.log(formData.get("file").name);
     console.log(formData.get("file").type);
