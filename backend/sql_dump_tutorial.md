@@ -3,7 +3,7 @@
 Jeśli chcesz wykonać kopię zapasową bazy danych działającej w kontenerze:
 
 ```sh
-docker exec -i fashion-database mysqldump -u root -p"twoje_haslo" nazwa_bazy > ./dumps/dump.sql
+docker exec -i fashion-database mysqldump -u root -p"twoje_haslo" --default-character-set=utf8 nazwa_bazy > ./fashionassistant/src/main/resources/dump.sql
 ```
 
 

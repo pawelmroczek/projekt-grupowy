@@ -65,7 +65,6 @@ export default function index() {
   ];
   const params = useLocalSearchParams();
   useEffect(() => {
-    console.log(params);
     if (Object.keys(params).length > 0) {
       setEditing(true);
       setForm({
@@ -82,6 +81,11 @@ export default function index() {
       setImageName(".jpg");
       setImageType("image/jpeg");
       setCleanStatus(params.clean);
+      setSelectedIcons(
+        params.pictogramIds
+          ? params.pictogramIds.split(",").map(Number).sort((a, b) => a - b)
+          : []
+      );
       //console.log("Wczytano parametry");
     }
   }, []);
@@ -117,9 +121,9 @@ export default function index() {
     formData.append("size", selectedSize);
     formData.append("color", selectedColor);
     formData.append("clean", cleanStatus);
-    // formData.append("visible", true);
     formData.append("visible", visible);
     formData.append("priority", priority);
+    formData.append("pictogramIds", selectedIcons.join(", "));
     console.log(formData);
     console.log(formData.get("file").uri);
     console.log(formData.get("file").name);
@@ -131,10 +135,11 @@ export default function index() {
       const serverresponse = await clothesEditing(formData, token);
       const clothesData = await getClothes(token);
       setClothes(clothesData);
-      router.back()
+      router.back();
     }
     else{
       //console.log("Wysyłam formularz");
+      console.log(formData);
       const serverresponse = await clothesSending(formData, token);
       const clothesData = await getClothes(token);
       setClothes(clothesData);

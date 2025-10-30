@@ -68,10 +68,11 @@ const Wardrobe = () => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={[styles.item, displayMode ? styles.single : styles.double]}
-      onPress={() => router.push({
+      onPress={() => {
+        router.push({
         pathname: "/clothDetails",
-        params: { "name": item.name, "picture": item.picture, "id": item.id, "type": item.type, "color": item.color, "size": item.size, "clean": item.clean, "visibility": item.visibility, "priority": item.priority, "category": item.category}
-      })
+        params: { "name": item.name, "picture": item.picture, "id": item.id, "type": item.type, "color": item.color, "size": item.size, "clean": item.clean, "visible": item.visible, "priority": item.priority, "category": item.category, "pictogramIds": item.pictogramIds}
+      })}
     }
     >
       <Image source={{ uri: item.picture }} style={[styles.image]} />

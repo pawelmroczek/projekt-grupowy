@@ -1,19 +1,27 @@
--- MySQL dump 10.13  Distrib 9.0.1, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 9.5.0, for Linux (x86_64)
 --
 -- Host: localhost    Database: fashion
 -- ------------------------------------------------------
--- Server version	9.0.1
+-- Server version	9.5.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
+SET @@SESSION.SQL_LOG_BIN= 0;
+
+--
+-- GTID state at the beginning of the backup 
+--
+
+SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ 'b6a415d0-b58f-11f0-87f6-0242ac130002:1-64';
 
 --
 -- Table structure for table `clothes`
@@ -33,6 +41,7 @@ CREATE TABLE `clothes` (
   `type` varchar(255) DEFAULT NULL,
   `user_id` int DEFAULT NULL,
   `priority` int DEFAULT NULL,
+  `category` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK9v7gut79d5gafwodlxbpv5y2x` (`user_id`),
   CONSTRAINT `FK9v7gut79d5gafwodlxbpv5y2x` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
@@ -46,6 +55,32 @@ CREATE TABLE `clothes` (
 LOCK TABLES `clothes` WRITE;
 /*!40000 ALTER TABLE `clothes` DISABLE KEYS */;
 /*!40000 ALTER TABLE `clothes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `clothes_pictograms`
+--
+
+DROP TABLE IF EXISTS `clothes_pictograms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `clothes_pictograms` (
+  `clothes_id` int NOT NULL,
+  `pictogram_id` int NOT NULL,
+  PRIMARY KEY (`clothes_id`,`pictogram_id`),
+  KEY `FK8pc5usygi34kbw3robs42hpa` (`pictogram_id`),
+  CONSTRAINT `FK8ilh5t39qtk4wka6jmjldw0kx` FOREIGN KEY (`clothes_id`) REFERENCES `clothes` (`id`),
+  CONSTRAINT `FK8pc5usygi34kbw3robs42hpa` FOREIGN KEY (`pictogram_id`) REFERENCES `pictograms` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `clothes_pictograms`
+--
+
+LOCK TABLES `clothes_pictograms` WRITE;
+/*!40000 ALTER TABLE `clothes_pictograms` DISABLE KEYS */;
+/*!40000 ALTER TABLE `clothes_pictograms` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -195,6 +230,7 @@ CREATE TABLE `outfits` (
   `name` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
   `user_id` int DEFAULT NULL,
+  `visible` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKf249bhuwj850p7mbg5el7a5f9` (`user_id`),
   CONSTRAINT `FKf249bhuwj850p7mbg5el7a5f9` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
@@ -208,6 +244,30 @@ CREATE TABLE `outfits` (
 LOCK TABLES `outfits` WRITE;
 /*!40000 ALTER TABLE `outfits` DISABLE KEYS */;
 /*!40000 ALTER TABLE `outfits` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pictograms`
+--
+
+DROP TABLE IF EXISTS `pictograms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pictograms` (
+  `id` int NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pictograms`
+--
+
+LOCK TABLES `pictograms` WRITE;
+/*!40000 ALTER TABLE `pictograms` DISABLE KEYS */;
+INSERT INTO `pictograms` VALUES (0,'30C'),(1,'40C'),(2,'50C'),(3,'60C'),(4,'70C'),(5,'95C'),(6,'DN_bleach'),(7,'DN_dry'),(8,'DN_dry_clean'),(9,'DN_iron'),(10,'DN_steam'),(11,'DN_tumble_dry'),(12,'DN_wash'),(13,'DN_wring'),(14,'bleach'),(15,'chlorine_bleach'),(16,'drip_dry'),(17,'dry_clean'),(18,'dry_clean_any_solvent'),(19,'dry_clean_any_solvent_except_trichloroethylene'),(20,'dry_clean_low_heat'),(21,'dry_clean_no_steam'),(22,'dry_clean_petrol_only'),(23,'dry_clean_reduced_moisture'),(24,'dry_clean_short_cycle'),(25,'dry_flat'),(26,'hand_wash'),(27,'iron'),(28,'iron_high'),(29,'iron_low'),(30,'iron_medium'),(31,'line_dry'),(32,'line_dry_in_shade'),(33,'machine_wash_delicate'),(34,'machine_wash_normal'),(35,'machine_wash_permanent_press'),(36,'natural_dry'),(37,'non_chlorine_bleach'),(38,'shade_dry'),(39,'steam'),(40,'tumble_dry_low'),(41,'tumble_dry_medium'),(42,'tumble_dry_no_heat'),(43,'tumble_dry_normal'),(44,'wet_clean'),(45,'wring');
+/*!40000 ALTER TABLE `pictograms` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -308,7 +368,6 @@ CREATE TABLE `users` (
   `household_id` int DEFAULT NULL,
   `is_enabled` bit(1) DEFAULT NULL,
   `preferences_id` int DEFAULT NULL,
-
   PRIMARY KEY (`id`),
   UNIQUE KEY `UKp500u51iqqij1u0b4eqv13lwx` (`preferences_id`),
   KEY `FKlacr3nkhlm93hgc5d32ukqim9` (`household_id`),
@@ -355,6 +414,7 @@ LOCK TABLES `verification_tokens` WRITE;
 INSERT INTO `verification_tokens` VALUES (1,'2025-10-12 14:04:19.809151','65193100-14ff-4552-8d4f-56ec0a6a178e',3);
 /*!40000 ALTER TABLE `verification_tokens` ENABLE KEYS */;
 UNLOCK TABLES;
+SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -365,4 +425,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-12  8:48:54
+-- Dump completed on 2025-10-30 12:58:47
