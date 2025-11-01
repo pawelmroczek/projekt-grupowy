@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { getClothes } from "../lib/clothes/clothes";
+import { getClothes } from "./clothes/clothes";
 import { TokenContext } from "./TokenContext";
 
 // Funkcja do symulacji symboli prania na podstawie typu i koloru ubrania

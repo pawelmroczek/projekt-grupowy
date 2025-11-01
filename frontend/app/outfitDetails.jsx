@@ -11,7 +11,7 @@ import { router, useLocalSearchParams } from "expo-router";
 
 import { X, Pencil } from "lucide-react-native";
 import { clothesDeleting } from "../lib/clothes/clothes";
-import { TokenContext } from "./TokenContext";
+import { TokenContext } from "../lib/TokenContext";
 import { getClothes } from "../lib/clothes/clothes";
 import OutfitDetailsTile from "../components/features/outfits/OutfitsDetails";
 import { fetchOutfits, outfitDeleting } from "../lib/outfits/outfits";
