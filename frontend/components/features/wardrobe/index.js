@@ -16,9 +16,10 @@ import { router } from "expo-router";
 
 import { useLocalSearchParams } from "expo-router";
 import { useMemo } from "react";
-import { TokenContext } from "../../../app/TokenContext";
+
 import SearchBarWardrobe from "../../common/SearchBarWardrobe";
 import AddButton from "./AddButton";
+import { TokenContext } from "../../../lib/TokenContext";
 
 const FormData = global.FormData;
 

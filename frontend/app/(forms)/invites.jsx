@@ -1,8 +1,9 @@
 import React from "react";
 import { useState, useContext, useEffect } from "react";
 import { View, Text, TouchableOpacity, FlatList, SafeAreaView, ActivityIndicator} from "react-native";
-import { TokenContext } from "../TokenContext";
+
 import { acceptInvite, getInvites, rejectInvite } from "../../lib/friends/friends";
+import { TokenContext } from "../../lib/TokenContext";
 
 const invites = () => {
 

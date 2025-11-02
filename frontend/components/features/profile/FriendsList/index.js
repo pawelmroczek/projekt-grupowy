@@ -1,10 +1,10 @@
 import { View, Text, TouchableOpacity, Modal  } from "react-native";
 import VerticalList from "./VertitalList";
 import { getHomiesList, getFriendsList } from "../../../../lib/friends/friends";
-import React, { useEffect, useState, useContext} from "react";
-import { TokenContext } from "../../../../app/TokenContext";
+import React, { useState, useContext} from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { leaveHousehold } from "../../../../lib/friends/friends";
+import { TokenContext } from "../../../../lib/TokenContext";
 
 export default function FriendsList() {
 

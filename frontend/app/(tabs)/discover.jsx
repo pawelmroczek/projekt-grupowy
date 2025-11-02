@@ -13,7 +13,7 @@ import { router } from "expo-router";
 import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
 
 import { getClothes } from "../../lib/clothes/clothes";
-import { TokenContext } from "../TokenContext";
+
 import { useLocalSearchParams } from "expo-router";
 import { useMemo } from "react";
 import Wardrobe from "../../components/features/wardrobe";

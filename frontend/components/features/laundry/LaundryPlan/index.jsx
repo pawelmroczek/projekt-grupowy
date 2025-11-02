@@ -11,7 +11,6 @@ import {
 } from "lucide-react-native";
 import planLaundry from "../../../../lib/laundry/planLaundry";
 import { getSymbolDescription } from "../../../../lib/careSymbols";
-import { TokenContext } from "../../../../app/TokenContext";
 import LaundrySettings from "../LaundrySettings";
 import { wichStrictnessIsActive } from "../../../../lib/laundry/utils";
 

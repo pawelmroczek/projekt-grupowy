@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Text, FlatList } from "react-native";
 import { BarChart } from "react-native-chart-kit";
-import useDirtyClothes from "../../../../app/useDirtyClothes";
+import useDirtyClothes from "../../../../lib/useDirtyClothes";
+
 
 
 const getClothingColorCounts = (clothes) => {

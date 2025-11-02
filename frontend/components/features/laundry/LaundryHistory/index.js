@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { AArrowDown, Frown, History } from "lucide-react-native";
 import { fetchLaundries } from "../../../../lib/laundry/fetchLaundries";
-import { TokenContext } from "../../../../app/TokenContext";
+
 
 export default function LaundryHistory({ laundries }) {
   // Tutaj można dodać fetch do pobrania historii prania

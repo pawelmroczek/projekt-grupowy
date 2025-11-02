@@ -4,10 +4,11 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OutfitSelector from "../../components/features/outfits/OutfitSelector";
 import { router, useLocalSearchParams } from "expo-router";
-import { TokenContext } from "../TokenContext";
+
 import ModalBox from "../../components/features/outfits/ModalBox";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
 import VisibiltySelector from "../../components/common/VisibiltySelector";
+import { TokenContext } from "../../lib/TokenContext";
 
 export default function Index() {
   const { clothes, setClothes } = useContext(TokenContext);

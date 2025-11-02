@@ -18,7 +18,7 @@ import { router, useLocalSearchParams} from "expo-router";
 import AddPhoto from "../../components/features/wardrobe/AddPhoto";
 import ColorSelector from "../../components/features/wardrobe/ColorSelector";
 import LaundryIconsSelector from "../../components/features/wardrobe/LaundryIconsSelector";
-import { TokenContext } from "../TokenContext";
+
 import VerticalSelector from "../../components/common/VerticalSelector";
 import { getClothes } from "../../lib/clothes/clothes";
 import ThreeOptionSelector from "../../components/common/ThreeOptionSelector";
@@ -27,6 +27,7 @@ import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../
 import ClassifyButton from "../../components/common/ClassifyButton";
 import VisibiltySelector from "../../components/common/VisibiltySelector";
 import PioritySelector from "../../components/common/PioritySelector";
+import { TokenContext } from "../../lib/TokenContext";
 
 export default function index() {
   const [modalVisible, setModalVisible] = useState(false);

@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import TokenProvider from "./TokenContext";
+import TokenProvider from "../lib/TokenContext";
+
 
 SplashScreen.preventAutoHideAsync();
 

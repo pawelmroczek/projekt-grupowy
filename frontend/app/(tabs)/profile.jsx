@@ -4,7 +4,8 @@ import AddFriend from "../../components/features/profile/AddFriend";
 import ProfileBlock from "../../components/features/profile/ProfileBlock";
 import { router } from "expo-router";
 import FriendsList from "../../components/features/profile/FriendsList";
-import { TokenContext } from "../TokenContext";
+import { TokenContext } from "../../lib/TokenContext";
+
 
 
 const Profile = () => {

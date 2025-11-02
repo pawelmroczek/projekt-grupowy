@@ -10,7 +10,8 @@ import {
 import { Settings, Info, X } from "lucide-react-native";
 import { wichStrictnessIsActive } from "../../../../lib/laundry/utils";
 import { saveLaundryPreferences } from "../../../../lib/laundry/saveLaundryPreferences";
-import { TokenContext } from "../../../../app/TokenContext";
+import { TokenContext } from "../../../../lib/TokenContext";
+
 
 export default function LaundrySettings({
   options,

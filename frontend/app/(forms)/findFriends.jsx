@@ -3,7 +3,8 @@ import { useState, useContext } from "react";
 import { View, Text, TouchableOpacity, TextInput, FlatList} from "react-native";
 import { Search } from "lucide-react-native";
 import { getUsers, iviteSending } from "../../lib/friends/friends";
-import { TokenContext } from "../TokenContext";
+import { TokenContext } from "../../lib/TokenContext";
+
 
 
 

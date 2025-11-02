@@ -1,12 +1,13 @@
 import React, { use } from "react";
 import { useState, useContext, useEffect } from "react";
 import { View, Text, TouchableOpacity, Modal} from "react-native";
-import { TokenContext } from "../../TokenContext";
+
 import FormField from "../../../components/common/FormField";
 import { loginUser } from "../../../lib/authorization/authorization";
 import { getUserInfo } from "../../../lib/friends/friends";
 import { changePassword } from "../../../lib/authorization/authorization";
 import { router } from "expo-router";
+import { TokenContext } from "../../../lib/TokenContext";
 
 
 

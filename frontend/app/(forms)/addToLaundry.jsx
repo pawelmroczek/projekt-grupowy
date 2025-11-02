@@ -13,11 +13,12 @@ import {
 } from "react-native";
 import { Search, Shirt, WashingMachine } from "lucide-react-native";
 import { router, useLocalSearchParams } from "expo-router";
-import { TokenContext } from "../TokenContext";
+
 import VerticalSelector from "../../components/common/VerticalSelector";
 import { useFocusEffect } from "@react-navigation/core";
 import { getClothes, toggleClean } from "../../lib/clothes/clothes";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
+import { TokenContext } from "../../lib/TokenContext";
 
 export default function index() {
   const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];

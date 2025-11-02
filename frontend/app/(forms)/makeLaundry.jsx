@@ -11,14 +11,16 @@ import {
 import React, { useEffect, useState, useContext } from "react";
 import { useLocalSearchParams, router } from "expo-router";
 import { Info, Thermometer, AlertTriangle, X } from "lucide-react-native";
-import useDirtyClothes from "../useDirtyClothes";
+
 import { toggleClean } from "../../lib/clothes/clothes";
-import { TokenContext } from "../TokenContext";
+
 import { getClothes, getClothesHousehold } from "../../lib/clothes/clothes";
 import { addLaundry } from "../../lib/laundry/addLaundry";
 import CareSymbolsDisplay from "../../components/features/laundry/CareSymbolsDisplay";
 import { getColorFromGroup } from "../../lib/colors";
 import { getSymbolDescription } from "../../lib/careSymbols";
+import { TokenContext } from "../../lib/TokenContext";
+import useDirtyClothes from "../../lib/useDirtyClothes";
 
 const makeLaundry = () => {
   // const [selectedColor, setSelectedColor] = useState(null);

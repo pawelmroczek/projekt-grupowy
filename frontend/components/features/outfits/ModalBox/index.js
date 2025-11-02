@@ -9,9 +9,10 @@ import {
 import FormField from "../../../common/FormField";
 import VerticalSelector from "../../../common/VerticalSelector";
 import { outfitsTypes } from "../../../../lib/outfitsTypes";
-import { TokenContext } from "../../../../app/TokenContext";
+
 import { fetchOutfits, outfitsSending } from "../../../../lib/outfits/outfits";
 import {router} from "expo-router";
+import { TokenContext } from "../../../../lib/TokenContext";
 
 const ModalBox = ({ modalVisible, setModalVisible, selectedItems, visible }) => {
   const [outfitName, setOutfitName] = useState("");

@@ -10,7 +10,7 @@ import { loginUser } from "../../lib/authorization/authorization";
 import { CircleX } from "lucide-react-native";
 import ErrorText from "../../components/common/ErrorText";
 import Link from "../../components/common/Link";
-import { TokenContext } from "../TokenContext";
+import { TokenContext } from "../../lib/TokenContext";
 import { getClothes } from "../../lib/clothes/clothes";
 
 const SignIn = () => {
