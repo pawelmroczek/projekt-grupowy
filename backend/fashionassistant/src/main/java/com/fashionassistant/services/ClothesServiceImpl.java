@@ -7,6 +7,7 @@ import com.fashionassistant.repositories.ClothesRepository;
 import com.fashionassistant.repositories.HouseholdRepository;
 import com.fashionassistant.repositories.UserRepository;
 import com.fashionassistant.repositories.PictogramsRepository;
+import com.fashionassistant.repositories.OutfitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,7 @@ public class ClothesServiceImpl implements ClothesService {
     private final UserRepository userRepository;
     private final HouseholdRepository householdRepository;
     private final PictogramsRepository pictogramsRepository;
+    private final OutfitRepository outfitRepository;
 
     @Override
     public List<ClothesGet> getClothes(Integer page, Integer pageSize) {
@@ -134,6 +136,12 @@ public class ClothesServiceImpl implements ClothesService {
         user = userRepository.findById(user.getId())
                 .orElseThrow(() -> new BadRequestException("User not found"));
         if (clothes.getUser().getId() == user.getId()) {
+
+            Set<Outfit> outfits = new HashSet<>(clothes.getOutfits());
+            for (Outfit outfit : outfits) {
+                outfit.getClothes().clear();
+                user.getOutfits().remove(outfit);
+            }            
 
             Set<Laundry> laundries = new HashSet<>(clothes.getLaundries());
             for (Laundry laundry : laundries) {
