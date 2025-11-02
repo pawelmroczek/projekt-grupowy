@@ -184,7 +184,8 @@ public class ClothesServiceImpl implements ClothesService {
                 picture,
                 user, 
                 new HashSet<>(), // this is empty list of pictograms 
-                new HashSet<>()  // laundries
+                new HashSet<>(), // laundries
+                new HashSet<>()  // outfits   
         );
 
         if (clothesRequest.pictogramIds() != null && !clothesRequest.pictogramIds().isEmpty()) {
@@ -199,6 +200,14 @@ public class ClothesServiceImpl implements ClothesService {
         user.addClothes(clothes);
         Clothes addedClothes = clothesRepository.save(clothes);
         return new ClothesGet(addedClothes);
+    }
+
+    @Override
+    public int getOutfitsCountForClothes(int clothesId) {
+        Clothes clothes = clothesRepository.findById(clothesId)
+                .orElseThrow(() -> new BadRequestException("Clothes not found"));
+
+        return clothes.getOutfits() != null ? clothes.getOutfits().size() : 0;
     }
 
 }

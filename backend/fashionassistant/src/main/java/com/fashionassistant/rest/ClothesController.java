@@ -53,4 +53,9 @@ public class ClothesController {
     public void deleteClothes(@PathVariable int id) {
         clothesService.deleteClothesById(id);
     }
+
+    @GetMapping("/{id}/outfitsCount")
+    public int getOutfitsCount(@PathVariable int id) {
+        return clothesService.getOutfitsCountForClothes(id);
+    }
 }

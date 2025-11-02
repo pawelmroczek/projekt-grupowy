@@ -18,4 +18,6 @@ public interface ClothesService {
     void deleteClothesById(int id);
 
     List<ClothesGet> toggleStatus(List<Integer> ids);
+
+    int getOutfitsCountForClothes(int clothesId);
 }

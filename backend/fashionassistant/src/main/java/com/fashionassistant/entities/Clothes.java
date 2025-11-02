@@ -56,4 +56,7 @@ public class Clothes {
 
     @ManyToMany(mappedBy = "clothes")
     private Set<Laundry> laundries = new HashSet<>();
+
+    @ManyToMany(mappedBy = "clothes")
+    private Set<Outfit> outfits = new HashSet<>();
 }
