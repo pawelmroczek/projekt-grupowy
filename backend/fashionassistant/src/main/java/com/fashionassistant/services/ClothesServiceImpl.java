@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 import java.util.HashSet;
@@ -125,6 +126,7 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
+    @Transactional
     public void deleteClothesById(int id) {
         Clothes clothes = clothesRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Clothes not found"));
@@ -132,7 +134,14 @@ public class ClothesServiceImpl implements ClothesService {
         user = userRepository.findById(user.getId())
                 .orElseThrow(() -> new BadRequestException("User not found"));
         if (clothes.getUser().getId() == user.getId()) {
+
+            Set<Laundry> laundries = new HashSet<>(clothes.getLaundries());
+            for (Laundry laundry : laundries) {
+                laundry.getClothes().remove(clothes);
+            }
+
             pictureService.deleteById(clothes.getPicture().getId());
+
             clothes.setUser(null);
             user.getClothes().remove(clothes);
             clothesRepository.deleteById(id);
@@ -174,7 +183,8 @@ public class ClothesServiceImpl implements ClothesService {
                 clothesRequest.priority(),
                 picture,
                 user, 
-                new HashSet<>() // this is empty list of pictograms
+                new HashSet<>(), // this is empty list of pictograms 
+                new HashSet<>()  // laundries
         );
 
         if (clothesRequest.pictogramIds() != null && !clothesRequest.pictogramIds().isEmpty()) {
