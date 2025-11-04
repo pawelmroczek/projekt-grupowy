@@ -94,6 +94,21 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
+    public List<Clothes> getPublicClothes(Integer page, Integer pageSize) {
+        Integer publicVisibility = Visibility.PUBLIC; 
+
+        List<Clothes> publicClothes;
+        if (page != null && pageSize != null) {
+            PageRequest pageRequest = PageRequest.of(page, pageSize);
+            Page<Clothes> clothesPage = clothesRepository.findByVisible(publicVisibility, pageRequest);
+            publicClothes = clothesPage.getContent();
+        } else {
+            publicClothes = clothesRepository.findByVisible(publicVisibility);
+        }
+        return publicClothes;
+    }
+
+    @Override
     public ClothesGet updateClothes(ClothesUpdate clothesRequest) {
         MultipartFile file = clothesRequest.file();
         User user = authService.getCurrentUser();

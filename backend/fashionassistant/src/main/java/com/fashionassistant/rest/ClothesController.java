@@ -44,6 +44,14 @@ public class ClothesController {
                 .map(ClothesGet::new).toList();
     }
 
+    @GetMapping("/public")
+    public List<ClothesGet> getAllPublicClothes(@RequestParam(required = false) Integer page,
+                                                @RequestParam(required = false) Integer size) {
+        return clothesService.getPublicClothes(page, size).stream()
+                .map(ClothesGet::new)
+                .toList();
+    }
+
     @PutMapping
     public ClothesGet updateClothes(@ModelAttribute ClothesUpdate clothes) {
         return clothesService.updateClothes(clothes);
