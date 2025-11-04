@@ -39,6 +39,13 @@ public class OutfitController {
                 .map(OutfitGet::new).toList();
     }
 
+    @GetMapping("/public")
+    public List<OutfitGet> getAllPublicOutfits(@RequestParam(required = false) Integer page,
+                                               @RequestParam(required = false) Integer size) {
+        return outfitService.getPublicOutfits(page, size).stream()
+                .map(OutfitGet::new).toList();
+    }
+
     @PutMapping
     public OutfitGet updateOutfit(@RequestBody OutfitUpdate outfit) {
         return outfitService.updateOutfit(outfit);
