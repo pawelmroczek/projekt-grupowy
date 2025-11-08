@@ -33,4 +33,16 @@ public class UserPreferences {
     private boolean allowDelicateWithNormal;
     @OneToOne(mappedBy = "userPreferences", cascade = CascadeType.ALL)
     private User user;
+
+    public UserPreferences(int id, UserPreferencesPut userPreferencesPut, User user) {
+        this.id = id;
+        this.minItemsPerLoad = userPreferencesPut.minItemsPerLoad();
+        this.useTemperatureMatching = userPreferencesPut.useTemperatureMatching();
+        this.useRestrictionMatching = userPreferencesPut.useRestrictionMatching();
+        this.temperatureTolerance = userPreferencesPut.temperatureTolerance();
+        this.treatEmptyAsCompatible = userPreferencesPut.treatEmptyAsCompatible();
+        this.allowHandWashWithMachine = userPreferencesPut.allowHandWashWithMachine();
+        this.allowDelicateWithNormal = userPreferencesPut.allowDelicateWithNormal();
+        this.user = user;
+    }
 }

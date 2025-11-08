@@ -17,4 +17,8 @@ public interface ClothesRepository extends JpaRepository<Clothes, Integer> {
     Page<Clothes> findByUserIdInAndVisibleIn(List<Integer> userIds, List<Integer> visible, Pageable pageable);
 
     List<Clothes> findByUserIdInAndVisibleIn(List<Integer> userIds, List<Integer> visible);
+
+    Page<Clothes> findByVisible(Integer visible, Pageable pageable);
+
+    List<Clothes> findByVisible(Integer visible);
 }

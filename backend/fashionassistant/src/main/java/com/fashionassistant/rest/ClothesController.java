@@ -44,6 +44,14 @@ public class ClothesController {
                 .map(ClothesGet::new).toList();
     }
 
+    @GetMapping("/public")
+    public List<ClothesGet> getAllPublicClothes(@RequestParam(required = false) Integer page,
+                                                @RequestParam(required = false) Integer size) {
+        return clothesService.getPublicClothes(page, size).stream()
+                .map(ClothesGet::new)
+                .toList();
+    }
+
     @PutMapping
     public ClothesGet updateClothes(@ModelAttribute ClothesUpdate clothes) {
         return clothesService.updateClothes(clothes);
@@ -52,5 +60,10 @@ public class ClothesController {
     @DeleteMapping("/{id}")
     public void deleteClothes(@PathVariable int id) {
         clothesService.deleteClothesById(id);
+    }
+
+    @GetMapping("/{id}/outfitsCount")
+    public int getOutfitsCount(@PathVariable int id) {
+        return clothesService.getOutfitsCountForClothes(id);
     }
 }

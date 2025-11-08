@@ -55,6 +55,13 @@ public class Clothes {
         inverseJoinColumns = @JoinColumn(name = "pictogram_id")
     )
     private Set<Pictograms> pictograms = new HashSet<>();
+
+    @ManyToMany(mappedBy = "clothes")
+    private Set<Laundry> laundries = new HashSet<>();
+
+    @ManyToMany(mappedBy = "clothes")
+    private Set<Outfit> outfits = new HashSet<>();
+  
     @ElementCollection(targetClass = Season.class)
     @CollectionTable(
             name = "clothes_seasons",

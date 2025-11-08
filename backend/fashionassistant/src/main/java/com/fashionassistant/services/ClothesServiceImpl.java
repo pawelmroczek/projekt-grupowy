@@ -7,11 +7,13 @@ import com.fashionassistant.repositories.ClothesRepository;
 import com.fashionassistant.repositories.HouseholdRepository;
 import com.fashionassistant.repositories.UserRepository;
 import com.fashionassistant.repositories.PictogramsRepository;
+import com.fashionassistant.repositories.OutfitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 import java.util.HashSet;
@@ -29,6 +31,7 @@ public class ClothesServiceImpl implements ClothesService {
     private final UserRepository userRepository;
     private final HouseholdRepository householdRepository;
     private final PictogramsRepository pictogramsRepository;
+    private final OutfitRepository outfitRepository;
 
     @Override
     public List<ClothesGet> getClothes(Integer page, Integer pageSize) {
@@ -91,6 +94,21 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
+    public List<Clothes> getPublicClothes(Integer page, Integer pageSize) {
+        Integer publicVisibility = Visibility.PUBLIC; 
+
+        List<Clothes> publicClothes;
+        if (page != null && pageSize != null) {
+            PageRequest pageRequest = PageRequest.of(page, pageSize);
+            Page<Clothes> clothesPage = clothesRepository.findByVisible(publicVisibility, pageRequest);
+            publicClothes = clothesPage.getContent();
+        } else {
+            publicClothes = clothesRepository.findByVisible(publicVisibility);
+        }
+        return publicClothes;
+    }
+
+    @Override
     public ClothesGet updateClothes(ClothesUpdate clothesRequest) {
         MultipartFile file = clothesRequest.file();
         User user = authService.getCurrentUser();
@@ -127,6 +145,7 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
+    @Transactional
     public void deleteClothesById(int id) {
         Clothes clothes = clothesRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Clothes not found"));
@@ -134,7 +153,20 @@ public class ClothesServiceImpl implements ClothesService {
         user = userRepository.findById(user.getId())
                 .orElseThrow(() -> new BadRequestException("User not found"));
         if (clothes.getUser().getId() == user.getId()) {
+
+            Set<Outfit> outfits = new HashSet<>(clothes.getOutfits());
+            for (Outfit outfit : outfits) {
+                outfit.getClothes().clear();
+                user.getOutfits().remove(outfit);
+            }            
+
+            Set<Laundry> laundries = new HashSet<>(clothes.getLaundries());
+            for (Laundry laundry : laundries) {
+                laundry.getClothes().remove(clothes);
+            }
+
             pictureService.deleteById(clothes.getPicture().getId());
+
             clothes.setUser(null);
             user.getClothes().remove(clothes);
             clothesRepository.deleteById(id);
@@ -177,7 +209,9 @@ public class ClothesServiceImpl implements ClothesService {
                 clothesRequest.priority(),
                 picture,
                 user, 
-                new HashSet<>(), // this is empty list of pictograms
+                new HashSet<>(), // this is empty list of pictograms 
+                new HashSet<>(), // laundries
+                new HashSet<>(),  // outfits   
                 clothesRequest.seasons()
         );
 
@@ -193,6 +227,14 @@ public class ClothesServiceImpl implements ClothesService {
         user.addClothes(clothes);
         Clothes addedClothes = clothesRepository.save(clothes);
         return new ClothesGet(addedClothes);
+    }
+
+    @Override
+    public int getOutfitsCountForClothes(int clothesId) {
+        Clothes clothes = clothesRepository.findById(clothesId)
+                .orElseThrow(() -> new BadRequestException("Clothes not found"));
+
+        return clothes.getOutfits() != null ? clothes.getOutfits().size() : 0;
     }
 
 }
