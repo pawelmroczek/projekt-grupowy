@@ -38,6 +38,7 @@ const Wardrobe = () => {
 
   const filteredClothes = useMemo(() => {
     console.log("Filtering clothes...");
+    console.log(clothes);
     let result = clothes;
     result = selectedCategory ? result.filter((item) => item.type === selectedCategory) : result;
     result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -72,7 +73,7 @@ const Wardrobe = () => {
       onPress={() => {
         router.push({
         pathname: "/clothDetails",
-        params: { "name": item.name, "picture": item.picture, "id": item.id, "type": item.type, "color": item.color, "size": item.size, "clean": item.clean, "visible": item.visible, "priority": item.priority, "category": item.category, "pictogramIds": item.pictogramIds}
+        params: { "name": item.name, "picture": item.picture, "id": item.id, "type": item.type, "color": item.color, "colorHex": item.colorHex, "size": item.size, "clean": item.clean, "visible": item.visible, "priority": item.priority, "category": item.category, "pictogramIds": item.pictogramIds, "seasons": item.seasons }
       })}
     }
     >

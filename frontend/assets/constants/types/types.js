@@ -3,7 +3,7 @@ export const clothingTypeOptions = [
     { label: "Top", type: "TOP" },
     { label: "Koszula/Bluzka", type: "TOP" },
     { label: "Bluza/Sweter", type: "TOP" },
-    { label: "Kurtka/Płaszcz", type: "TOP" },
+    { label: "Kurtka/Płaszcz", type: "OUTWEAR" },
     { label: "Spodnie", type: "BOTTOM" },
     { label: "Spodenki", type: "BOTTOM" },
     { label: "Spódnica", type: "BOTTOM" },

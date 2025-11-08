@@ -15,8 +15,11 @@ export default function AddPhoto({
   setImageName,
   setImageType,
   setPredictedType,
+  loadingImage,
+  setLoadingImage,
+  selectedColorHex,
+  setSelectedColorHex
 }) {
-  const [loadingImage, setLoadingImage] = useState(false);
   const removeImageBackground = async (imageUri) => {
     const formData = new FormData();
     formData.append("image", {
@@ -26,7 +29,8 @@ export default function AddPhoto({
     });
     try {
       const response = await removeBackground(formData);
-      return response;
+      setSelectedColorHex(response.dominantColor);
+      return response.imageUri;
     } catch (error) {
       console.error("Błąd podczas usuwania tła:", error);
       return null;

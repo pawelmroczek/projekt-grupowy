@@ -60,7 +60,8 @@ public class UserServiceImpl implements UserService {
         String verificationUrl = "http://localhost:8080/fashion/users/verify/" + token;
         emailService.sendVerificationEmail(user.getEmail(),
                 "Fashion Buddy email verification",
-                "Click link to activate your account: " + verificationUrl);
+                "<p>Click the link below to activate your account:</p>" +
+                     "<p><a href=\"" + verificationUrl + "\">Activate Account</a></p>");
         return new UserFriendGet(createdUser.getId(), createdUser.getUsername());
     }
 

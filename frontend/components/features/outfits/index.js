@@ -23,6 +23,7 @@ import SearchBarOutfits from "../../common/SearchBarOutfits";
 import AddButton from "../wardrobe/AddButton";
 import { fetchOutfits } from "../../../lib/outfits/outfits";
 import { TokenContext } from "../../../lib/TokenContext";
+import SmartOutfitsSettings from "./SmartOutfitsSettings";
 
 const FormData = global.FormData;
 
@@ -36,6 +37,8 @@ const OutfitsPage = () => {
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
   const { outfits, setOutfits } = useContext(TokenContext);
+
+  const [modalVisible, setModalVisible] = useState(false);
   
   console.log("Outfits:", outfits);
 
@@ -102,36 +105,40 @@ const OutfitsPage = () => {
   };
 
   return (
-    <View className="flex-1 bg-gray-100">
-      <SearchBarOutfits
-        displayMode={displayMode}
-        onDisplayPress={setDisplayMode}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        filters={filters}
-      />
-      <View className="flex-1">
-        {filteredOutfits.length > 0 ? (
-          <FlatList
-            data={filteredOutfits}
-            key={displayMode ? "single" : "double"}
-            numColumns={displayMode ? 1 : 2}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.list}
-            showsVerticalScrollIndicator={false}
-            style={{ flex: 1 }}
-          />
-        ) : (
-          <View style={styles.list}>
-            <Text className="text-center text-gray-500">
-              Brak strojów w tej kategorii
-            </Text>
-          </View>
-        )}
+      <View className="flex-1 bg-gray-100">
+        <SearchBarOutfits
+          displayMode={displayMode}
+          onDisplayPress={setDisplayMode}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          filters={filters}
+        />
+        <View className="flex-1">
+          {filteredOutfits.length > 0 ? (
+            <FlatList
+              data={filteredOutfits}
+              key={displayMode ? "single" : "double"}
+              numColumns={displayMode ? 1 : 2}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={styles.list}
+              showsVerticalScrollIndicator={false}
+              style={{ flex: 1 }}
+            />
+          ) : (
+            <View style={styles.list}>
+              <Text className="text-center text-gray-500">
+                Brak strojów w tej kategorii
+              </Text>
+            </View>
+          )}
+        </View>
+        <AddButton onPress={() => setModalVisible(true)} />
+        <SmartOutfitsSettings 
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+        />
       </View>
-      <AddButton onPress={() => router.push("/addOutfits")} />
-    </View>
   );
 };
 

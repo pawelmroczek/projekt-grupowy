@@ -20,6 +20,7 @@ const clothDetails = () => {
   const { token, setToken } = useContext(TokenContext);
   const {clothes, setClothes} = useContext(TokenContext);
 
+  console.log("Szczegóły ubrania:", cloth);
   const handleDelete = async (id) => {
     console.log("Usuwam ubranie o id:", id);
     const serverresponse = await clothesDeleting(id, token);
@@ -35,7 +36,7 @@ const clothDetails = () => {
           <TouchableOpacity onPress={() =>{
                   router.push({
                   pathname: "/addClothes",
-                  params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "size": cloth.size, "clean": cloth.clean, "visible": cloth.visible, "category": cloth.category, "priority": cloth.priority, "pictogramIds": cloth.pictogramIds}
+                  params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "colorHex": cloth.colorHex, "size": cloth.size, "clean": cloth.clean, "visible": cloth.visible, "category": cloth.category, "priority": cloth.priority, "pictogramIds": cloth.pictogramIds, "seasons": cloth.seasons}
                 })}
                 }>
             <Pencil className="text-black" size={30} />
@@ -61,7 +62,7 @@ const clothDetails = () => {
                 <TouchableOpacity
                   onPress={() => router.replace({
                     pathname: "/addClothes",
-                    params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "size": cloth.size, "clean": cloth.clean, "visible": cloth.visible, "category": cloth.category, "priority": cloth.priority, "pictogramIds": cloth.pictogramIds}
+                    params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "colorHex": cloth.colorHex, "size": cloth.size, "clean": cloth.clean, "visible": cloth.visible, "category": cloth.category, "priority": cloth.priority, "pictogramIds": cloth.pictogramIds, "seasons": cloth.seasons }
                 })}
                   className="px-4  w-full flex items-center py-2 border text-black border-primary-100 rounded-lg"
                 >

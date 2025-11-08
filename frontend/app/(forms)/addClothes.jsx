@@ -24,6 +24,7 @@ import { getClothes } from "../../lib/clothes/clothes";
 import ThreeOptionSelector from "../../components/common/ThreeOptionSelector";
 import { CLOTHING_SIZES, SHOES_SIZES, ACCESSORY_SIZES } from "../../assets/constants/sizes/sizes";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
+import { Seasons } from "../../assets/constants/seasons/seasons";
 import ClassifyButton from "../../components/common/ClassifyButton";
 import VisibiltySelector from "../../components/common/VisibiltySelector";
 import PioritySelector from "../../components/common/PioritySelector";
@@ -48,11 +49,16 @@ export default function index() {
   const [nonValidAlert, setNonValidAlert] = useState("");
 
   const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedColorHex, setSelectedColorHex] = useState(null);
   const [selectedIcons, setSelectedIcons] = useState([]);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
   const [predictedType, setPredictedType] = useState(null);
   const [cleanStatus, setCleanStatus] = useState(true);
+  const [selectedSeason, setSelectedSeason] = useState([]);
+
+  const [loadingImage, setLoadingImage] = useState(false);
+
   const [editing, setEditing] = useState(false);
 
   const [visible, setVisible] = useState(2);
@@ -64,6 +70,7 @@ export default function index() {
     (shoesTypeOptions?.map(item => item.label) || []),
     (accessoryTypeOptions?.map(item => item.label) || []),
   ];
+  const seasonOptions = Seasons.map(item => item.label);
   const params = useLocalSearchParams();
   useEffect(() => {
     if (Object.keys(params).length > 0) {
@@ -73,6 +80,7 @@ export default function index() {
       type: params.type,
       });
       setSelectedColor(params.color);
+      setSelectedColorHex(params.colorHex);
       setSelectedSize(params.size);
       setSelectedType(params.type);
       setVisible(parseInt(params.visible));
@@ -87,8 +95,17 @@ export default function index() {
           ? params.pictogramIds.split(",").map(Number).sort((a, b) => a - b)
           : []
       );
-      //console.log("Wczytano parametry");
-    }
+      
+      const seasonsArray = params.seasons
+        ? params.seasons.split(",")
+        : [];
+
+      const seasonLabels = Seasons
+        .filter(season => seasonsArray.includes(season.value))
+        .map(season => season.label);
+
+      setSelectedSeason(seasonLabels);
+}
   }, []);
 
   const handleSubmit = async () => {
@@ -98,7 +115,8 @@ export default function index() {
     selectedType &&
     imageUri &&
     selectedSize &&
-    selectedColor
+    selectedColor &&
+    selectedSeason.length > 0;
 
   if (!isValid) {
     setNonValidAlert("Uzupełnij wszystkie pola!");
@@ -121,11 +139,19 @@ export default function index() {
     console.log(imageType);
     formData.append("size", selectedSize);
     formData.append("color", selectedColor);
+    formData.append("colorHex", selectedColorHex);
     formData.append("clean", cleanStatus);
     formData.append("visible", visible);
     formData.append("priority", priority);
     formData.append("pictogramIds", selectedIcons.join(", "));
-    console.log(formData);
+
+    selectedSeason.forEach(label => {
+      const season = Seasons.find(s => s.label === label);
+      if (season) {
+        formData.append("seasons", season.value);
+      }
+    });
+
     console.log(formData.get("file").uri);
     console.log(formData.get("file").name);
     console.log(formData.get("file").type);
@@ -169,6 +195,10 @@ export default function index() {
               setImageType={setImageType}
               setImageUri={setImageUri}
               setPredictedType={setPredictedType}
+              loadingImage={loadingImage}
+              setLoadingImage={setLoadingImage}
+              selectedColorHex={selectedColorHex}
+              setSelectedColorHex={setSelectedColorHex}
             />
             { selectedCategory === 0 && imageUri ? (
               <ClassifyButton
@@ -206,6 +236,17 @@ export default function index() {
                 options={typeOptions[selectedCategory] || []}
                 setValue={setSelectedType}
                 value={selectedType}
+              />
+            </View>
+            <Text className="text-base mb-1.5 mt-4 text-text-primary font-pmedium">
+              {"Sezon:"}
+            </Text>
+            <View>
+              <VerticalSelector
+                options={ seasonOptions || []}
+                setValue={setSelectedSeason}
+                value={selectedSeason}
+                multiSelect={true}
               />
             </View>
             <Text className="text-base mb-1.5 mt-4 text-text-primary font-pmedium">

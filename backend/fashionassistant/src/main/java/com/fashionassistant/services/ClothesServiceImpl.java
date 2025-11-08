@@ -102,14 +102,16 @@ public class ClothesServiceImpl implements ClothesService {
             clothes.setPicture(null);
             pictureService.deleteById(pictureId);
             clothes.setName(clothesRequest.name());
+            clothes.setCategory(clothesRequest.category());
             clothes.setColor(clothesRequest.color());
+            clothes.setColorHex(clothesRequest.colorHex());
             clothes.setSize(clothesRequest.size());
             clothes.setClean(clothesRequest.clean());
             clothes.setVisible(clothesRequest.visible());
             clothes.setPriority(clothesRequest.priority());
             clothes.setPicture(picture);
             picture.setClothes(clothes);
-
+            clothes.setSeasons(clothes.getSeasons());
             if (clothesRequest.pictogramIds() != null) {
                 Set<Pictograms> pictograms = clothesRequest.pictogramIds().stream()
                         .map(id -> pictogramsRepository.findById(id)
@@ -167,6 +169,7 @@ public class ClothesServiceImpl implements ClothesService {
                 clothesRequest.category(),
                 clothesRequest.type(),
                 clothesRequest.color(),
+                clothesRequest.colorHex(),
                 clothesRequest.size(),
                 LocalDate.now(),
                 clothesRequest.clean(),
@@ -174,7 +177,8 @@ public class ClothesServiceImpl implements ClothesService {
                 clothesRequest.priority(),
                 picture,
                 user, 
-                new HashSet<>() // this is empty list of pictograms
+                new HashSet<>(), // this is empty list of pictograms
+                clothesRequest.seasons()
         );
 
         if (clothesRequest.pictogramIds() != null && !clothesRequest.pictogramIds().isEmpty()) {
