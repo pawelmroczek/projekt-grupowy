@@ -31,6 +31,8 @@ public class Clothes {
     private String type;
     @Column(name = "color")
     private String color;
+    @Column(name = "colorHex")
+    private String colorHex;
     @Column(name = "size")
     private String size;
     @Column(name = "createdAt")
@@ -59,4 +61,13 @@ public class Clothes {
 
     @ManyToMany(mappedBy = "clothes")
     private Set<Outfit> outfits = new HashSet<>();
+  
+    @ElementCollection(targetClass = Season.class)
+    @CollectionTable(
+            name = "clothes_seasons",
+            joinColumns = @JoinColumn(name = "clothes_id")
+    )
+    @Enumerated(EnumType.STRING)
+    @Column(name = "season")
+    private Set<Season> seasons = new HashSet<>();
 }

@@ -4,7 +4,7 @@ import { LAUNDRY_ICONS, LAUNDRY_ICONS_NAMES } from "../../../../assets/constants
 import { X, ListTodo, Camera, Eraser } from "lucide-react-native";
 import { captureImage } from "../../../../lib/clothes/picture_logic";
 import { laundryIconsClassification } from "../../../../lib/ml";
-import { TokenContext } from "../../../../app/TokenContext";
+import { TokenContext } from "../../../../lib/TokenContext";
 
 export default function LaundryIconsSelector({ selectedIcons, setSelectedIcons }) {
     const [modalVisible, setModalVisible] = useState(false);
@@ -63,7 +63,7 @@ export default function LaundryIconsSelector({ selectedIcons, setSelectedIcons }
                         </View>
                     ))
                 ) : (
-                    <View className="w-full items-center justify-center">
+                    <View className="w-full items-center justify-center m-3 h-8">
                         <Text className="text-gray-500">Nie wybrano piktogramów</Text>
                     </View> 
                 )}

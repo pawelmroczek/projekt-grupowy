@@ -1,40 +1,22 @@
 export const clothingTypeOptions = [
-    "wszystkie",
-    "Nakrycie głowy",
-    "Kurtka",
-    "Sweter",
-    "Koszulka",
-    "Koszula",
-    "Sukienka",  
-    "Spodnie",
-    "Spódnica",
+    { label: "Nakrycie głowy", type: "HAT" },
+    { label: "Top", type: "TOP" },
+    { label: "Koszula/Bluzka", type: "TOP" },
+    { label: "Bluza/Sweter", type: "TOP" },
+    { label: "Kurtka/Płaszcz", type: "OUTWEAR" },
+    { label: "Spodnie", type: "BOTTOM" },
+    { label: "Spodenki", type: "BOTTOM" },
+    { label: "Spódnica", type: "BOTTOM" },
+    { label: "Sukienka", type: "FULLBODY" },
+    { label: "Bielizna", type: "NONE" },
+    { label: "Piżama", type: "NONE" },
 ];
 
+
 export const shoesTypeOptions = [
-    "Buty",
-    /*"Sneakersy",
-    "Baleriny",
-    "Botki",
-    "Sandały",
-    "Klapki",
-    "Trampki",
-    "Szpilki",
-    "Kozaki",
-    "Sandały na obcasie",
-    "Czółenka",
-*/];
+    { label: "Buty", type: "SHOE" },
+];
 
 export const accessoryTypeOptions = [
-    "Akcesoria",
-    /*
-    "Torebka",
-    "Pasek",
-    "Czapka",
-    "Szalik",
-    "Rękawiczki",
-    "Okulary",
-    "Biżuteria",
-    "Portfel",
-    "Zegarek",
-    "Portmonetka",
-*/];
+    { label: "Akcesoria", type: "ACCESsORY" },
+];

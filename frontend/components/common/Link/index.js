@@ -6,7 +6,7 @@ const Link = ({ children, href }) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        router.push(href);
+        router.replace(href);
       }}
     >
       <Text className=" text-base font-pmedium underline">{children}</Text>

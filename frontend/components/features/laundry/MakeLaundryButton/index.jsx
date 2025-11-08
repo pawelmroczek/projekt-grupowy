@@ -24,13 +24,12 @@ export default function MakeLaundryButton({ suggestedLaundry }) {
 
   const handleSubmit = () => {
     setModalVisible(false);
-
     const dataToPass =
       selectedLoad !== null
         ? { laundry: JSON.stringify(suggestedLaundry[selectedLoad]) }
         : { color: selectedColor };
 
-    router.push({
+    router.replace({
       pathname: "/makeLaundry",
       params: dataToPass,
     });

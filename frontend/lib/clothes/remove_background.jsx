@@ -10,6 +10,9 @@ export const removeBackground = async (formData) => {
         if (!response.ok) {
             throw new Error(`HTTP status ${response.status}`);
         }
+
+        const dominantColor = response.headers.get("X-Dominant-Color");
+
         const blob = await response.blob();
 
         const base64data = await new Promise((resolve, reject) => {
@@ -31,7 +34,11 @@ export const removeBackground = async (formData) => {
         await FileSystem.writeAsStringAsync(outUri, base64data, {
             encoding: FileSystem.EncodingType.Base64 || "base64",
         });
-        return outUri;
+
+        return {
+            imageUri: outUri,
+            dominantColor: dominantColor || "#000000",
+        };
 
     } catch (error) {
       console.error('Błąd:', error);

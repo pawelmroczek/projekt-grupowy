@@ -9,20 +9,35 @@ import {
 import FormField from "../../../common/FormField";
 import VerticalSelector from "../../../common/VerticalSelector";
 import { outfitsTypes } from "../../../../lib/outfitsTypes";
-import { TokenContext } from "../../../../app/TokenContext";
+
 import { fetchOutfits, outfitsSending } from "../../../../lib/outfits/outfits";
 import {router} from "expo-router";
+import { TokenContext } from "../../../../lib/TokenContext";
 
-const ModalBox = ({ modalVisible, setModalVisible, selectedItems }) => {
+const ModalBox = ({ modalVisible, setModalVisible, selectedItems, visible }) => {
   const [outfitName, setOutfitName] = useState("");
   const [selectType, setSelectType] = useState("ide");
   const { token } = useContext(TokenContext);
   const { outfits, setOutfits } = useContext(TokenContext);
 
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
+
   const handleSave = async () => {
+    if(outfitName.trim() === "") {
+      alert("Nazwa nie może być pusta");
+      setSaveButtonDisabled(false);
+      return;
+    }
+    if(selectType === "ide") {
+      alert("Wybierz typ outfitu");
+      setSaveButtonDisabled(false);
+      return;
+    }
+
     const dataToSend = {
       name: outfitName,
       type: selectType,
+      //visible: visible,
       clothesIds: selectedItems.map((item) => item.id),
     };
 
@@ -32,7 +47,7 @@ const ModalBox = ({ modalVisible, setModalVisible, selectedItems }) => {
     const outfitsData = await fetchOutfits(token);
     setOutfits(outfitsData);
     setModalVisible(false);
-    router.push("/outfits");
+    router.replace("/wardrobe");
   };
 
   return (
@@ -58,7 +73,11 @@ const ModalBox = ({ modalVisible, setModalVisible, selectedItems }) => {
 
               <View className="items-center py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4">
                 <TouchableOpacity
-                  onPress={handleSave}
+                  disabled={saveButtonDisabled}
+                  onPress={() => {
+                    setSaveButtonDisabled(true);
+                    handleSave(); 
+                  }}
                   className="px-4 py-2 bg-primary-100 rounded-lg"
                 >
                   <Text className="text-white text-sm font-pregular">

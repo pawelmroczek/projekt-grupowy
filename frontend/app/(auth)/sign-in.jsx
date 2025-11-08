@@ -10,7 +10,7 @@ import { loginUser } from "../../lib/authorization/authorization";
 import { CircleX } from "lucide-react-native";
 import ErrorText from "../../components/common/ErrorText";
 import Link from "../../components/common/Link";
-import { TokenContext } from "../TokenContext";
+import { TokenContext } from "../../lib/TokenContext";
 import { getClothes } from "../../lib/clothes/clothes";
 
 const SignIn = () => {
@@ -59,7 +59,7 @@ const SignIn = () => {
         setToken(token);
         const clothesData = await getClothes(token);
         setClothes(clothesData);
-        router.replace("/outfits");
+        router.replace("/discover");
       } else {
         console.log("❌ Błąd:",data.message.message);
         setError(data.message.message);

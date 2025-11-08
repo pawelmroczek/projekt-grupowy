@@ -4,23 +4,36 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OutfitSelector from "../../components/features/outfits/OutfitSelector";
 import { router, useLocalSearchParams } from "expo-router";
-import { TokenContext } from "../TokenContext";
+
 import ModalBox from "../../components/features/outfits/ModalBox";
+import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
+import VisibiltySelector from "../../components/common/VisibiltySelector";
+import { TokenContext } from "../../lib/TokenContext";
 
 export default function Index() {
   const { clothes, setClothes } = useContext(TokenContext);
+
+  const [nonValidAlert, setNonValidAlert] = useState("");
+
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [visibility, setVisibility] = useState(0);
 
   console.log("Clothes", clothes);
 
   const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
   const dictionary = {
-    "Nakrycie głowy": ["Nakrycie głowy"],
-    "Górna część": ["Koszulka", "Koszula", "Sweter", "Kurtka", "Sukienka"],
-    "Dolna część": ["Spodnie", "Spódnica"],
-    Buty: ["Buty"],
-    Akcesoria: ["Akcesoria"],
+    "Nakrycie głowy": clothingTypeOptions
+      .filter(item => item.type === "HAT")
+      .map(item => item.label),
+    "Górna część": clothingTypeOptions
+      .filter(item => item.type === "TOP" || item.type === "FULLBODY")
+      .map(item => item.label), 
+    "Dolna część": clothingTypeOptions
+      .filter(item => item.type === "BOTTOM")
+      .map(item => item.label),
+    Buty: shoesTypeOptions.map(item => item.label),
+    Akcesoria: accessoryTypeOptions.map(item => item.label),
   };
 
 
@@ -28,6 +41,10 @@ export default function Index() {
     clothes.filter((item) => dictionary[type].includes(item.type));
 
   const handleSave = () => {
+    if(selectedItems.length === 0) {
+      setNonValidAlert("Wybierz przynajmniej jeden element");
+      return;
+    }
     setModalVisible(true);
   };
 
@@ -78,8 +95,19 @@ export default function Index() {
             onSelect={(item) => handleSelect(item, category)}
           />
         ))}
-
-        <TouchableOpacity onPress={handleSave}>
+        <VisibiltySelector
+          value={visibility}
+          setValue={setVisibility}
+        />
+        {nonValidAlert !== "" ? (
+          <Text className="text-red-500 mt-2 mb-2 text-center">{nonValidAlert}</Text>
+        ) : null}
+        <TouchableOpacity 
+          disabled={modalVisible}
+          onPress={ () => {
+            handleSave();
+          }}
+        >
           <View className="bg-primary-200 rounded-lg p-2 m-2 items-center justify-center flex-row space-x-2">
             <CirclePlus size={20} color={"#fff"} />
             <Text className="text-lg text-white text-center">Zapisz</Text>
@@ -91,6 +119,7 @@ export default function Index() {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         selectedItems={selectedItems}
+        visible={visibility}
       />
     </SafeAreaView>
   );

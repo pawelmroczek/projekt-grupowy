@@ -15,8 +15,11 @@ export default function AddPhoto({
   setImageName,
   setImageType,
   setPredictedType,
+  loadingImage,
+  setLoadingImage,
+  selectedColorHex,
+  setSelectedColorHex
 }) {
-  const [loadingImage, setLoadingImage] = useState(false);
   const removeImageBackground = async (imageUri) => {
     const formData = new FormData();
     formData.append("image", {
@@ -26,7 +29,8 @@ export default function AddPhoto({
     });
     try {
       const response = await removeBackground(formData);
-      return response;
+      setSelectedColorHex(response.dominantColor);
+      return response.imageUri;
     } catch (error) {
       console.error("Błąd podczas usuwania tła:", error);
       return null;
@@ -50,14 +54,17 @@ export default function AddPhoto({
       <View className="items-center  flex justify-between  bg-white-100 ">
         {/* Przycisk "Dodaj z galerii" */}
         <TouchableOpacity
+        disabled={loadingImage}
           onPress={async () => {
             let imageResult = await selectImageFromLibrary(); // Czekamy na wynik
             setLoadingImage(true);
-            imageResult.uri = await removeImageBackground(imageResult.uri);
+            if(imageResult !== null) {
+              imageResult.uri = await removeImageBackground(imageResult.uri);
+              setImageUri(imageResult.uri);
+              setImageName("ml_output.png");
+              setImageType("image/png");
+            }
             setLoadingImage(false);
-            setImageUri(imageResult.uri);
-            setImageName("ml_output.png");
-            setImageType("image/png");
             setPredictedType(null);
           }}
           className="px-3 py-2 rounded-lg items-center border border-secondary-300"
@@ -67,14 +74,17 @@ export default function AddPhoto({
 
         {/* Przycisk "Zrób zdjęcie" */}
         <TouchableOpacity
+          disabled={loadingImage}
           onPress={async () => {
             let imageResult = await captureImage(); // Czekamy na wynik
             setLoadingImage(true);
-            imageResult.uri = await removeImageBackground(imageResult.uri);
+            if(imageResult !== null) {
+              imageResult.uri = await removeImageBackground(imageResult.uri);
+              setImageUri(imageResult.uri);
+              setImageName("image.png");
+              setImageType("image/png");
+            }
             setLoadingImage(false);
-            setImageUri(imageResult.uri);
-            setImageName("ml_output.png");
-            setImageType("image/png");
             setPredictedType(null);
           }}
           className="px-3 py-2 rounded-lg items-center border border-secondary-300"
@@ -84,6 +94,7 @@ export default function AddPhoto({
 
         {/* Przycisk "Usuń zdjęcie" */}
         <TouchableOpacity
+          disabled={loadingImage || !imageUri}
           onPress={() => {
             setImageUri(null);
             setPredictedType(null);

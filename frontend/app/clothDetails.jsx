@@ -11,30 +11,34 @@ import { router, useLocalSearchParams } from "expo-router";
 
 import { X, Pencil } from "lucide-react-native";
 import { clothesDeleting } from "../lib/clothes/clothes";
-import { TokenContext } from "./TokenContext";
+
 import { getClothes } from "../lib/clothes/clothes";
+import { TokenContext } from "../lib/TokenContext";
 
 const clothDetails = () => {
   const cloth = useLocalSearchParams();
   const { token, setToken } = useContext(TokenContext);
   const {clothes, setClothes} = useContext(TokenContext);
 
+  console.log("Szczegóły ubrania:", cloth);
   const handleDelete = async (id) => {
     console.log("Usuwam ubranie o id:", id);
     const serverresponse = await clothesDeleting(id, token);
     const clothesData = await getClothes(token);
     setClothes(clothesData);
-    router.push("/wardrobe");
+    router.replace("/wardrobe");
   };
 
   return (
     <>
       <View className="relative">
         <View className=" w-full flex-row items-center justify-between p-4 bg-white shadow-md pt-14 px-6">
-          <TouchableOpacity onPress={() => router.push({
+          <TouchableOpacity onPress={() =>{
+                  router.push({
                   pathname: "/addClothes",
-                  params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "size": cloth.size, "clean": cloth.clean}
-                })}>
+                  params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "colorHex": cloth.colorHex, "size": cloth.size, "clean": cloth.clean, "visible": cloth.visible, "category": cloth.category, "priority": cloth.priority, "pictogramIds": cloth.pictogramIds, "seasons": cloth.seasons}
+                })}
+                }>
             <Pencil className="text-black" size={30} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => router.back()}>
@@ -56,9 +60,9 @@ const clothDetails = () => {
               </Text>
               <View className="items-center space-y-3   py-3.5 rounded-xl w-full flex justify-center bg-white-100 pb-40">
                 <TouchableOpacity
-                  onPress={() => router.push({
+                  onPress={() => router.replace({
                     pathname: "/addClothes",
-                    params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "size": cloth.size, "clean": cloth.clean}
+                    params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "colorHex": cloth.colorHex, "size": cloth.size, "clean": cloth.clean, "visible": cloth.visible, "category": cloth.category, "priority": cloth.priority, "pictogramIds": cloth.pictogramIds, "seasons": cloth.seasons }
                 })}
                   className="px-4  w-full flex items-center py-2 border text-black border-primary-100 rounded-lg"
                 >

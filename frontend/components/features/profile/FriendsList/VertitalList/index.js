@@ -1,8 +1,9 @@
 import { View, Text, ScrollView, TouchableOpacity, Modal, Pressable } from "react-native";
 import React, { useState, useContext } from "react";
 import { CircleUser, UserX } from "lucide-react-native";
-import { TokenContext } from "../../../../../app/TokenContext";
+
 import { iviteSending } from "../../../../../lib/friends/friends";
+import { TokenContext } from "../../../../../lib/TokenContext";
 
 export default function VerticalList({friends = [],  household = []}) {
 

@@ -11,19 +11,24 @@ import {
 import React, { useEffect, useState, useContext } from "react";
 import { useLocalSearchParams, router } from "expo-router";
 import { Info, Thermometer, AlertTriangle, X } from "lucide-react-native";
-import useDirtyClothes from "../useDirtyClothes";
+
 import { toggleClean } from "../../lib/clothes/clothes";
-import { TokenContext } from "../TokenContext";
+
 import { getClothes, getClothesHousehold } from "../../lib/clothes/clothes";
 import { addLaundry } from "../../lib/laundry/addLaundry";
 import CareSymbolsDisplay from "../../components/features/laundry/CareSymbolsDisplay";
 import { getColorFromGroup } from "../../lib/colors";
 import { getSymbolDescription } from "../../lib/careSymbols";
+import { TokenContext } from "../../lib/TokenContext";
+import useDirtyClothes from "../../lib/useDirtyClothes";
 
 const makeLaundry = () => {
   // const [selectedColor, setSelectedColor] = useState(null);
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
+
+  const [MakeLaundryButtonDisabled, setMakeLaundryButtonDisabled] = useState(false);
+  const [nonValidMessage, setNonValidMessage] = useState("");
 
   const allDirtyClothes = useDirtyClothes(); // Używamy hook z symbolami prania
   const params = useLocalSearchParams();
@@ -62,11 +67,16 @@ const makeLaundry = () => {
   };
 
   const handleSubmit = async () => {
+    if(selected.length === 0){
+      setNonValidMessage("Wybierz przynajmniej jedno ubranie do prania.");
+      setMakeLaundryButtonDisabled(false);
+      return;
+    }
     const serverresponse = await toggleClean(selected, token);
     const laundryResponse = await addLaundry(selected, token);
     const clothesData = await getClothes(token);
     setClothes(clothesData);
-    router.push("/laundry");
+    router.replace("/laundry");
   };
 
   return (
@@ -131,6 +141,11 @@ const makeLaundry = () => {
       </ScrollView>
 
       <View>
+        {nonValidMessage !== "" && (
+          <Text className="text-red-600 font-pmedium mb-2 text-center">
+            {nonValidMessage}
+          </Text>
+        )}
         {/* Przycisk instrukcji prania dla sugerowanych prań */}
         {isSuggestedLaundry && laundryData && (
           <TouchableOpacity
@@ -149,7 +164,9 @@ const makeLaundry = () => {
         <View className="flex-row justify-center space-x-2 mt-4 mb-4">
           <TouchableOpacity
             className="bg-primary-100 w-[65%] rounded-md py-2 px-4"
+            disabled={MakeLaundryButtonDisabled}
             onPress={() => {
+              setMakeLaundryButtonDisabled(true);
               handleSubmit();
             }}
           >
@@ -161,7 +178,7 @@ const makeLaundry = () => {
           <TouchableOpacity
             className="bg-gray-400 rounded-md py-2 px-4"
             onPress={() => {
-              router.push("/laundry");
+              router.replace("/laundry");
             }}
           >
             <Text className="text-white text-lg font-pregular ">Anuluj</Text>

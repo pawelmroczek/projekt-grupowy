@@ -3,7 +3,7 @@ import { useState, useContext, useEffect } from "react";
 import React from "react";
 import { router } from "expo-router";
 import { getUserInfo } from "../../../../lib/friends/friends";
-import { TokenContext } from "../../../../app/TokenContext";
+import { TokenContext } from "../../../../lib/TokenContext";
 
 
 

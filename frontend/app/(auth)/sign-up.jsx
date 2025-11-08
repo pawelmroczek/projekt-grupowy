@@ -19,8 +19,8 @@ import { router } from "expo-router";
 import { CircleX } from "lucide-react-native";
 import ErrorText from "../../components/common/ErrorText";
 import { registerUser } from "../../lib/authorization/authorization";
-import { TokenContext } from "../TokenContext";
-import { getClothes } from "../../lib/clothes/clothes";
+
+
 import EmailConfirmation from "../../components/features/auth/EmailConfirmation";
 
 
@@ -28,8 +28,8 @@ const SignUp = () => {
   const [emailNotificationVisible, setEmailNotificationVisible] = useState(false);
   const [registryStatus, setRegistryStatus] = useState(false);
   const [error, setError] = useState(null);
-  const { token, setToken } = useContext(TokenContext);
-  const { clothes, setClothes } = useContext(TokenContext);
+  
+  
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -176,7 +176,7 @@ const SignUp = () => {
                 </Text>
                 <TouchableOpacity
                   onPress={() => {
-                    router.push("/sign-in");
+                    router.replace("/sign-in");
                   }}
                 >
                   <Text className=" text-base font-pmedium underline">

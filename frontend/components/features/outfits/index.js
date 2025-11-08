@@ -1,22 +1,33 @@
+import React, { useState, useContext, useEffect } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
-  Text,
   FlatList,
-  StyleSheet,
-  TouchableOpacity,
   Image,
+  Text,
+  TouchableOpacity,
+  StyleSheet
 } from "react-native";
-import React, { use, useContext, useEffect, useMemo, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
-import { useLocalSearchParams } from "expo-router";
-import { TokenContext } from "../TokenContext";
-import SearchBarOutfits from "../../components/common/SearchBarOutfits";
-import AddButton from "../../components/features/wardrobe/AddButton";
-import { router } from "expo-router";
-import { fetchOutfits } from "../../lib/outfits/outfits";
 
-const Home = () => {
+import { router } from "expo-router";
+
+
+
+
+import { useLocalSearchParams } from "expo-router";
+import { useMemo } from "react";
+
+
+
+import SearchBarOutfits from "../../common/SearchBarOutfits";
+import AddButton from "../wardrobe/AddButton";
+import { fetchOutfits } from "../../../lib/outfits/outfits";
+import { TokenContext } from "../../../lib/TokenContext";
+import SmartOutfitsSettings from "./SmartOutfitsSettings";
+
+const FormData = global.FormData;
+
+const OutfitsPage = () => {
   const rawFilters = useLocalSearchParams();
   const filters = useMemo(() => rawFilters, [JSON.stringify(rawFilters)]);
 
@@ -26,6 +37,8 @@ const Home = () => {
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
   const { outfits, setOutfits } = useContext(TokenContext);
+
+  const [modalVisible, setModalVisible] = useState(false);
   
   console.log("Outfits:", outfits);
 
@@ -92,36 +105,40 @@ const Home = () => {
   };
 
   return (
-    <>
-      <SearchBarOutfits
-        displayMode={displayMode}
-        onDisplayPress={setDisplayMode}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        filters={filters}
-      />
-      <View className="flex-1">
-        {filteredOutfits.length > 0 ? (
-          <FlatList
-            data={filteredOutfits}
-            key={displayMode ? "single" : "double"}
-            numColumns={displayMode ? 1 : 2}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.list}
-            showsVerticalScrollIndicator={false}
-            style={{ flex: 1 }}
-          />
-        ) : (
-          <View style={styles.list}>
-            <Text className="text-center text-gray-500">
-              Brak strojów w tej kategorii
-            </Text>
-          </View>
-        )}
+      <View className="flex-1 bg-gray-100">
+        <SearchBarOutfits
+          displayMode={displayMode}
+          onDisplayPress={setDisplayMode}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          filters={filters}
+        />
+        <View className="flex-1">
+          {filteredOutfits.length > 0 ? (
+            <FlatList
+              data={filteredOutfits}
+              key={displayMode ? "single" : "double"}
+              numColumns={displayMode ? 1 : 2}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={styles.list}
+              showsVerticalScrollIndicator={false}
+              style={{ flex: 1 }}
+            />
+          ) : (
+            <View style={styles.list}>
+              <Text className="text-center text-gray-500">
+                Brak strojów w tej kategorii
+              </Text>
+            </View>
+          )}
+        </View>
+        <AddButton onPress={() => setModalVisible(true)} />
+        <SmartOutfitsSettings 
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+        />
       </View>
-      <AddButton onPress={() => router.push("/addOutfits")} />
-    </>
   );
 };
 
@@ -169,4 +186,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default OutfitsPage;
+

@@ -3,8 +3,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { Bell, UserRoundPlus } from "lucide-react-native";
 import { router } from "expo-router";
 import { getInvites } from "../../../../lib/friends/friends";
-import { TokenContext } from "../../../../app/TokenContext";
 import { useFocusEffect } from "@react-navigation/native";
+import { TokenContext } from "../../../../lib/TokenContext";
 
 export default function AddFriend() {
   const [invites, setInvites] = useState([]);

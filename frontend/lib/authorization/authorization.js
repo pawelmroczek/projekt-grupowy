@@ -94,12 +94,6 @@ export const changePassword = async (token, password) => {
       },
       body: JSON.stringify(body),
     });
-    console.log(JSON.stringify({ password }));
-    console.log(response);
-    //const data = await response.json();
-    console.log(response.ok);
-    //console.log(data);
-    console.log("?");
     if (response.ok) {
       return {
         success: true,
