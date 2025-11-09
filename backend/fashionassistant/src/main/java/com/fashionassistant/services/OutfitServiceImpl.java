@@ -88,14 +88,15 @@ public class OutfitServiceImpl implements OutfitService {
     @Override
     public List<Outfit> getPublicOutfits(Integer page, Integer pageSize) {
         Integer publicVisibility = Visibility.PUBLIC; 
+        Integer currentUserId = authService.getCurrentUser().getId();
 
         List<Outfit> publicOutfits;
         if (page != null && pageSize != null) {
             PageRequest pageRequest = PageRequest.of(page, pageSize);
-            Page<Outfit> outfitsPage = outfitRepository.findByVisible(publicVisibility, pageRequest);
+            Page<Outfit> outfitsPage = outfitRepository.findByVisibleAndUserIdNot(publicVisibility, currentUserId, pageRequest);
             publicOutfits = outfitsPage.getContent();
         } else {
-            publicOutfits = outfitRepository.findByVisible(publicVisibility);
+            publicOutfits = outfitRepository.findByVisibleAndUserIdNot(publicVisibility, currentUserId);
         }
         return publicOutfits;
     }

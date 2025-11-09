@@ -92,14 +92,15 @@ public class ClothesServiceImpl implements ClothesService {
     @Override
     public List<Clothes> getPublicClothes(Integer page, Integer pageSize) {
         Integer publicVisibility = Visibility.PUBLIC;
+        Integer currentUserId = authService.getCurrentUser().getId();
 
         List<Clothes> publicClothes;
         if (page != null && pageSize != null) {
             PageRequest pageRequest = PageRequest.of(page, pageSize);
-            Page<Clothes> clothesPage = clothesRepository.findByVisible(publicVisibility, pageRequest);
+            Page<Clothes> clothesPage = clothesRepository.findByVisibleAndUserIdNot(publicVisibility, currentUserId, pageRequest);
             publicClothes = clothesPage.getContent();
         } else {
-            publicClothes = clothesRepository.findByVisible(publicVisibility);
+            publicClothes = clothesRepository.findByVisibleAndUserIdNot(publicVisibility, currentUserId);
         }
         return publicClothes;
     }
