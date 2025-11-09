@@ -3,24 +3,20 @@ package com.fashionassistant.services;
 import com.fashionassistant.entities.*;
 import com.fashionassistant.exceptions.BadRequestException;
 import com.fashionassistant.exceptions.NotFoundException;
-import com.fashionassistant.repositories.ClothesRepository;
-import com.fashionassistant.repositories.HouseholdRepository;
-import com.fashionassistant.repositories.UserRepository;
-import com.fashionassistant.repositories.PictogramsRepository;
-import com.fashionassistant.repositories.OutfitRepository;
+import com.fashionassistant.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.stream.Collectors;
-import java.util.HashSet;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -95,7 +91,7 @@ public class ClothesServiceImpl implements ClothesService {
 
     @Override
     public List<Clothes> getPublicClothes(Integer page, Integer pageSize) {
-        Integer publicVisibility = Visibility.PUBLIC; 
+        Integer publicVisibility = Visibility.PUBLIC;
 
         List<Clothes> publicClothes;
         if (page != null && pageSize != null) {
@@ -137,7 +133,7 @@ public class ClothesServiceImpl implements ClothesService {
                         .collect(Collectors.toSet());
                 clothes.setPictograms(pictograms);
             }
-    
+
             Clothes clothesNew = clothesRepository.save(clothes);
             return new ClothesGet(clothesNew);
         }
@@ -158,7 +154,7 @@ public class ClothesServiceImpl implements ClothesService {
             for (Outfit outfit : outfits) {
                 outfit.getClothes().clear();
                 user.getOutfits().remove(outfit);
-            }            
+            }
 
             Set<Laundry> laundries = new HashSet<>(clothes.getLaundries());
             for (Laundry laundry : laundries) {
@@ -208,11 +204,13 @@ public class ClothesServiceImpl implements ClothesService {
                 clothesRequest.visible(),
                 clothesRequest.priority(),
                 picture,
-                user, 
+                user,
                 new HashSet<>(), // this is empty list of pictograms 
                 new HashSet<>(), // laundries
                 new HashSet<>(),  // outfits   
-                clothesRequest.seasons()
+                clothesRequest.seasons(),
+                null,
+                null
         );
 
         if (clothesRequest.pictogramIds() != null && !clothesRequest.pictogramIds().isEmpty()) {

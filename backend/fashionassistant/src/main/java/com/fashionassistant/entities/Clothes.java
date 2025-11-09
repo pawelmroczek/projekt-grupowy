@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -50,9 +49,9 @@ public class Clothes {
     private User user;
     @ManyToMany
     @JoinTable(
-        name = "clothes_pictograms",
-        joinColumns = @JoinColumn(name = "clothes_id"),
-        inverseJoinColumns = @JoinColumn(name = "pictogram_id")
+            name = "clothes_pictograms",
+            joinColumns = @JoinColumn(name = "clothes_id"),
+            inverseJoinColumns = @JoinColumn(name = "pictogram_id")
     )
     private Set<Pictograms> pictograms = new HashSet<>();
 
@@ -61,7 +60,7 @@ public class Clothes {
 
     @ManyToMany(mappedBy = "clothes")
     private Set<Outfit> outfits = new HashSet<>();
-  
+
     @ElementCollection(targetClass = Season.class)
     @CollectionTable(
             name = "clothes_seasons",
@@ -70,4 +69,9 @@ public class Clothes {
     @Enumerated(EnumType.STRING)
     @Column(name = "season")
     private Set<Season> seasons = new HashSet<>();
+    @Column(name = "loan_finish_date")
+    private LocalDate loanFinishDate;
+    @ManyToOne
+    @JoinColumn(name = "loanUserId")
+    private User loanUser;
 }

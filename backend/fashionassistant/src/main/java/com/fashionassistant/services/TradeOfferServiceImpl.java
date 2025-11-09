@@ -69,9 +69,12 @@ public class TradeOfferServiceImpl implements TradeOfferService {
                     .map(Clothes::getId).collect(Collectors.toSet());
             deleteTradeOffersWithClothesIds(clothesInTrade, fromUser, toUser);
         }
-        fromUser.deleteTradeOffer(tradeOffer);
-        toUser.deleteTradeOffer(tradeOffer);
-        tradeOfferRepository.delete(tradeOffer);
+        if (tradeOffer.getType() == TradeOfferType.LOAN) {
+            loan(tradeOffer, fromUser, toUser);
+            fromUser.deleteTradeOffer(tradeOffer);
+            toUser.deleteTradeOffer(tradeOffer);
+            tradeOfferRepository.delete(tradeOffer);
+        }
     }
 
     @Override
@@ -96,6 +99,19 @@ public class TradeOfferServiceImpl implements TradeOfferService {
         toDelete.forEach(fromUser::deleteTradeOffer);
         toDelete.forEach(toUser::deleteTradeOffer);
         tradeOfferRepository.deleteAll(toDelete);
+    }
+
+    private void loan(TradeOffer tradeOffer, User fromUser, User toUser) {
+        tradeOffer.getFromUserClothes().forEach(clothes -> {
+            toUser.addLoanClothes(clothes);
+            clothes.setLoanUser(toUser);
+            clothes.setLoanFinishDate(tradeOffer.getLoanFinishDate());
+        });
+        tradeOffer.getToUserClothes().forEach(clothes -> {
+            fromUser.addLoanClothes(clothes);
+            clothes.setLoanUser(fromUser);
+            clothes.setLoanFinishDate(tradeOffer.getLoanFinishDate());
+        });
     }
 
     private void trade(TradeOffer tradeOffer, User fromUser, User toUser) {
