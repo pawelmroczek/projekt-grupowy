@@ -12,5 +12,5 @@ public interface TradeOfferService {
 
     void acceptTradeOffer(int tradeOfferId);
 
-    //void rejectInvitation(int invitationId);
+    void rejectTradeOffer(int tradeOfferId);
 }

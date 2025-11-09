@@ -1,9 +1,6 @@
 package com.fashionassistant.services;
 
-import com.fashionassistant.entities.Clothes;
-import com.fashionassistant.entities.TradeOffer;
-import com.fashionassistant.entities.TradeOfferCreate;
-import com.fashionassistant.entities.User;
+import com.fashionassistant.entities.*;
 import com.fashionassistant.exceptions.BadRequestException;
 import com.fashionassistant.exceptions.NotFoundException;
 import com.fashionassistant.repositories.ClothesRepository;
@@ -15,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -64,6 +62,43 @@ public class TradeOfferServiceImpl implements TradeOfferService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
         User toUser = userRepository.findById(tradeOffer.getToUser().getId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
+        if (tradeOffer.getType() == TradeOfferType.TRADE) {
+            trade(tradeOffer, fromUser, toUser);
+            Set<Integer> clothesInTrade = Stream.concat(tradeOffer.getFromUserClothes().stream(),
+                            tradeOffer.getToUserClothes().stream())
+                    .map(Clothes::getId).collect(Collectors.toSet());
+            deleteTradeOffersWithClothesIds(clothesInTrade, fromUser, toUser);
+        }
+        fromUser.deleteTradeOffer(tradeOffer);
+        toUser.deleteTradeOffer(tradeOffer);
+        tradeOfferRepository.delete(tradeOffer);
+    }
+
+    @Override
+    public void rejectTradeOffer(int tradeOfferId) {
+        TradeOffer tradeOffer = getTradeOfferById(tradeOfferId);
+        User fromUser = userRepository.findById(tradeOffer.getFromUser().getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        User toUser = userRepository.findById(tradeOffer.getToUser().getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        fromUser.deleteTradeOffer(tradeOffer);
+        toUser.deleteTradeOffer(tradeOffer);
+        tradeOfferRepository.delete(tradeOffer);
+    }
+
+    private void deleteTradeOffersWithClothesIds(Set<Integer> clothesIds, User fromUser, User toUser) {
+        List<TradeOffer> tradeOffers = tradeOfferRepository.findAll();
+        List<TradeOffer> toDelete = tradeOffers.stream()
+                .filter(offer -> offer.getFromUserClothes().stream()
+                        .anyMatch(clothes -> clothesIds.contains(clothes.getId())) ||
+                        offer.getToUserClothes().stream().anyMatch(clothes -> clothesIds.contains(clothes.getId())))
+                .toList();
+        toDelete.forEach(fromUser::deleteTradeOffer);
+        toDelete.forEach(toUser::deleteTradeOffer);
+        tradeOfferRepository.deleteAll(toDelete);
+    }
+
+    private void trade(TradeOffer tradeOffer, User fromUser, User toUser) {
         tradeOffer.getFromUserClothes().forEach(clothes -> {
             clothes.setUser(toUser);
             toUser.addClothes(clothes);
@@ -74,11 +109,6 @@ public class TradeOfferServiceImpl implements TradeOfferService {
             fromUser.addClothes(clothes);
             toUser.getClothes().remove(clothes);
         });
-        fromUser.deleteTradeOffer(tradeOffer);
-        toUser.deleteTradeOffer(tradeOffer);
-        tradeOffer.setFromUserClothes(null);
-        tradeOffer.setToUserClothes(null);
-        tradeOfferRepository.delete(tradeOffer);
     }
 
     private Set<Clothes> getSetOfClothesByIds(Set<Integer> clothesIds, int userId) {
