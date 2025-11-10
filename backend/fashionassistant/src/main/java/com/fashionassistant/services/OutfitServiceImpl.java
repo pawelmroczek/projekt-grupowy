@@ -73,7 +73,7 @@ public class OutfitServiceImpl implements OutfitService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
         List<Outfit> friendsOutfits = new ArrayList<>();
         Set<User> friends = user.getFriends();
-        List<Integer> visibleValues = List.of(Visibility.PUBLIC, Visibility.FRIENDS);
+        List<Integer> visibleValues = List.of(Visibility.PUBLIC.getValue(), Visibility.FRIENDS.getValue());
         List<Integer> userIds = friends.stream().map(User::getId).toList();
         if (page != null && pageSize != null) {
             PageRequest pageRequest = PageRequest.of(page, pageSize);
@@ -87,7 +87,7 @@ public class OutfitServiceImpl implements OutfitService {
 
     @Override
     public List<Outfit> getPublicOutfits(Integer page, Integer pageSize) {
-        Integer publicVisibility = Visibility.PUBLIC; 
+        Integer publicVisibility = Visibility.PUBLIC.getValue(); 
         Integer currentUserId = authService.getCurrentUser().getId();
 
         List<Outfit> publicOutfits;
