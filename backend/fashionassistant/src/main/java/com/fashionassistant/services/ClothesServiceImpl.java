@@ -71,6 +71,29 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
+    public List<Clothes> getHouseholdClothesFiltered(Boolean clean, List<String> types, Season season) {
+        User currentUser = authService.getCurrentUser();
+
+        if (currentUser.getHousehold() == null) {
+            throw new NotFoundException("User does not belong to any household");
+        }
+
+        Household household = householdRepository.findById(currentUser.getHousehold().getId())
+                .orElseThrow(() -> new NotFoundException("Household not found"));
+
+        List<Integer> userIds = household.getUsers().stream()
+                .map(User::getId)
+                .toList();
+
+        List<Integer> visibleValues = List.of(
+                Visibility.FRIENDS.getValue(),
+                Visibility.PUBLIC.getValue()
+        );
+
+        return clothesRepository.findHouseholdClothesFiltered(userIds, visibleValues, clean, (types == null || types.isEmpty()) ? null : types, season);
+    }
+
+    @Override
     public List<Clothes> getFriendsClothes(Integer page, Integer pageSize) {
         User currentUser = authService.getCurrentUser();
         User user = userRepository.findById(currentUser.getId())

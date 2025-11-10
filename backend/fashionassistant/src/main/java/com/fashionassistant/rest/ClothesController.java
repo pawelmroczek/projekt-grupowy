@@ -37,6 +37,13 @@ public class ClothesController {
     public List<ClothesHouseholdGet> getAllClothesFromHousehold() {
         return clothesService.getClothesFromHousehold();
     }
+    @GetMapping("/household/filtered")
+    public List<ClothesGet> getFilteredHouseholdClothes(@RequestParam(required = false) Boolean clean,
+                                                      @RequestParam(required = false) List<String> types,
+                                                      @RequestParam(required = false) Season season) {
+        return clothesService.getHouseholdClothesFiltered(clean, types, season).stream()
+                .map(ClothesGet::new).toList();
+    }
 
     @GetMapping("/friends")
     public List<ClothesGet> getAllClothesFromFriends(@RequestParam(required = false) Integer page,

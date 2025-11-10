@@ -44,4 +44,20 @@ public interface ClothesRepository extends JpaRepository<Clothes, Integer> {
             @Param("types") List<String> types,
             @Param("season") Season season
     );
+
+    @Query("""
+        SELECT c FROM Clothes c
+        WHERE c.user.id IN :userIds
+        AND c.visible IN :visible
+        AND (:clean IS NULL OR c.clean = :clean)
+        AND (:types IS NULL OR c.type IN :types)
+        AND (:season IS NULL OR :season MEMBER OF c.seasons)
+    """)
+    List<Clothes> findHouseholdClothesFiltered(
+            @Param("userIds") List<Integer> userIds,
+            @Param("visible") List<Integer> visible,
+            @Param("clean") Boolean clean,
+            @Param("types") List<String> types,
+            @Param("season") Season season
+    );
 }
