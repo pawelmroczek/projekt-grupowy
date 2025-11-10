@@ -13,6 +13,8 @@ public interface ClothesService {
 
     List<Clothes> getFriendsClothes(Integer page, Integer pageSize);
 
+    List<Clothes> getFilteredFriendsClothes(Boolean clean, List<String> types, Season season);
+
     List<Clothes> getPublicClothes(Integer page, Integer pageSize);
 
     ClothesGet updateClothes(ClothesUpdate clothes);
