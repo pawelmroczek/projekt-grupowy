@@ -17,60 +17,57 @@ import { useMemo } from "react";
 import SearchBarWardrobe from "../../common/SearchBarWardrobe";
 import AddButton from "./AddButton";
 import { TokenContext } from "../../../lib/TokenContext";
+import { getClothesFriends, getClothesPublic } from "../../../lib/clothes/discovery";
 
 const FormData = global.FormData;
 
-const WardrobeDiscover = () => {
+const WardrobeDiscover = ({selectedCategory}) => {
   const rawFilters = useLocalSearchParams();
   const filters = useMemo(() => rawFilters, [JSON.stringify(rawFilters)]);
 
   const [displayMode, setDisplayMode] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
   
-  //const [clothes, setClothes] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
+
+  const [clothes, setClothes] = useState([]);
 
   const { token, setToken } = useContext(TokenContext);
-  const { clothes, setClothes } = useContext(TokenContext);
 
 
-  const filteredClothes = useMemo(() => {
-    console.log("Filtering clothes...");
-    let result = clothes;
-    result = selectedCategory
-      ? result.filter((item) => item.type === selectedCategory)
-      : result;
-    result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-    if (Object.keys(filters).length === 0) {
-      return result;
-    }
-
-    result =
-      filters.cleanliness === "all"
-        ? result
-        : result.filter(
-            (item) => item.clean === (filters.cleanliness === "clean")
-          );
-
-    result =
-      filters.size.length > 0
-        ? result.filter((item) => filters.size.includes(item.size))
-        : result;
-
-    if (filters.sortBy) {
-      result = [...result]; // Tworzymy kopię, aby uniknąć mutacji
-      if (filters.sortBy === "Newest") {
-        result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      } else if (filters.sortBy === "Oldest") {
-        result.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-      } else if (filters.sortBy === "Alphabetically") {
-        result.sort((a, b) => a.name.localeCompare(b.name));
+  const fetchClothes = async (page) => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+      try {
+        if (selectedCategory === "public") {
+          const data = await getClothesPublic(token, page-1, 10);
+          setClothes((prev) => [...prev, ...data]);
+          if (data.length < 10) setHasMore(false);
+        } else {
+          const data = await getClothesFriends(token, page-1, 10);
+          setClothes((prev) => [...prev, ...data]);
+          if (data.length < 10) setHasMore(false);
+        }
+        setPage(page);
+      } catch (error) {
+        console.error("Błąd pobierania ubrań:", error);
       }
-    }
+      finally
+      {
+        setLoading(false);
+      }
+    };
 
-    return result;
-  }, [filters, clothes, selectedCategory]);
+  useEffect(() => {
+    setClothes([]);
+    setPage(1);
+    setHasMore(true);
+    fetchClothes(1);
+  }, [selectedCategory]);
 
+  
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={[styles.item, displayMode ? styles.single : styles.double]}
@@ -101,7 +98,7 @@ const WardrobeDiscover = () => {
     <View className="flex-1 bg-gray-100">
       {/* <SearchBarWardrobe displayMode={displayMode} onDisplayPress={setDisplayMode} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} filters={filters}/> */}
       <FlatList
-        data={filteredClothes}
+        data={clothes}
         key={displayMode ? "single" : "double"}
         numColumns={displayMode ? 1 : 2}
         renderItem={renderItem}
@@ -109,6 +106,9 @@ const WardrobeDiscover = () => {
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
         style={{ flex: 1 }}
+        onEndReached={() => fetchClothes(page+1)}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={loading ? <Text className="text-lg text-center my-4 font-bold" >Ładowanie...</Text> : null}
       />
       
     </View>

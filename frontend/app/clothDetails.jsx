@@ -6,11 +6,12 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Modal
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 
 import { X, Pencil } from "lucide-react-native";
-import { clothesDeleting } from "../lib/clothes/clothes";
+import { clothesDeleting, getOutfitsCount } from "../lib/clothes/clothes";
 
 import { getClothes } from "../lib/clothes/clothes";
 import { TokenContext } from "../lib/TokenContext";
@@ -20,14 +21,31 @@ const clothDetails = () => {
   const { token, setToken } = useContext(TokenContext);
   const {clothes, setClothes} = useContext(TokenContext);
 
-  console.log("Szczegóły ubrania:", cloth);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [outfitsCount, setOutfitsCount] = useState(0);
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
+
   const handleDelete = async (id) => {
-    console.log("Usuwam ubranie o id:", id);
+    const count = await getOutfitsCount(token, id);
+    if (count !== 0) {
+      setOutfitsCount(count);
+      setPendingDeleteId(id);
+      setModalVisible(true);
+      return;
+    }
+
+    await proceedDelete(id);
+  };
+
+  const proceedDelete = async (id) => {
+    setModalVisible(false);
     const serverresponse = await clothesDeleting(id, token);
     const clothesData = await getClothes(token);
     setClothes(clothesData);
     router.replace("/wardrobe");
   };
+
+  
 
   return (
     <>
@@ -85,6 +103,38 @@ const clothDetails = () => {
           </View>
         </ScrollView>
       </View>
+      <Modal
+        visible={modalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View className="flex-1 bg-black/50 justify-center items-center">
+          <View className="bg-white rounded-2xl w-4/5 p-6 shadow-lg">
+            <Text className="text-xl font-bold text-center mb-3">
+              Usunąć to ubranie?
+            </Text>
+            <Text className="text-base text-center mb-6">
+              To ubranie znajduje się w {outfitsCount} stylizacj{outfitsCount === 1 ? "i" : "ach"}.
+              Usunięcie go spowoduje również usunięcie tych stylizacji.
+            </Text>
+            <View className="flex-row justify-around">
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                className="bg-gray-300 px-6 py-2 rounded-xl"
+              >
+                <Text className="text-black font-semibold">Anuluj</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => proceedDelete(pendingDeleteId)}
+                className="bg-red-500 px-6 py-2 rounded-xl"
+              >
+                <Text className="text-white font-semibold">Usuń</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 };
