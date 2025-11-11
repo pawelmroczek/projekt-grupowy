@@ -5,6 +5,7 @@ import {
   getWashTemperature,
   hasCareTags,
 } from "./utils.js";
+import { LAUNDRY_ICONS_NAMES } from "../../assets/constants/laundry_icons/laundry_icons.js";
 
 const planLaundry = (allClothes, laundryHistory, outfits, options) => {
   const today = new Date();
@@ -28,9 +29,8 @@ const planLaundry = (allClothes, laundryHistory, outfits, options) => {
 
   // Sprawdza czy dwa elementy można prać razem (używane do finalnej weryfikacji)
   const canWashTogether = (item1, item2) => {
-    const hasTags1 = hasCareTags(item1.careSymbols);
-    const hasTags2 = hasCareTags(item2.careSymbols);
-
+    const hasTags1 = hasCareTags(item1.pictogramIds);
+    const hasTags2 = hasCareTags(item2.pictogramIds);
     if (
       careSymbolOptions.treatEmptyAsCompatible &&
       (!hasTags1 || !hasTags2)
@@ -39,7 +39,7 @@ const planLaundry = (allClothes, laundryHistory, outfits, options) => {
     }
 
     if (hasTags1 && hasTags2) {
-      return checkCareSymbolCompatibility(item1.careSymbols, item2.careSymbols);
+      return checkCareSymbolCompatibility(item1.pictogramIds, item2.pictogramIds);
     }
 
     return false;
@@ -53,18 +53,18 @@ const planLaundry = (allClothes, laundryHistory, outfits, options) => {
     }
 
     if (careSymbolOptions.useRestrictionMatching) {
-      if (symbols1.includes("DN_wash") || symbols2.includes("DN_wash")) return false;
+      if (symbols1.includes(LAUNDRY_ICONS_NAMES.indexOf("DN_wash")) || symbols2.includes(LAUNDRY_ICONS_NAMES.indexOf("DN_wash"))) return false;
     }
 
     if (isWashTypeMatchingEnabled) {
-      const hand1 = symbols1.includes("hand_wash");
-      const hand2 = symbols2.includes("hand_wash");
+      const hand1 = symbols1.includes(LAUNDRY_ICONS_NAMES.indexOf("hand_wash"));
+      const hand2 = symbols2.includes(LAUNDRY_ICONS_NAMES.indexOf("hand_wash"));
       if (!careSymbolOptions.allowHandWashWithMachine && hand1 !== hand2) return false;
 
-      const delicate1 = symbols1.includes("machine_wash_delicate");
-      const delicate2 = symbols2.includes("machine_wash_delicate");
-      const normal1 = symbols1.includes("machine_wash_normal");
-      const normal2 = symbols2.includes("machine_wash_normal");
+      const delicate1 = symbols1.includes(LAUNDRY_ICONS_NAMES.indexOf("machine_wash_delicate"));
+      const delicate2 = symbols2.includes(LAUNDRY_ICONS_NAMES.indexOf("machine_wash_delicate"));
+      const normal1 = symbols1.includes(LAUNDRY_ICONS_NAMES.indexOf("machine_wash_normal"));
+      const normal2 = symbols2.includes(LAUNDRY_ICONS_NAMES.indexOf("machine_wash_normal"));
       if (!careSymbolOptions.allowDelicateWithNormal) {
         if ((delicate1 && normal2) || (normal1 && delicate2)) return false;
       }
@@ -75,10 +75,10 @@ const planLaundry = (allClothes, laundryHistory, outfits, options) => {
 
   // Zwraca typ prania: "hand_wash" | "delicate" | "normal" | "no_wash"
   const getWashType = (symbols = []) => {
-    if (symbols.includes("DN_wash")) return "no_wash";
-    if (symbols.includes("hand_wash")) return "hand_wash";
-    if (symbols.includes("machine_wash_delicate")) return "delicate";
-    if (symbols.includes("machine_wash_normal")) return "normal";
+    if (symbols.includes(LAUNDRY_ICONS_NAMES.indexOf("DN_wash"))) return "no_wash";
+    if (symbols.includes(LAUNDRY_ICONS_NAMES.indexOf("hand_wash"))) return "hand_wash";
+    if (symbols.includes(LAUNDRY_ICONS_NAMES.indexOf("machine_wash_delicate"))) return "delicate";
+    if (symbols.includes(LAUNDRY_ICONS_NAMES.indexOf("machine_wash_normal"))) return "normal";
     // brak metek lub nieokreślone -> traktuj jako normal jeśli treatEmptyAsCompatible true
     return careSymbolOptions.treatEmptyAsCompatible ? "normal" : "unknown";
   };
@@ -109,9 +109,9 @@ const planLaundry = (allClothes, laundryHistory, outfits, options) => {
       priority += daysSinceWash;
       if (lastWash && daysSinceWash === 0) priority -= 15;
 
-      const washTemp = getWashTemperature(c.careSymbols);
+      const washTemp = getWashTemperature(c.pictogramIds);
       const colorGroup = getColorGroup(c.color);
-      const washType = getWashType(c.careSymbols);
+      const washType = getWashType(c.pictogramIds);
 
       return {
         ...c,
@@ -166,7 +166,7 @@ const planLaundry = (allClothes, laundryHistory, outfits, options) => {
       laundryPlan.push({
         washGroup: groupKey,
         colorGroup: load[0].colorGroup,
-        washTemperature: getWashTemperature(load[0].careSymbols),
+        washTemperature: getWashTemperature(load[0].pictogramIds),
         clothes: load,
         washInstructions: getWashInstructions(load, careSymbolOptions),
       });
@@ -177,7 +177,7 @@ const planLaundry = (allClothes, laundryHistory, outfits, options) => {
       laundryPlan.push({
         washGroup: `${groupKey}_separate`,
         colorGroup: single.colorGroup,
-        washTemperature: getWashTemperature(single.careSymbols),
+        washTemperature: getWashTemperature(single.pictogramIds),
         clothes: [single],
         washInstructions: getWashInstructions([single], careSymbolOptions),
       });

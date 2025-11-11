@@ -1,4 +1,5 @@
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { clothingTypeOptions, shoesTypeOptions } from "../../assets/constants/types/types";
 
 export function hexToHsl(hex) {
     const hex_tmp = hex.replace('#','');
@@ -33,7 +34,7 @@ export function hexToHsl(hex) {
     h = Math.round(360*h);
     return {h: h, s: s, l: l};
 
-    };
+};
 
 // prosta odleglosc w HSL (ważymy najbardziej odcień i jasność)
 function colorDistanceHex(hexA, hexB){
@@ -47,67 +48,48 @@ function colorDistanceHex(hexA, hexB){
 }
 
 
-function isNeutralByHsl(hex){
-    const hsl = hexToHsl(hex);
-    return hsl.s < 8 || (hsl.l > 90 || hsl.l < 10);
-}
-
-
-// mapowanie hex -> prosty tag koloru (opcjonalne, pomocnicze)
-function simpleColorName(hex){
-    const hsl = hexToHsl(hex);
-    if(isNeutralByHsl(hex)) return 'neutral';
-    if(hsl.h < 30 || hsl.h >= 330) return 'red';
-    if(hsl.h < 60) return 'orange';
-    if(hsl.h < 90) return 'yellow';
-    if(hsl.h < 150) return 'green';
-    if(hsl.h < 210) return 'cyan';
-    if(hsl.h < 270) return 'blue';
-    if(hsl.h < 330) return 'purple';
-    return 'unknown';
-}
-
-
-const temperature = 15;
-const pickedClothes = {id: 1, type: "top", color: '#FF5733', seasons: ['spring', 'summer']};
-const takeFriends = false;
-const takeHousehold = false;
-const isHat = false;
-const isClean = true;
-
-export function planOutfit(clothes, pickedClothes, temperature, takeFriends, takeHousehold, isHat, isClean){
+export function planOutfit(clothes, pickedClothes, minTemp, maxTemp, takeFriends, takeHousehold, isHat, isClean, isOutwear){
     // temperatura -> sezon 
+    const types = [
+        ...clothingTypeOptions,
+        ...shoesTypeOptions,
+    ];
 
-    function tempToSeasons(temp){
-        // <=5: winter
-        // 6..16: autumn/winter/spring (transitions) -> return ['spring', 'autumn']
-        // 17..23: spring/autumn
-        // 24+: summer
-        if (temp >= 24) return ['summer'];
-        if (temp >= 17 && temp <= 23) return ['spring', 'autumn'];
-        if (temp >= 6 && temp <= 16) return ['autumn', 'winter', 'spring'];
-        return ['winter'];
+    function tempToSeason(minTemp, maxTemp) {
+        const avg = (minTemp + maxTemp) / 2;
+        if (maxTemp <= 5) return 'winter';
+        if (minTemp >= 24 || avg >= 24) return 'summer';
+
+        if (avg >= 17 && avg <= 23) return 'spring';
+        if (avg >= 6 && avg <= 17) {
+            return avg < 11 ? 'autumn' : 'spring';
+        }
+
+        return 'winter';
     }
 
-    function clothesMatchesSeason(c, temp) {
-        const computed = tempToSeasons(temp);
-        if (c.seasons && Array.isArray(c.seasons) && c.seasons.length>0) {
-        for (const s of computed) {
-            if (c.seasons.map(x=>x.toLowerCase()).includes(s.toLowerCase())) return true;
-        }
+    function clothesMatchesSeason(c, minTemp, maxTemp) {
+        const computed = tempToSeason(minTemp, maxTemp);
+        if (c.seasons) {
+            if (c.seasons.map(x=>x.toLowerCase()).includes(computed.toLowerCase())) return true;
         }
         return false;
     };
-
-        // helper: for a given type pick best garment
     function pickForType(type) {
-        let candidates = clothes.filter(c => c.type === type);
+
+        let candidates = clothes.filter(c => {
+            const option = types.find(o => o.label === c.type);
+            return option && option.type === type;
+        });
         if (isClean) candidates = candidates.filter(c => c.clean);
-        candidates = candidates.filter(c => clothesMatchesSeason(c, temperature));
+        candidates = candidates.filter(c => clothesMatchesSeason(c, minTemp, maxTemp));
         if (candidates.length === 0) return null;
 
         const scored = candidates.map(c => {
-            const colorDist = targetHsl && c.color ? colorDistanceHex(c.color, pickedClothes.color) : 0;
+            let colorDist = 0;
+            if(pickedClothes != null){
+                colorDist = c.hexColor ? colorDistanceHex(c.hexColor, pickedClothes.hexColor) : 0;
+            }
             const prio = c.priority ?? 0;
             return { c, score: prio * 10 - colorDist };
         });
@@ -116,11 +98,14 @@ export function planOutfit(clothes, pickedClothes, temperature, takeFriends, tak
         return scored[0].c;
     };
 
-    const top = pickForType('top');
-    const bottom = pickForType('bottom');
-    const shoe = pickForType('shoe');
-    const hat = isHat ? pickForType('hat') : null;
 
-    const result = {top,bottom,shoe,hat};    
-    return result;
+    const pickedType = pickedClothes ? types.find(item => item.label === pickedClothes.type) : null;
+    const top = pickedType === 'TOP' ? pickedClothes : pickForType('TOP');
+    const bottom = pickedType === 'BOTTOM' ? pickedClothes : pickForType('BOTTOM');
+    const shoe = pickedType === 'SHOE' ? pickedClothes : pickForType('SHOE');
+    const hat = pickedType === 'HAT' ? pickedClothes : isHat ? pickForType('HAT') : null;
+    const outwear = pickedType === 'OUTWEAR' ? pickedClothes : isOutwear ? pickForType('OUTWEAR') : null;
+
+    const ids = [top, bottom, shoe, hat, outwear].flatMap(item => item?.id ? [item.id] : []);   
+    return ids;
 }

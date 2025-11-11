@@ -1,7 +1,12 @@
-import { View, Text, TouchableOpacity, Modal, ScrollView } from "react-native";
-import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Modal, ScrollView, FlatList, StyleSheet, Image } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
 import { WandSparkles, X } from "lucide-react-native";
 import { router } from "expo-router";
+import { getClothes } from "../../../../lib/clothes/clothes";
+import { TokenContext } from "../../../../lib/TokenContext";
+import { planOutfit } from "../../../../lib/outfits/planOutfit";
+import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../../../assets/constants/types/types";
+import VerticalSelector from "../../../common/VerticalSelector";
 
 export default function SmartOutfitsSettings({visible, onClose}) {
 
@@ -11,7 +16,17 @@ export default function SmartOutfitsSettings({visible, onClose}) {
     const [takeFriends, setTakeFriends] = useState(false);
     const [takeHomies, setTakeHomies] = useState(false);
     const [isOutwear, setIsOutwear] = useState(false);
+    const [isHat, setIsHat] = useState(true);
 
+    const [pickedClothes, setPickedClothes] = useState(null);
+
+
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [pickModalVisible, setPickModalVisible] = useState(false);
+    const [filteredClothes, setFilteredClothes] = useState([]);
+
+    const { token } = useContext(TokenContext);
+    const {clothes, setClothes} = useContext(TokenContext);
 
 
     useEffect(() => {
@@ -25,6 +40,20 @@ export default function SmartOutfitsSettings({visible, onClose}) {
             setTakeFriends(false);
         }
     }, [takeHomies]);
+
+    useEffect(() => {
+      if (clothes) {
+        let filtered = clothes;
+        if(isClean) {
+          filtered = clothes.filter((item) => item.clean);
+        }
+        if (selectedCategory) {
+          filtered = filtered.filter((item) => item.type === selectedCategory);
+        }
+    
+        setFilteredClothes(filtered);
+        }
+      }, [selectedCategory, clothes]);
 
     const SettingRow = ({
         title,
@@ -129,6 +158,36 @@ export default function SmartOutfitsSettings({visible, onClose}) {
         </View>
       );
 
+    const createOutfit = async () => {
+      const result = planOutfit(clothes, pickedClothes, minTemp, maxTemp, takeFriends, takeHomies, isHat, isClean, isOutwear);
+      console.log(result);
+      router.replace({ pathname: "/smartOutfitOffer", params: { outfitIds: JSON.stringify(result) }});
+    }
+
+    const renderItem = ({ item }) => {
+      const isSelected = pickedClothes ? pickedClothes.id === item.id : false;
+
+      return (
+        <TouchableOpacity
+          style={[styles.item, styles.double, isSelected && styles.selected]}
+          onPress={() => {
+            if (isSelected) {
+              setPickedClothes(null);
+              setPickModalVisible(false);
+            } else {
+              setPickedClothes(item);
+              setPickModalVisible(false);
+            }
+          }}
+        >
+          <Image source={{ uri: item.picture }} style={[styles.image]} />
+          <Text style={styles.title}>{item.name}</Text>
+        </TouchableOpacity>
+      );
+    };
+
+    
+
     return(
         <Modal
             visible={visible}
@@ -154,6 +213,61 @@ export default function SmartOutfitsSettings({visible, onClose}) {
                 <Text className="font-bold text-lg text-gray-800 mb-3">
                 Podstawowe ustawienia
                 </Text>
+
+                <View className="flex-row items-center justify-between py-3 border-b border-gray-100 h-24">
+                  <View className="flex-1 mr-4">
+                    <Text className="font-pmedium text-gray-800">Wybierz podstawowe ubranie</Text>
+                    <Text className="text-sm text-gray-600 mt-1">Wybierz element garderoby jako punkt wyjścia dla stylizacji</Text>
+                  </View>
+                  <View className="flex-row items-center">
+                  <TouchableOpacity
+                    className="flex-row items-center justify-between py-3 border-b border-gray-100"
+                    onPress={() => setPickModalVisible(true)}
+                  >
+                    {pickedClothes && pickedClothes.picture ? (
+                      <Image
+                        source={{ uri: pickedClothes.picture }}
+                        className="w-24 h-24 rounded-full ml-3"
+                        resizeMode="cover"
+                      />
+                    ) : (
+                      <View className="w-16 h-16 rounded-full bg-gray-200 mx-4 items-center justify-center ml-3">
+                        <Text className="text-gray-500 text-sm">?</Text>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+
+            
+                  </View>
+                    </View>
+                <Modal visible={pickModalVisible} animationType="slide" presentationStyle="pageSheet">
+                  <View className="flex-1 bg-white">
+                    <View className="flex-row justify-between p-4 border-b border-gray-200">
+                      <Text className="font-bold text-lg">Wybierz ubranie</Text>
+                      <TouchableOpacity onPress={() => setPickModalVisible(false)}>
+                        <X size={24} color="#6b7280" />
+                      </TouchableOpacity>
+                    </View>
+                    <View className="items-start mx-auto flex  justify-center w-full rounded-lg ">
+                      <Text className="text-lg font-pmedium ml-2">Rodzaj</Text>
+                      <VerticalSelector
+                        options={[...clothingTypeOptions.map(item => item.label), ...shoesTypeOptions.map(item => item.label), ...accessoryTypeOptions.map(item => item.label)]}
+                        setValue={setSelectedCategory}
+                        value={selectedCategory}
+                      />
+                    </View>
+                    <FlatList
+                      data={filteredClothes}
+                      key={"double"}
+                      numColumns={2}
+                      renderItem={renderItem}
+                      keyExtractor={(item) => item.id.toString()}
+                      contentContainerStyle={styles.list}
+                      showsVerticalScrollIndicator={false}
+                      style={{ flex: 1 }}
+                    />
+                  </View>
+                </Modal>
 
                 <NumberInput
                     title="Minimalna temperatura"
@@ -190,6 +304,12 @@ export default function SmartOutfitsSettings({visible, onClose}) {
                     onValueChange={setTakeHomies}
                 />
                 <SettingRow
+                    title="Uwzględnij nakrycie głowy"
+                    description="Dodaj nakrycie głowy do propozycji outfitu."
+                    value={isHat}
+                    onValueChange={setIsHat}
+                />
+                <SettingRow
                     title="Uwzględnij odzież wierzchnią"
                     description="Dodaj kurtki, płaszcze i inne elementy odzieży wierzchniej do propozycji outfitu."
                     value={isOutwear}
@@ -215,7 +335,7 @@ export default function SmartOutfitsSettings({visible, onClose}) {
 
                 <TouchableOpacity
                 className="flex-1 bg-primary-100 p-3 rounded-lg"
-                onPress={console.log("zapisz")}
+                onPress={createOutfit}
                 >
                 <Text className="text-center font-pmedium text-white">
                     Utwórz
@@ -228,3 +348,43 @@ export default function SmartOutfitsSettings({visible, onClose}) {
     );
 };
 
+const styles = StyleSheet.create({
+  list: {
+    paddingHorizontal: 10,
+    paddingTop: 10,
+  },
+  selected: {
+    shadowOpacity: 0,
+    borderBlockColor: "#264653",
+    borderWidth: 1,
+  },
+  item: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3,
+    padding: 10,
+    marginVertical: 10,
+  },
+  double: {
+    width: "45%",
+    marginHorizontal: "2.5%",
+  },
+  image: {
+    width: "100%",
+    height: undefined,
+    aspectRatio: 1,
+    borderRadius: 8,
+    resizeMode: "cover",
+  },
+  title: {
+    marginTop: 8,
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+});
