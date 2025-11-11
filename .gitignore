@@ -6,7 +6,7 @@
 
 # dependencies
 frontend/node_modules/
-#backend/fashionassistant/uploads
+backend/fashionassistant/uploads
 
 # Expo
 .expo/
