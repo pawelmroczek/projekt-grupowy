@@ -99,7 +99,7 @@ export function planOutfit(clothes, pickedClothes, minTemp, maxTemp, takeFriends
     };
 
 
-    const pickedType = pickedClothes ? types.find(item => item.label === pickedClothes.type) : null;
+    const pickedType = pickedClothes ? types.find(item => item.label === pickedClothes.type).type : null;
     const top = pickedType === 'TOP' ? pickedClothes : pickForType('TOP');
     const bottom = pickedType === 'BOTTOM' ? pickedClothes : pickForType('BOTTOM');
     const shoe = pickedType === 'SHOE' ? pickedClothes : pickForType('SHOE');
