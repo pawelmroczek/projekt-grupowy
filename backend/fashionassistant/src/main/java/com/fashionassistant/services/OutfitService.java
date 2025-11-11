@@ -11,6 +11,8 @@ public interface OutfitService {
 
     List<Outfit> getFriendsOutfits(Integer page, Integer pageSize);
 
+    List<Outfit> getPublicOutfits(Integer page, Integer pageSize);
+
     OutfitGet updateOutfit(OutfitUpdate outfit);
 
     void deleteOutfitById(int id);

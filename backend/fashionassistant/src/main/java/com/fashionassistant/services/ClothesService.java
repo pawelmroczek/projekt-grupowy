@@ -13,9 +13,13 @@ public interface ClothesService {
 
     List<Clothes> getFriendsClothes(Integer page, Integer pageSize);
 
+    List<Clothes> getPublicClothes(Integer page, Integer pageSize);
+
     ClothesGet updateClothes(ClothesUpdate clothes);
 
     void deleteClothesById(int id);
 
     List<ClothesGet> toggleStatus(List<Integer> ids);
+
+    int getOutfitsCountForClothes(int clothesId);
 }
