@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public record TradeOfferGet(int id, int fromUser, String fromUserUsername, int toUser, String toUserUsername,
-                            String type, LocalDate loanFinishDate, Set<ClothesGet> fromUserClothes,
+                            TradeOfferType type, LocalDate loanFinishDate, Set<ClothesGet> fromUserClothes,
                             Set<ClothesGet> toUserClothes) {
     public TradeOfferGet(TradeOffer tradeOffer) {
         this(tradeOffer.getId(), tradeOffer.getFromUser().getId(), tradeOffer.getFromUser().getUsername(),

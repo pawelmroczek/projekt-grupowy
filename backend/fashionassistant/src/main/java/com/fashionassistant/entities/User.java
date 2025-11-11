@@ -57,6 +57,8 @@ public class User implements UserDetails {
     private List<TradeOffer> sentTrades;
     @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<TradeOffer> receivedTrades;
+    @OneToMany(mappedBy = "loanUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Clothes> loanClothes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -88,6 +90,13 @@ public class User implements UserDetails {
             clothes = new ArrayList<>();
         }
         clothes.add(newClothes);
+    }
+
+    public void addLoanClothes(Clothes newClothes) {
+        if (loanClothes == null) {
+            loanClothes = new ArrayList<>();
+        }
+        loanClothes.add(newClothes);
     }
 
     public void addOutfit(Outfit outfit) {

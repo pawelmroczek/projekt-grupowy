@@ -28,4 +28,9 @@ public class TradeOfferController {
     public void acceptTradeOffer(@PathVariable int id) {
         tradeOfferService.acceptTradeOffer(id);
     }
+
+    @PostMapping("/reject/{id}")
+    public void rejectTrade(@PathVariable int id) {
+        tradeOfferService.rejectTradeOffer(id);
+    }
 }

@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
                 new ArrayList<>(),
                 userPreferences,
                 new ArrayList<>(),
+                new ArrayList<>(),
                 new ArrayList<>()
         );
         userPreferences.setUser(user);
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
         emailService.sendVerificationEmail(user.getEmail(),
                 "Fashion Buddy email verification",
                 "<p>Click the link below to activate your account:</p>" +
-                     "<p><a href=\"" + verificationUrl + "\">Activate Account</a></p>");
+                        "<p><a href=\"" + verificationUrl + "\">Activate Account</a></p>");
         return new UserFriendGet(createdUser.getId(), createdUser.getUsername());
     }
 

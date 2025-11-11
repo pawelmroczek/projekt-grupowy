@@ -26,8 +26,9 @@ public class TradeOffer {
     @ManyToOne
     @JoinColumn(name = "toUserId")
     private User toUser;
+    @Enumerated(EnumType.STRING)
     @Column(name = "type")
-    private String type;
+    private TradeOfferType type;
     @Column(name = "loan_finish_date")
     private LocalDate loanFinishDate;
     @ManyToMany
