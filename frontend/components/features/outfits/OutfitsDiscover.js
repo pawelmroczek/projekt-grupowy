@@ -14,7 +14,7 @@ import { useLocalSearchParams } from "expo-router";
 import { useMemo } from "react";
 import { fetchOutfits } from "../../../lib/outfits/outfits";
 import { TokenContext } from "../../../lib/TokenContext";
-import { fetchOutfitsFriends, fetchOutfitsPublic } from "../../../lib/clothes/discovery"; 
+import { fetchOutfitsFriends, fetchOutfitsPublic } from "../../../lib/outfits/discovery";
 
 
 

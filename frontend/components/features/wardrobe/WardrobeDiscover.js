@@ -38,7 +38,7 @@ const WardrobeDiscover = ({selectedCategory}) => {
 
 
   const fetchClothes = async (page) => {
-    if (loading || !hasMore) return;
+    if (page != 1 && (loading || !hasMore)) return;
     setLoading(true);
       try {
         if (selectedCategory === "public") {
