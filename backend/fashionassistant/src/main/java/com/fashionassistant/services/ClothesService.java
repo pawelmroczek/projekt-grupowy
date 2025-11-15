@@ -15,6 +15,8 @@ public interface ClothesService {
 
     List<Clothes> getPublicClothes(Integer page, Integer pageSize);
 
+    List<Clothes> getLoanClothes();
+
     ClothesGet updateClothes(ClothesUpdate clothes);
 
     void deleteClothesById(int id);

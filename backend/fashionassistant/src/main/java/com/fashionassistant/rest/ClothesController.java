@@ -32,6 +32,11 @@ public class ClothesController {
         return clothesService.getClothes(page, size);
     }
 
+    @GetMapping("/loan")
+    public List<ClothesGet> getLoanClothes() {
+        return clothesService.getLoanClothes().stream().map(ClothesGet::new).toList();
+    }
+
     @GetMapping("/household")
     public List<ClothesHouseholdGet> getAllClothesFromHousehold() {
         return clothesService.getClothesFromHousehold();
