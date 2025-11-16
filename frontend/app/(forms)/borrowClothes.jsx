@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Image,
@@ -7,6 +7,8 @@ import {
   StyleSheet,
   ScrollView,
   TextInput,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import {
@@ -18,15 +20,20 @@ import {
   Plus,
 } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { sendLoanRequest } from "../../lib/trades/sendLoanRequest";
+import { TokenContext } from "../../lib/TokenContext";
 
 const BorrowClothes = () => {
   const params = useLocalSearchParams();
+  const { token, setToken } = useContext(TokenContext);
+  
   const targetCloth = params.targetCloth
     ? JSON.parse(params.targetCloth)
     : null;
 
   const [borrowDays, setBorrowDays] = useState(7); // Domyślnie 7 dni
   const [startDate, setStartDate] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(false);
 
   // Obliczanie daty zwrotu
   const calculateReturnDate = () => {
@@ -55,21 +62,54 @@ const BorrowClothes = () => {
     setBorrowDays(Math.max(1, Math.min(days, 365)));
   };
 
-  const handleConfirmBorrow = () => {
+  const handleConfirmBorrow = async () => {
     if (borrowDays < 1) {
-      alert("Okres pożyczenia musi wynosić przynajmniej 1 dzień");
+      Alert.alert("Błąd", "Okres pożyczenia musi wynosić przynajmniej 1 dzień");
       return;
     }
 
-    console.log("Pożyczenie ubrania:");
-    console.log("Ubranie:", targetCloth);
-    console.log("Okres:", borrowDays, "dni");
-    console.log("Data rozpoczęcia:", formatDate(startDate));
-    console.log("Data zwrotu:", formatDate(calculateReturnDate()));
+    if (!targetCloth) {
+      Alert.alert("Błąd", "Brak informacji o ubraniu do wypożyczenia");
+      return;
+    }
 
-    // Tutaj dodaj logikę wysyłania propozycji pożyczenia do backendu
+    setIsLoading(true);
 
-    router.back();
+    try {
+      console.log("Wysyłanie prośby o pożyczenie:");
+      console.log("Ubranie:", targetCloth);
+      console.log("Okres:", borrowDays, "dni");
+      console.log("Data rozpoczęcia:", formatDate(startDate));
+      console.log("Data zwrotu:", formatDate(calculateReturnDate()));
+
+      const response = await sendLoanRequest(
+        {
+          toUserId: targetCloth.userId,
+          clothId: targetCloth.id,
+          loanFinishDate: calculateReturnDate(),
+        },
+        token
+      );
+
+      Alert.alert(
+        "Sukces! 🎉",
+        "Prośba o pożyczenie została wysłana",
+        [
+          {
+            text: "OK",
+            onPress: () => router.back(),
+          },
+        ]
+      );
+    } catch (error) {
+      console.error("Błąd wysyłania prośby o pożyczenie:", error);
+      Alert.alert(
+        "Błąd",
+        "Nie udało się wysłać prośby o pożyczenie. Spróbuj ponownie."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const getQuickDayOptions = () => [
@@ -224,12 +264,25 @@ const BorrowClothes = () => {
       <View className="bg-white px-4 py-4 shadow-lg pb-10 mb-[-30px]">
         <TouchableOpacity
           onPress={handleConfirmBorrow}
+          disabled={isLoading}
           className="bg-primary-200 py-4 rounded-lg flex-row justify-center items-center"
+          style={{ opacity: isLoading ? 0.7 : 1 }}
         >
-          <ArrowLeftFromLine size={20} color="white" />
-          <Text className="text-white text-lg font-pmedium ml-2">
-            Wyślij prośbę o pożyczenie
-          </Text>
+          {isLoading ? (
+            <>
+              <ActivityIndicator color="white" size="small" />
+              <Text className="text-white text-lg font-pmedium ml-2">
+                Wysyłanie...
+              </Text>
+            </>
+          ) : (
+            <>
+              <ArrowLeftFromLine size={20} color="white" />
+              <Text className="text-white text-lg font-pmedium ml-2">
+                Wyślij prośbę o pożyczenie
+              </Text>
+            </>
+          )}
         </TouchableOpacity>
       </View>
     </SafeAreaView>

@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import {
@@ -20,11 +22,13 @@ import {
 import { getClothes } from "../../lib/clothes/clothes";
 import { TokenContext } from "../../lib/TokenContext";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { sendExchangeRequest } from "../../lib/trades/sendExchangeRequest";
 
 const ExchangeClothes = () => {
   const params = useLocalSearchParams();
   const [selectedClothes, setSelectedClothes] = useState([]);
   const [myClothes, setMyClothes] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const { token } = useContext(TokenContext);
 
   // Parsujemy dane o ubraniu do wymiany
@@ -61,19 +65,52 @@ const ExchangeClothes = () => {
     return selectedClothes.some((cloth) => cloth.id === item.id);
   };
 
-  const handleConfirmExchange = () => {
+  const handleConfirmExchange = async () => {
     if (selectedClothes.length === 0) {
-      alert("Wybierz przynajmniej jedno ubranie do wymiany");
+      Alert.alert(
+        "Brak wyboru",
+        "Wybierz przynajmniej jedno ubranie do wymiany"
+      );
       return;
     }
 
-    console.log("Wymiana ubrań:");
-    console.log("Otrzymujesz:", targetCloth);
-    console.log("Oddajesz:", selectedClothes);
+    if (!targetCloth) {
+      Alert.alert("Błąd", "Brak informacji o ubraniu do wymiany");
+      return;
+    }
 
-    // Tutaj dodaj logikę wysyłania propozycji wymiany do backendu
+    setIsLoading(true);
 
-    router.back();
+    try {
+      const exchangeData = {
+        toUserId: targetCloth.userId,
+        myClothesIds: selectedClothes.map((cloth) => cloth.id),
+        targetClothesIds: [targetCloth.id],
+      };
+
+      console.log("Wysyłanie propozycji wymiany:", exchangeData);
+
+      await sendExchangeRequest(exchangeData, token);
+
+      Alert.alert(
+        "Sukces! 🎉",
+        "Propozycja wymiany została wysłana",
+        [
+          {
+            text: "OK",
+            onPress: () => router.back(),
+          },
+        ]
+      );
+    } catch (error) {
+      console.error("Błąd wysyłania propozycji wymiany:", error);
+      Alert.alert(
+        "Błąd",
+        "Nie udało się wysłać propozycji wymiany. Spróbuj ponownie."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const renderItem = ({ item }) => {
@@ -186,12 +223,25 @@ const ExchangeClothes = () => {
           <View className="bg-white px-4 py-4 shadow-lg pb-10 mb-[-30px]">
             <TouchableOpacity
               onPress={handleConfirmExchange}
+              disabled={isLoading}
               className="bg-primary-100 py-4 rounded-lg flex-row justify-center items-center"
+              style={{ opacity: isLoading ? 0.7 : 1 }}
             >
-              <ArrowLeftRight size={20} color="white" />
-              <Text className="text-white text-lg font-pmedium ml-2">
-                Zaproponuj wymianę
-              </Text>
+              {isLoading ? (
+                <>
+                  <ActivityIndicator color="white" size="small" />
+                  <Text className="text-white text-lg font-pmedium ml-2">
+                    Wysyłanie...
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <ArrowLeftRight size={20} color="white" />
+                  <Text className="text-white text-lg font-pmedium ml-2">
+                    Zaproponuj wymianę
+                  </Text>
+                </>
+              )}
             </TouchableOpacity>
           </View>
         )}
