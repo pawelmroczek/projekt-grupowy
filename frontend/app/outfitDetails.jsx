@@ -15,6 +15,7 @@ import { TokenContext } from "../lib/TokenContext";
 import { getClothes } from "../lib/clothes/clothes";
 import OutfitDetailsTile from "../components/features/outfits/OutfitsDetails";
 import { fetchOutfits, outfitDeleting } from "../lib/outfits/outfits";
+import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../assets/constants/types/types";
 
 const outfitDetails = () => {
   const outfit = useLocalSearchParams();
@@ -27,7 +28,7 @@ const outfitDetails = () => {
     const serverresponse = await outfitDeleting(id, token);
     const outfitsData = await fetchOutfits(token);
     setOutfits(outfitsData);
-    router.replace("/outfits");
+    router.replace("/wardobe");
   };
 
   const outfitClothes = clothes.filter((cloth) =>
@@ -36,13 +37,19 @@ const outfitDetails = () => {
 
   console.log("Outfit clothes:", outfitClothes);
 
-  const dictionary = {
-    "Nakrycie głowy": ["Nakrycie głowy"],
-    "Górna część": ["Koszulka", "Koszula", "Sweter", "Kurtka", "Sukienka"],
-    "Dolna część": ["Spodnie", "Spódnica"],
-    Buty: ["Buty"],
-    Akcesoria: ["Akcesoria"],
-  };
+ const dictionary = {
+     "Nakrycie głowy": clothingTypeOptions
+       .filter(item => item.type === "HAT")
+       .map(item => item.label),
+     "Górna część": clothingTypeOptions
+       .filter(item => item.type === "TOP" || item.type === "FULLBODY")
+       .map(item => item.label), 
+     "Dolna część": clothingTypeOptions
+       .filter(item => item.type === "BOTTOM")
+       .map(item => item.label),
+     Buty: shoesTypeOptions.map(item => item.label),
+     Akcesoria: accessoryTypeOptions.map(item => item.label),
+   };
 
   const categorizeClothes = (clothes, dictionary) => {
     const result = [];
@@ -93,7 +100,7 @@ const outfitDetails = () => {
               <Text className="text-base text-gray-600">
                 Typ: {outfit.type}
               </Text>
-              <View className="items-center space-y-3   py-3.5 rounded-xl w-full flex justify-center bg-white-100 pb-40">
+              <View className="items-center space-y-3 py-3.5 rounded-xl w-full flex justify-center bg-white-100 pb-40">
                 <TouchableOpacity
                   onPress={() => {
                     handleDelete(outfit.id);

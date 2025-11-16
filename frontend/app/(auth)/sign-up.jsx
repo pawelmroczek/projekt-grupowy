@@ -74,7 +74,7 @@ const SignUp = () => {
 
   const handleRegister = async () => {
     console.log("Próba rejestracji z danymi:", form);
-    validate = validateForm();
+    const validate = validateForm();
     if (validate === 0) {
       setRegistryStatus(true)
       const response = await registerUser(form);

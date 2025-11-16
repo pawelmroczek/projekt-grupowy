@@ -72,13 +72,36 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
+    public List<Clothes> getHouseholdClothesFiltered(Boolean clean, List<String> types, Season season) {
+        User currentUser = authService.getCurrentUser();
+
+        if (currentUser.getHousehold() == null) {
+            throw new NotFoundException("User does not belong to any household");
+        }
+
+        Household household = householdRepository.findById(currentUser.getHousehold().getId())
+                .orElseThrow(() -> new NotFoundException("Household not found"));
+
+        List<Integer> userIds = household.getUsers().stream()
+                .map(User::getId)
+                .toList();
+
+        List<Integer> visibleValues = List.of(
+                Visibility.FRIENDS.getValue(),
+                Visibility.PUBLIC.getValue()
+        );
+
+        return clothesRepository.findHouseholdClothesFiltered(userIds, visibleValues, clean, (types == null || types.isEmpty()) ? null : types, season);
+    }
+
+    @Override
     public List<Clothes> getFriendsClothes(Integer page, Integer pageSize) {
         User currentUser = authService.getCurrentUser();
         User user = userRepository.findById(currentUser.getId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
         List<Clothes> friendsClothes;
         Set<User> friends = user.getFriends();
-        List<Integer> visibleValues = List.of(Visibility.PUBLIC, Visibility.FRIENDS);
+        List<Integer> visibleValues = List.of(Visibility.PUBLIC.getValue(), Visibility.FRIENDS.getValue());
         List<Integer> userIds = friends.stream().map(User::getId).toList();
         if (page != null && pageSize != null) {
             PageRequest pageRequest = PageRequest.of(page, pageSize);
@@ -91,15 +114,43 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
+    public List<Clothes> getFilteredFriendsClothes(Boolean clean, List<String> types, Season season) {
+        User currentUser = authService.getCurrentUser();
+        User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        Set<User> friends = user.getFriends();
+        if (friends.isEmpty()) {
+            return List.of();
+        }
+
+        List<Integer> userIds = friends.stream().map(User::getId).toList();
+        List<Integer> visibleValues = List.of(
+                Visibility.PUBLIC.getValue(),
+                Visibility.FRIENDS.getValue()
+        );
+
+        return clothesRepository.findFriendsClothesFiltered(
+                userIds,
+                visibleValues,
+                clean,
+                (types == null || types.isEmpty()) ? null : types,
+                season
+        );
+    }
+
+    @Override
     public List<Clothes> getPublicClothes(Integer page, Integer pageSize) {
-        Integer publicVisibility = Visibility.PUBLIC;
+        Integer publicVisibility = Visibility.PUBLIC.getValue();
+        Integer currentUserId = authService.getCurrentUser().getId();
+
         List<Clothes> publicClothes;
         if (page != null && pageSize != null) {
             PageRequest pageRequest = PageRequest.of(page, pageSize);
-            Page<Clothes> clothesPage = clothesRepository.findByVisible(publicVisibility, pageRequest);
+            Page<Clothes> clothesPage = clothesRepository.findByVisibleAndUserIdNot(publicVisibility, currentUserId, pageRequest);
             publicClothes = clothesPage.getContent();
         } else {
-            publicClothes = clothesRepository.findByVisible(publicVisibility);
+            publicClothes = clothesRepository.findByVisibleAndUserIdNot(publicVisibility, currentUserId);
         }
         return publicClothes;
     }

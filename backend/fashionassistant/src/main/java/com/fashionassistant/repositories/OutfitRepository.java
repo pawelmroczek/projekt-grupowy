@@ -21,4 +21,8 @@ public interface OutfitRepository extends JpaRepository<Outfit, Integer> {
     Page<Outfit> findByVisible(Integer visible, Pageable pageable);
 
     List<Outfit> findByVisible(Integer visible);
+
+    Page<Outfit> findByVisibleAndUserIdNot(Integer visible, Integer userId, Pageable pageable);
+
+    List<Outfit> findByVisibleAndUserIdNot(Integer visible, Integer userId);
 }

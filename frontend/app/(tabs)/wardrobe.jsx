@@ -1,26 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
-  FlatList,
-  Image,
   Text,
   TouchableOpacity,
-  StyleSheet,
 } from "react-native";
-import AddButton from "../../components/features/wardrobe/AddButton";
-import { router } from "expo-router";
-import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
-
-import { getClothes } from "../../lib/clothes/clothes";
-
-import { useLocalSearchParams } from "expo-router";
-import { useMemo } from "react";
 import Wardrobe from "../../components/features/wardrobe";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import OutfitsPage from "../../components/features/outfits";
-
 
 
 const FormData = global.FormData;

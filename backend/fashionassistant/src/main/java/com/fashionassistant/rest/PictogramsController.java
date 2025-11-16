@@ -30,19 +30,19 @@ public class PictogramsController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public Pictograms createOrUpdate(@RequestBody Pictograms pictograms) {
-        return service.createOrUpdate(pictograms);
-    }
+    //@PostMapping
+    //public Pictograms createOrUpdate(@RequestBody Pictograms pictograms) {
+    //    return service.createOrUpdate(pictograms);
+    //}
 
-    @PutMapping("/{id}")
-    public Pictograms update(@PathVariable Integer id, @RequestBody Pictograms pictograms) {
-        return service.update(id, pictograms);
-    }
+    //@PutMapping("/{id}")
+    //public Pictograms update(@PathVariable Integer id, @RequestBody Pictograms pictograms) {
+    //    return service.update(id, pictograms);
+    //}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
+    //@DeleteMapping("/{id}")
+    //public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    //    service.delete(id);
+    //    return ResponseEntity.noContent().build();
+    //}
 }
