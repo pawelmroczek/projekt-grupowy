@@ -62,9 +62,9 @@ export default function VerticalList({friends = [],  household = []}) {
         })}
 
         {friends.length === 0 && (
-          <View className="p-4 items-center">
-            <UserX size={30} />
-            <Text className="text-lg">Brak znajomych</Text>
+          <View className="p-4  w-full flex items-center flex-row justify-center space-x-2">
+            <UserX size={30} color="#e76f51" />
+            <Text className="text-base text-secondary-300">Brak znajomych</Text>
           </View>
         )}
       </ScrollView>
