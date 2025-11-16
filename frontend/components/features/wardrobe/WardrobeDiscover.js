@@ -103,8 +103,16 @@ const WardrobeDiscover = ({ selectedCategory }) => {
 
   const handleBorrow = () => {
     console.log("Pożyczenie ubrania:", selectedItem);
-    // Tutaj dodaj logikę dla pożyczenia
     setModalVisible(false);
+    
+    // Przekazujemy dane o wybranym ubraniu do strony pożyczenia
+    router.push({
+      pathname: "/borrowClothes",
+      params: {
+        targetCloth: JSON.stringify(selectedItem)
+      }
+    });
+    
     setSelectedItem(null);
   };
 
