@@ -1,10 +1,10 @@
 import { View, Text, TouchableOpacity, Modal  } from "react-native";
 import VerticalList from "./VertitalList";
 import { getHomiesList, getFriendsList } from "../../../../lib/friends/friends";
-import React, { useEffect, useState, useContext} from "react";
-import { TokenContext } from "../../../../app/TokenContext";
+import React, { useState, useContext} from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { leaveHousehold } from "../../../../lib/friends/friends";
+import { TokenContext } from "../../../../lib/TokenContext";
 
 export default function FriendsList() {
 
@@ -35,11 +35,12 @@ export default function FriendsList() {
 
 
   return (
-    <View className="w-full bg-white rounded-xl">
-      <Text className="text-xl font-bold p-2">Znajomi:</Text>
+    <View className=" bg-white rounded-xl mx-2">
+      <Text className="text-sm text-gray-500 uppercase font-bold p-2">Znajomi:</Text>
       <VerticalList friends={friends} household={homies}/>
+      <View className="mb-2 h-[1px] mx-2  bg-gray-300" />
       <View className="flex-row items-center justify-between p-2">
-        <Text className="text-xl font-bold">Domownicy:</Text>
+         <Text className="text-sm text-gray-500 uppercase font-bold ">Domownicy:</Text>
         {homies.length !== 0 && (
           <TouchableOpacity
             className="mx-4 px-4 py-2 bg-red-500 rounded-lg"
@@ -49,6 +50,7 @@ export default function FriendsList() {
           </TouchableOpacity>
         )}
       </View>
+      
       <VerticalList friends={homies} household={homies} />
       <Modal
         transparent={true}

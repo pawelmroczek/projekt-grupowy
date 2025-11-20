@@ -13,11 +13,12 @@ import {
 } from "react-native";
 import { Search, Shirt, WashingMachine } from "lucide-react-native";
 import { router, useLocalSearchParams } from "expo-router";
-import { TokenContext } from "../TokenContext";
+
 import VerticalSelector from "../../components/common/VerticalSelector";
 import { useFocusEffect } from "@react-navigation/core";
 import { getClothes, toggleClean } from "../../lib/clothes/clothes";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
+import { TokenContext } from "../../lib/TokenContext";
 
 export default function index() {
   const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
@@ -31,6 +32,8 @@ export default function index() {
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
 
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
+
   const handleSubmit = () => {
     const selectedClothesIds = selectedClothes.map((item) => item.id);
 
@@ -39,7 +42,7 @@ export default function index() {
         getClothes(token).then((response) => {
           if (response) {
             setClothes(response);
-            router.push("/laundry");
+            router.replace("/laundry");
           } else {
             console.error("Error fetching clothes:", response.status);
           }
@@ -116,7 +119,7 @@ export default function index() {
             />
             <Text className="text-lg font-pmedium ml-2">Rodzaj</Text>
             <VerticalSelector
-              options={[...clothingTypeOptions, ...shoesTypeOptions, ...accessoryTypeOptions]}
+              options={[...clothingTypeOptions.map(item => item.label), ...shoesTypeOptions.map(item => item.label), ...accessoryTypeOptions.map(item => item.label)]}
               setValue={setSelectedCategory}
               value={selectedCategory}
             />
@@ -135,7 +138,7 @@ export default function index() {
         <View className="w-full items-center flex-row justify-center px-3 space-x-2">
           <TouchableOpacity
             onPress={() => {
-              router.push("/laundry");
+              router.replace("/laundry");
             }}
             className="bg-gray-400 w-[40%] p-2 px-8 rounded-md mb-4"
           >
@@ -144,7 +147,9 @@ export default function index() {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={saveButtonDisabled}
             onPress={() => {
+              setSaveButtonDisabled(true);
               handleSubmit();
             }}
             className="bg-primary-100 w-[60%] p-2 px-8 rounded-md mb-4"

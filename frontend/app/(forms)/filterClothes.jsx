@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import { X } from "lucide-react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";  
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const FilterClothes = () => {
     const params = useLocalSearchParams(); // Pobieramy parametry z routera
@@ -20,7 +21,7 @@ const FilterClothes = () => {
     }, [filters]);
 
     const toggleSort = (option) => {
-        setFilters(prev => ({ ...prev, sortBy: prev.sortBy === option ? null : option }));
+        setFilters(prev => ({ ...prev, sortBy: option }));
     };
 
     const toggleSize = (option) => {
@@ -37,19 +38,19 @@ const FilterClothes = () => {
     };
 
     const applyFilters = () => {
-        router.push({ pathname: "/wardrobe", params: filters });
+        router.replace({ pathname: "/wardrobe", params: filters });
     };
 
     const resetFilters = () => {
         setFilters({ sortBy: "Newest", size: [], cleanliness: "all" });
-        //router.push("/wardrobe");
+        //router.replace("/wardrobe");
     };
 
     return (
-        <View className="flex-1 bg-white p-6">
+        <SafeAreaView className="flex-1 bg-white p-6">
             <View className="flex-row justify-between items-center mb-6">
                 <Text className="text-lg font-bold">Filter Options</Text>
-                <TouchableOpacity onPress={() => router.push("/wardrobe")}> 
+                <TouchableOpacity onPress={() => router.replace("/wardrobe")}> 
                     <X className="text-black" size={30} />
                 </TouchableOpacity>
             </View>
@@ -101,7 +102,7 @@ const FilterClothes = () => {
             >
                 <Text className="text-center text-white font-bold">Reset Filters</Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     );
 };
 

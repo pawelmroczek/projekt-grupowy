@@ -23,18 +23,26 @@ public class OutfitController {
 
     @PostMapping
     public OutfitGet addOutfit(@RequestBody OutfitCreate outfit) {
-        System.out.println(">>> Wszedł do kontrolera2");
         return outfitService.addOutfit(outfit);
     }
 
     @GetMapping
-    public List<OutfitGet> getAllOutfits() {
-        return outfitService.getOutfits();
+    public List<OutfitGet> getAllOutfits(@RequestParam(required = false) Integer page,
+                                         @RequestParam(required = false) Integer size) {
+        return outfitService.getOutfits(page, size);
     }
 
     @GetMapping("/friends")
-    public List<OutfitGet> getAllOutfitsFromFriends() {
-        return outfitService.getFriendsOutfits().stream()
+    public List<OutfitGet> getAllOutfitsFromFriends(@RequestParam(required = false) Integer page,
+                                                    @RequestParam(required = false) Integer size) {
+        return outfitService.getFriendsOutfits(page, size).stream()
+                .map(OutfitGet::new).toList();
+    }
+
+    @GetMapping("/public")
+    public List<OutfitGet> getAllPublicOutfits(@RequestParam(required = false) Integer page,
+                                               @RequestParam(required = false) Integer size) {
+        return outfitService.getPublicOutfits(page, size).stream()
                 .map(OutfitGet::new).toList();
     }
 

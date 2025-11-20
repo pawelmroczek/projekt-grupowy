@@ -128,3 +128,21 @@ export const clothesSending = async (formData, token) => {
       console.error('Błąd:', error);
     }
   }
+
+  export const getOutfitsCount = async (token, id) => {
+    try {
+      const response = await fetch(ipAddress+"/fashion/clothes/" + id + "/outfitsCount", {
+          method: "GET",
+          headers: {
+              "Authentication": `Bearer ${token}`
+          }
+      });
+      if (!response.ok) {
+          throw new Error(`HTTP status ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Błąd:', error);
+    }
+  }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,9 @@ import {
 } from "react-native";
 import { Settings, Info, X } from "lucide-react-native";
 import { wichStrictnessIsActive } from "../../../../lib/laundry/utils";
+import { saveLaundryPreferences } from "../../../../lib/laundry/saveLaundryPreferences";
+import { TokenContext } from "../../../../lib/TokenContext";
+
 
 export default function LaundrySettings({
   options,
@@ -20,12 +23,17 @@ export default function LaundrySettings({
     ...options,
   });
 
+  const { token } = useContext(TokenContext);
+
   useEffect(() => {
     setLocalOptions({ ...options });
   }, [options]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     onOptionsChange(localOptions);
+    // cos nie dziala na backendzie?
+    await saveLaundryPreferences(token, localOptions);
+    console.log("Saved options:", localOptions);
     onClose();
   };
 
@@ -68,7 +76,6 @@ export default function LaundrySettings({
           allowDelicateWithNormal: false,
         };
       }
-      console.log(`New options after setting ${level}:`, newOptions);
       return newOptions;
     });
   };
@@ -107,7 +114,6 @@ export default function LaundrySettings({
     onValueChange,
     type = "toggle", // Zmiana domyślnego typu na "toggle" dla lepszej nazwy
   }) => {
-
     // Funkcja obsługująca zmianę wartości
     const handleToggle = () => {
       const newValue = !value;
@@ -225,14 +231,6 @@ export default function LaundrySettings({
             <Text className="font-bold text-lg text-gray-800 mb-3">
               Podstawowe ustawienia
             </Text>
-
-            <NumberInput
-              title="Maksymalna liczba ubrań na ładunek"
-              value={localOptions.maxItemsPerLoad}
-              onValueChange={(value) => updateOption("maxItemsPerLoad", value)}
-              min={3}
-              max={15}
-            />
 
             <NumberInput
               title="Minimalna liczba ubrań na ładunek"
@@ -363,7 +361,7 @@ export default function LaundrySettings({
         </ScrollView>
 
         {/* Footer */}
-        <View className="p-4 border-t border-gray-200">
+        <View className="p-4 mb-4 border-t border-gray-200">
           <View className="flex-row space-x-3">
             <TouchableOpacity
               className="flex-1 bg-gray-200 p-3 rounded-lg"

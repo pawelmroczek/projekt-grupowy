@@ -1,8 +1,9 @@
 import React, { use } from "react";
 import { useState, useContext } from "react";
 import { View, Text, TouchableOpacity, TextInput, FlatList} from "react-native";
-import { TokenContext } from "../../TokenContext";
+
 import { router } from "expo-router";
+import { TokenContext } from "../../../lib/TokenContext";
 
 
 

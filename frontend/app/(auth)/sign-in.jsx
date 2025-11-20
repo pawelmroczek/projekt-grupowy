@@ -10,15 +10,17 @@ import { loginUser } from "../../lib/authorization/authorization";
 import { CircleX } from "lucide-react-native";
 import ErrorText from "../../components/common/ErrorText";
 import Link from "../../components/common/Link";
-import { TokenContext } from "../TokenContext";
+import { TokenContext } from "../../lib/TokenContext";
 import { getClothes } from "../../lib/clothes/clothes";
 
 const SignIn = () => {
   const [loginStatus, setLoginStatus] = useState(false);
   const [error, setError] = useState(null);
   const [form, setForm] = useState({
-    email: "admin@gmail.com", //tymczasowe dane do logowania
-    password: "admin", //tymczasowe dane do logowania
+    //email: "admin@gmail.com", //tymczasowe dane do logowania
+    //password: "admin", //tymczasowe dane do logowania
+    email: "vincenzo.piras@o2.pl",
+    password: "12345678",
   });
 
   const { token, setToken } = useContext(TokenContext);
@@ -59,7 +61,7 @@ const SignIn = () => {
         setToken(token);
         const clothesData = await getClothes(token);
         setClothes(clothesData);
-        router.replace("/outfits");
+        router.replace("/discover");
       } else {
         console.log("❌ Błąd:",data.message.message);
         setError(data.message.message);

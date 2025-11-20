@@ -1,55 +1,66 @@
+import React, { useState, useContext, useEffect } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
-  Text,
   FlatList,
-  StyleSheet,
-  TouchableOpacity,
   Image,
+  Text,
+  TouchableOpacity,
+  StyleSheet
 } from "react-native";
-import React, { use, useContext, useEffect, useMemo, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
-import { useLocalSearchParams } from "expo-router";
-import { TokenContext } from "../TokenContext";
-import SearchBarOutfits from "../../components/common/SearchBarOutfits";
-import AddButton from "../../components/features/wardrobe/AddButton";
-import { router } from "expo-router";
-import { fetchOutfits } from "../../lib/outfits/outfits";
 
-const Home = () => {
-  const rawFilters = useLocalSearchParams();
-  const filters = useMemo(() => rawFilters, [JSON.stringify(rawFilters)]);
+import { router } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
+import { useMemo } from "react";
+import { fetchOutfits } from "../../../lib/outfits/outfits";
+import { TokenContext } from "../../../lib/TokenContext";
+import { fetchOutfitsFriends, fetchOutfitsPublic } from "../../../lib/outfits/discovery";
+
+
+
+const OutfitsDiscover = ({selectedCategory}) => {
+  
+  const { token, setToken } = useContext(TokenContext);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   const [displayMode, setDisplayMode] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const { token, setToken } = useContext(TokenContext);
-  const { clothes, setClothes } = useContext(TokenContext);
-  const { outfits, setOutfits } = useContext(TokenContext);
-  
-  console.log("Outfits:", outfits);
+  const [outfits, setOutfits] = useState([]);
 
-  
-  const [filteredOutfits, setFilteredOutfits] = useState([]);
+
+  const fetchOutfits = async (page) => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+      try {
+        if (selectedCategory === "public") {
+          const data = await fetchOutfitsPublic(token, page-1, 10);
+          setOutfits((prev) => [...prev, ...data]);
+          if (data.length < 10) setHasMore(false);
+        } else {
+          const data = await fetchOutfitsFriends(token, page-1, 10);
+          setOutfits((prev) => [...prev, ...data]);
+          if (data.length < 10) setHasMore(false);
+        }
+        setPage(page);
+      } catch (error) {
+        console.error("Błąd pobierania ubrań:", error);
+      }
+      finally
+      {
+        setLoading(false);
+      }
+    };
 
   useEffect(() => {
-    if(!token) return;
-      fetchOutfits(token).then((data) => {
-        setOutfits(data);
-        
-      });
-  }, [token]);
+    setOutfits([]);
+    setPage(1);
+    setHasMore(true);
+    fetchOutfits(1);
+    console.log(outfits);
+  }, [selectedCategory]);
 
-  useEffect(() => {
-    if (selectedCategory) {
-      const filtered = outfits.filter(
-        (outfit) => outfit.type === selectedCategory
-      );
-      setFilteredOutfits(filtered);
-    } else {
-      setFilteredOutfits(outfits);
-    }
-  }, [selectedCategory, outfits]);
 
   const renderItem = ({ item: outfit }) => {
     const items = outfit?.clothesIds.map((id) => {
@@ -92,18 +103,10 @@ const Home = () => {
   };
 
   return (
-    <>
-      <SearchBarOutfits
-        displayMode={displayMode}
-        onDisplayPress={setDisplayMode}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        filters={filters}
-      />
+    <View className="flex-1 bg-gray-100">
       <View className="flex-1">
-        {filteredOutfits.length > 0 ? (
           <FlatList
-            data={filteredOutfits}
+            data={outfits}
             key={displayMode ? "single" : "double"}
             numColumns={displayMode ? 1 : 2}
             renderItem={renderItem}
@@ -111,17 +114,13 @@ const Home = () => {
             contentContainerStyle={styles.list}
             showsVerticalScrollIndicator={false}
             style={{ flex: 1 }}
+            onEndReached={() => fetchOutfits(page+1)}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={loading ? <Text className="text-lg text-center my-4 font-bold" >Ładowanie...</Text> : null}
           />
-        ) : (
-          <View style={styles.list}>
-            <Text className="text-center text-gray-500">
-              Brak strojów w tej kategorii
-            </Text>
-          </View>
-        )}
       </View>
-      <AddButton onPress={() => router.push("/addOutfits")} />
-    </>
+     
+    </View>
   );
 };
 
@@ -169,4 +168,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default OutfitsDiscover;
+

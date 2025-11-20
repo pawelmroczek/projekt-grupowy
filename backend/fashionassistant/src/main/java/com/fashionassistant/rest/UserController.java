@@ -3,8 +3,12 @@ package com.fashionassistant.rest;
 import com.fashionassistant.entities.*;
 import com.fashionassistant.services.AuthService;
 import com.fashionassistant.services.UserService;
+import com.fashionassistant.services.AvatarService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,6 +18,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final AuthService authService;
+    private final AvatarService avatarService;
 
     @PostMapping("/signIn")
     public Token signIn(@RequestBody UserAuth user) {
@@ -36,8 +41,20 @@ public class UserController {
     }
 
     @GetMapping("/verify/{token}")
-    public void verify(@PathVariable String token) {
+    public ResponseEntity<String> verify(@PathVariable String token) {
         userService.verify(token);
+        String successHtml = """
+            <html>
+                <head><title>Account Verified</title></head>
+                <body style="font-family: Arial; text-align: center; margin-top: 50px;">
+                    <h1>Your account has been successfully activated!</h1>
+                    <p>You can now log in to Fashion Buddy.</p>
+                </body>
+            </html>
+        """;
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_HTML)
+                .body(successHtml);
     }
 
     @PostMapping("/change-password")
@@ -48,5 +65,24 @@ public class UserController {
     @PostMapping("/reset-password/{email}")
     public void resetPassword(@PathVariable String email) {
         userService.resetPassword(email);
+    }
+
+    @GetMapping("/avatar")
+    public ResponseEntity<UserAvatarGet> getCurrentUserWithAvatar() {
+        User currentUser = authService.getCurrentUser();
+        return ResponseEntity.ok(new UserAvatarGet(currentUser));
+    }
+
+    @PostMapping("/avatar")
+    public ResponseEntity<UserAvatarGet> uploadAvatar(@RequestParam("file") MultipartFile file) {
+        avatarService.saveAvatar(file);
+        User currentUser = authService.getCurrentUser();
+        return ResponseEntity.ok(new UserAvatarGet(currentUser));
+    }
+
+    @DeleteMapping("/avatar")
+    public ResponseEntity<String> deleteAvatar() {
+        avatarService.deleteCurrentUserAvatar();
+        return ResponseEntity.ok("Avatar deleted successfully");
     }
 }

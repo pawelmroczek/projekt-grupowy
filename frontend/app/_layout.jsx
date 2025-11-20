@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import TokenProvider from "./TokenContext";
+import TokenProvider from "../lib/TokenContext";
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -35,6 +36,7 @@ const RootLayout = () => {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="clothDetails" options={{ headerShown: false }} />
         <Stack.Screen name="outfitDetails" options={{ headerShown: false }} />
+        <Stack.Screen name="smartOutfitOffer" options={{ headerShown: false }} />
       </Stack>
     </TokenProvider>
   );

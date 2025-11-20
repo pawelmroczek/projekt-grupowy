@@ -1,30 +1,29 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { colors } from "../../../../assets/constants/colors/colors";
 
 export default function ColorSelector({selectColor, setSelectedColor}) {
-  const colors = [
-    { name: "red", hex: "#FF0000" },
-    { name: "black", hex: "#000000" },
-    { name: "blue", hex: "#0000FF" },
-    { name: "gray", hex: "#808080" },
-    { name: "white", hex: "#FFFFFF" },
-    { name: "green", hex: "#00FF00" },
-    { name: "yellow", hex: "#FFFF00" },
-    { name: "purple", hex: "#800080" },
-    { name: "orange", hex: "#FFA500" },
-    { name: "brown", hex: "#A52A2A" },
-    { name: "pink", hex: "#FFC0CB" },
 
-    { name: "silver", hex: "#C0C0C0" },
-    { name: "gold", hex: "#FFD700" },
-    { name: "other", hex: "#FFFFFF" },
-  ];
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    if (!selectColor) return;
+
+    const index = colors.findIndex((c) => c.name === selectColor);
+    if (index !== -1 && scrollRef.current) {
+      scrollRef.current.scrollTo({
+        x: index * 60,
+        animated: true,
+      });
+    }
+  }, [selectColor]);
 
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{ paddingHorizontal: 0 }}
+      ref={scrollRef}
     >
       <View className="flex-row space-x-3 my-2">
         {colors.map((color) => (

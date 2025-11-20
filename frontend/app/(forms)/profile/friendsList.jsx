@@ -1,9 +1,10 @@
 import React, { use } from "react";
 import { useState, useContext, useEffect } from "react";
 import { View, Text, TouchableOpacity, TextInput, FlatList} from "react-native";
-import { TokenContext } from "../../TokenContext";
+
 import { getFriendsList } from "../../../lib/friends/friends";
 import { deleteFriend } from "../../../lib/friends/friends";
+import { TokenContext } from "../../../lib/TokenContext";
 
 
 

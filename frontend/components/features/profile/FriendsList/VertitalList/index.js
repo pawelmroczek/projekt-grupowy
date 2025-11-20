@@ -1,8 +1,9 @@
 import { View, Text, ScrollView, TouchableOpacity, Modal, Pressable } from "react-native";
 import React, { useState, useContext } from "react";
 import { CircleUser, UserX } from "lucide-react-native";
-import { TokenContext } from "../../../../../app/TokenContext";
+
 import { iviteSending } from "../../../../../lib/friends/friends";
+import { TokenContext } from "../../../../../lib/TokenContext";
 
 export default function VerticalList({friends = [],  household = []}) {
 
@@ -61,9 +62,9 @@ export default function VerticalList({friends = [],  household = []}) {
         })}
 
         {friends.length === 0 && (
-          <View className="p-4 items-center">
-            <UserX size={30} />
-            <Text className="text-lg">Brak znajomych</Text>
+          <View className="p-4  w-full flex items-center flex-row justify-center space-x-2">
+            <UserX size={30} color="#e76f51" />
+            <Text className="text-base text-secondary-300">Brak znajomych</Text>
           </View>
         )}
       </ScrollView>

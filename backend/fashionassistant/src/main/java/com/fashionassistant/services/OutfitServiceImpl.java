@@ -7,6 +7,8 @@ import com.fashionassistant.repositories.ClothesRepository;
 import com.fashionassistant.repositories.OutfitRepository;
 import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,27 +49,56 @@ public class OutfitServiceImpl implements OutfitService {
     }
 
     @Override
-    public List<OutfitGet> getOutfits() {
+    public List<OutfitGet> getOutfits(Integer page, Integer pageSize) {
         User user = authService.getCurrentUser();
-        List<Outfit> outfits = outfitRepository.findByUserId(user.getId());
+        List<Outfit> outfits;
         List<OutfitGet> outfitGets = new ArrayList<>();
-        outfits.forEach(outfit -> outfitGets.add(new OutfitGet(outfit)));
+        if (page != null && pageSize != null) {
+            PageRequest pageRequest = PageRequest.of(page, pageSize);
+            Page<Outfit> outfitsPage = outfitRepository.findOutfitByUserId(user.getId(), pageRequest);
+            outfits = outfitsPage.getContent();
+        } else {
+            outfits = outfitRepository.findOutfitByUserId(user.getId());
+        }
+        outfits.forEach(singleOutfit -> {
+            outfitGets.add(new OutfitGet(singleOutfit));
+        });
         return outfitGets;
     }
 
     @Override
-    public List<Outfit> getFriendsOutfits() {
+    public List<Outfit> getFriendsOutfits(Integer page, Integer pageSize) {
         User currentUser = authService.getCurrentUser();
         User user = userRepository.findById(currentUser.getId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
         List<Outfit> friendsOutfits = new ArrayList<>();
         Set<User> friends = user.getFriends();
-        friends.forEach(friend -> {
-            friend.getOutfits().stream()
-                .filter(Outfit::isVisible)
-                .forEach(friendsOutfits::add);
-        });
+        List<Integer> visibleValues = List.of(Visibility.PUBLIC.getValue(), Visibility.FRIENDS.getValue());
+        List<Integer> userIds = friends.stream().map(User::getId).toList();
+        if (page != null && pageSize != null) {
+            PageRequest pageRequest = PageRequest.of(page, pageSize);
+            Page<Outfit> outfitsPage = outfitRepository.findByUserIdInAndVisibleIn(userIds, visibleValues, pageRequest);
+            friendsOutfits = outfitsPage.getContent();
+        } else {
+            friendsOutfits = outfitRepository.findByUserIdInAndVisibleIn(userIds, visibleValues);
+        }
         return friendsOutfits;
+    }
+
+    @Override
+    public List<Outfit> getPublicOutfits(Integer page, Integer pageSize) {
+        Integer publicVisibility = Visibility.PUBLIC.getValue(); 
+        Integer currentUserId = authService.getCurrentUser().getId();
+
+        List<Outfit> publicOutfits;
+        if (page != null && pageSize != null) {
+            PageRequest pageRequest = PageRequest.of(page, pageSize);
+            Page<Outfit> outfitsPage = outfitRepository.findByVisibleAndUserIdNot(publicVisibility, currentUserId, pageRequest);
+            publicOutfits = outfitsPage.getContent();
+        } else {
+            publicOutfits = outfitRepository.findByVisibleAndUserIdNot(publicVisibility, currentUserId);
+        }
+        return publicOutfits;
     }
 
     @Override

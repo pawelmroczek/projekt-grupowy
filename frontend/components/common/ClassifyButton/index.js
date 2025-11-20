@@ -11,10 +11,17 @@ import { WandSparkles  } from "lucide-react-native";
 
 import { clothesClassification } from "../../../lib/ml/index.js";
 
-const ClassifyButton = ({ imageUri, imageType, imageName, predictedType, setPredictedType, setSelectedType }) => {
+import { simpleColorName } from "../../../assets/constants/colors/colors.js";
+
+const ClassifyButton = ({ imageUri, imageType, imageName, predictedType, setPredictedType, setSelectedType, hex, setColor }) => {
     const [loading, setLoading] = useState(false);
 
     const handlePress = async () => {
+        
+        console.log(hex);
+        setColor(simpleColorName(hex));
+
+        /*
         try {
             setLoading(true);
 
@@ -38,7 +45,7 @@ const ClassifyButton = ({ imageUri, imageType, imageName, predictedType, setPred
             setPredictedType({ error: "Wystąpił błąd po stronie aplikacji." });
         } finally {
             setLoading(false);
-        }
+        }*/
     };
     return (
         <View className="items-center">

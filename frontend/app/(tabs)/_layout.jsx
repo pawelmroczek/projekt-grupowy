@@ -5,6 +5,7 @@ import {
   Brush,
   CircleUserRound,
   House,
+  Rss,
   Shirt,
   WashingMachine,
 } from "lucide-react-native";
@@ -31,17 +32,18 @@ const TabsLayout = () => {
             borderTopWidth: 0.75,
             height:90,
             paddingTop: 15,
+            marginTop:0
           },
         
         }}
       >
         <Tabs.Screen
-          name="outfits"
+          name="discover"
           options={{
-            title: "Outfits",
+            title: "Discover",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              TabIcon({icon: <Brush size={24} color={color} />, name: "Outfits",focused})
+              TabIcon({icon: <Rss size={24} color={color} />, name: "Odkrywaj",focused})
             ),
             tabBarLabel: "",
           }}
