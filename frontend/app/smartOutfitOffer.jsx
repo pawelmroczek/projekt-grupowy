@@ -18,7 +18,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const smartOutfitOffer = () => {
 
   const params = useLocalSearchParams();
-  const outfitIds = params?.outfitIds ? JSON.parse(params.outfitIds) : [];
+  const outfitObj = params?.outfitIds ? JSON.parse(params.outfitIds) : null;
+  
+  const outfitIds = outfitObj?.ids ?? [];
+
 
   const { clothes, setClothes } = useContext(TokenContext);
   
