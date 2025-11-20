@@ -1,49 +1,66 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useMemo } from "react";
 import { Bell, UserRoundPlus } from "lucide-react-native";
 import { router } from "expo-router";
 import { getInvites } from "../../../../lib/friends/friends";
 import { useFocusEffect } from "@react-navigation/native";
 import { TokenContext } from "../../../../lib/TokenContext";
+import fetchOffers from "../../../../lib/trades/fetchOffers";
 
 export default function AddFriend() {
   const [invites, setInvites] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [tradesOffers, setTradesOffers] = useState([]);
   const { token, setToken } = useContext(TokenContext);
 
   useFocusEffect(
     React.useCallback(() => {
-      if(!token) return;
+      if (!token) return;
       const fetchInvites = async () => {
         setLoading(true);
         const response = await getInvites(token);
         setInvites(response);
+
+        const offers = await fetchOffers(token);
+        console.log("Offers fetched:", offers);
+        setTradesOffers(offers);
+
         setLoading(false);
       };
 
       fetchInvites();
     }, [token])
   );
-  
+
+  const notificationCount = useMemo(() => {
+    const friendInvitesCount = invites ? invites.length : 0;
+    const tradeOffersCount = tradesOffers.length;
+    return friendInvitesCount + tradeOffersCount;
+  }, [invites, tradesOffers]);
+
   return (
-    <View className=" w-[95%] mx-auto flex flex-row space-x-2 justify-stretch">
-      <TouchableOpacity onPress={() => router.push("/findFriends")}>
-        <View className="rounded-md border bg-white shadow-sm items-center border-primary-100  p-4 flex flex-row  flex-grow ">
+    <View className=" mx-2 mb-2  flex flex-row space-x-2 items-stretch justify-between">
+      <TouchableOpacity
+        className="flex-grow"
+        onPress={() => router.push("/findFriends")}
+      >
+        <View className="rounded-xl  bg-white items-center  p-4 flex flex-row  flex-grow ">
           <UserRoundPlus size={35} color="#2A9D8F" />
           <View className="ml-3">
             <Text className="text-lg">Zaproś znajomych</Text>
-            <Text className="text-[11px]">
-              Dodaj osoby do znajomych, aby móc się dzielić
-            </Text>
+            <Text className="text-[11px]">Dodaj osoby do znajomych</Text>
           </View>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => router.push("/invites")}>
-        <View className="rounded-md border bg-white shadow-sm items-center border-primary-100  p-4 flex flex-row justify-center  ">
+      <TouchableOpacity
+        className="bg-white  rounded-xl  flex flex-row justify-center items-center"
+        onPress={() => router.push("/invites")}
+      >
+        <View className=" items-center p-4">
           <Bell size={35} color={"#2A9D8F"} />
-          {!loading && invites?.length > 0 && (
+          {!loading && notificationCount > 0 && (
             <Text className="bg-red-500 font-bold top-2.5 right-3 text-xs text-white p-1 px-2 rounded-full absolute">
-              {invites.length}
+              {notificationCount}
             </Text>
           )}
         </View>

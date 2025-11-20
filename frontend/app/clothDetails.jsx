@@ -1,4 +1,4 @@
-import React, { useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Image,
@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
-  Modal
+  Modal,
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 
@@ -15,11 +15,16 @@ import { clothesDeleting, getOutfitsCount } from "../lib/clothes/clothes";
 
 import { getClothes } from "../lib/clothes/clothes";
 import { TokenContext } from "../lib/TokenContext";
+import {
+  visibilityDescription,
+  visibilityImages,
+  visibilityLabel,
+} from "../assets/constants/visibilty/visibilty";
 
 const clothDetails = () => {
   const cloth = useLocalSearchParams();
   const { token, setToken } = useContext(TokenContext);
-  const {clothes, setClothes} = useContext(TokenContext);
+  const { clothes, setClothes } = useContext(TokenContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [outfitsCount, setOutfitsCount] = useState(0);
@@ -45,18 +50,34 @@ const clothDetails = () => {
     router.replace("/wardrobe");
   };
 
-  
+  const VisibilityIcon = visibilityImages[cloth.visible];
 
   return (
     <>
       <View className="relative">
         <View className=" w-full flex-row items-center justify-between p-4 bg-white shadow-md pt-14 px-6">
-          <TouchableOpacity onPress={() =>{
-                  router.push({
-                  pathname: "/addClothes",
-                  params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "colorHex": cloth.colorHex, "size": cloth.size, "clean": cloth.clean, "visible": cloth.visible, "category": cloth.category, "priority": cloth.priority, "pictogramIds": cloth.pictogramIds, "seasons": cloth.seasons}
-                })}
-                }>
+          <TouchableOpacity
+            onPress={() => {
+              router.push({
+                pathname: "/addClothes",
+                params: {
+                  name: cloth.name,
+                  picture: cloth.picture,
+                  id: cloth.id,
+                  type: cloth.type,
+                  color: cloth.color,
+                  colorHex: cloth.colorHex,
+                  size: cloth.size,
+                  clean: cloth.clean,
+                  visible: cloth.visible,
+                  category: cloth.category,
+                  priority: cloth.priority,
+                  pictogramIds: cloth.pictogramIds,
+                  seasons: cloth.seasons,
+                },
+              });
+            }}
+          >
             <Pencil className="text-black" size={30} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => router.back()}>
@@ -76,12 +97,39 @@ const clothDetails = () => {
               <Text className="text-base text-gray-600">
                 Kolor: {cloth.color}
               </Text>
+              <View className="bg-gray-200 p-3 mt-2 flex flex-row items-center space-x-2 rounded-lg px-3">
+                <VisibilityIcon size={35} color="gray" />
+                <View>
+                  <Text className="text-base text-gray-600 font-semibold">
+                    Widoczność: {visibilityLabel[cloth.visible]}
+                  </Text>
+                  <Text className="text-sm text-gray-600 ">
+                    {visibilityDescription[cloth.visible]}
+                  </Text>
+                </View>
+              </View>
               <View className="items-center space-y-3   py-3.5 rounded-xl w-full flex justify-center bg-white-100 pb-40">
                 <TouchableOpacity
-                  onPress={() => router.replace({
-                    pathname: "/addClothes",
-                    params: { "name": cloth.name, "picture": cloth.picture, "id": cloth.id, "type": cloth.type, "color": cloth.color, "colorHex": cloth.colorHex, "size": cloth.size, "clean": cloth.clean, "visible": cloth.visible, "category": cloth.category, "priority": cloth.priority, "pictogramIds": cloth.pictogramIds, "seasons": cloth.seasons }
-                })}
+                  onPress={() =>
+                    router.replace({
+                      pathname: "/addClothes",
+                      params: {
+                        name: cloth.name,
+                        picture: cloth.picture,
+                        id: cloth.id,
+                        type: cloth.type,
+                        color: cloth.color,
+                        colorHex: cloth.colorHex,
+                        size: cloth.size,
+                        clean: cloth.clean,
+                        visible: cloth.visible,
+                        category: cloth.category,
+                        priority: cloth.priority,
+                        pictogramIds: cloth.pictogramIds,
+                        seasons: cloth.seasons,
+                      },
+                    })
+                  }
                   className="px-4  w-full flex items-center py-2 border text-black border-primary-100 rounded-lg"
                 >
                   <Text className="text-black text-xl font-pregular">
@@ -115,8 +163,9 @@ const clothDetails = () => {
               Usunąć to ubranie?
             </Text>
             <Text className="text-base text-center mb-6">
-              To ubranie znajduje się w {outfitsCount} stylizacj{outfitsCount === 1 ? "i" : "ach"}.
-              Usunięcie go spowoduje również usunięcie tych stylizacji.
+              To ubranie znajduje się w {outfitsCount} stylizacj
+              {outfitsCount === 1 ? "i" : "ach"}. Usunięcie go spowoduje również
+              usunięcie tych stylizacji.
             </Text>
             <View className="flex-row justify-around">
               <TouchableOpacity
