@@ -208,6 +208,8 @@ export default function index() {
                 predictedType={predictedType}
                 setPredictedType={setPredictedType}
                 setSelectedType={setSelectedType}
+                hex={selectedColorHex}
+                setColor={setSelectedColor}
               />
             ) : null}  
             <FormField

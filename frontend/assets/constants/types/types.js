@@ -12,11 +12,10 @@ export const clothingTypeOptions = [
     { label: "Piżama", type: "NONE" },
 ];
 
-
 export const shoesTypeOptions = [
     { label: "Buty", type: "SHOE" },
 ];
 
 export const accessoryTypeOptions = [
-    { label: "Akcesoria", type: "ACCESsORY" },
+    { label: "Akcesoria", type: "ACCESSORY" },
 ];

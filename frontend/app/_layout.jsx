@@ -36,6 +36,7 @@ const RootLayout = () => {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="clothDetails" options={{ headerShown: false }} />
         <Stack.Screen name="outfitDetails" options={{ headerShown: false }} />
+        <Stack.Screen name="smartOutfitOffer" options={{ headerShown: false }} />
       </Stack>
     </TokenProvider>
   );

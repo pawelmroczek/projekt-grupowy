@@ -37,7 +37,7 @@ const ModalBox = ({ modalVisible, setModalVisible, selectedItems, visible }) => 
     const dataToSend = {
       name: outfitName,
       type: selectType,
-      //visible: visible,
+      visible: visible,
       clothesIds: selectedItems.map((item) => item.id),
     };
 

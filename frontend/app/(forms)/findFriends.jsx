@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity, TextInput, FlatList} from "react-native";
 import { Search } from "lucide-react-native";
 import { getUsers, iviteSending } from "../../lib/friends/friends";
 import { TokenContext } from "../../lib/TokenContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 
@@ -48,7 +49,7 @@ const findFriends = () => {
     }
 
     return (
-        <View className="p-4 space-y-4">
+        <SafeAreaView className="p-4 space-y-4">
             <View className="flex-row items-center space-x-2">
                 <View className="flex-row items-center flex-1 bg-gray-100 rounded-xl px-3 py-5">
                     <Search size={20} color="#6B7280" />
@@ -101,7 +102,7 @@ const findFriends = () => {
                 <Text className="text-gray-400">Brak wyników</Text>
             </View>
         )}
-        </View>
+        </SafeAreaView>
     );
 }
 

@@ -47,6 +47,7 @@ public class ClothesServiceImpl implements ClothesService {
         return clothesGets;
     }
 
+
     @Override
     public List<ClothesHouseholdGet> getClothesFromHousehold() {
         User currentUser = authService.getCurrentUser();
@@ -152,6 +153,14 @@ public class ClothesServiceImpl implements ClothesService {
             publicClothes = clothesRepository.findByVisibleAndUserIdNot(publicVisibility, currentUserId);
         }
         return publicClothes;
+    }
+
+    @Override
+    public List<Clothes> getLoanClothes() {
+        User currentUser = authService.getCurrentUser();
+        User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        return user.getLoanClothes();
     }
 
     @Override

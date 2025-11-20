@@ -116,7 +116,13 @@ const WardrobePage = () => {
           </View>
         </View>
 
-        {selectedPage === "wardrobe" ? <WardrobeDiscover /> : <OutfitsDiscover />}
+        {selectedPage === "wardrobe" ? 
+          <WardrobeDiscover
+            selectedCategory={selectedCategory}
+          /> : 
+          <OutfitsDiscover
+            selectedCategory={selectedCategory}
+          />}
       </SafeAreaView>
     </View>
   );

@@ -1,4 +1,5 @@
 import { SYMBOL_CATEGORIES } from "../careSymbols";
+import { LAUNDRY_ICONS_NAMES } from "../../assets/constants/laundry_icons/laundry_icons";
 
 /**
  * Function to get color group based on color name
@@ -24,7 +25,7 @@ export const getWashTemperature = (careSymbols) => {
 
   // Znajdź symbol temperatury
   const tempSymbols = careSymbols.filter((symbol) =>
-    SYMBOL_CATEGORIES.TEMPERATURE.includes(symbol)
+    SYMBOL_CATEGORIES.TEMPERATURE.includes(LAUNDRY_ICONS_NAMES.indexOf(symbol))
   );
 
   if (tempSymbols.length === 0) return 40; // domyślna temperatura
@@ -48,12 +49,12 @@ export const hasCareTags = (careSymbols) => {
 
 // Funkcja do generowania instrukcji prania
 export function getWashInstructions(clothes, careSymbolOptions) {
-  const allSymbols = clothes.flatMap((item) => item.careSymbols || []);
+  const allSymbols = clothes.flatMap((item) => (item.pictogramIds || []).map((id) => LAUNDRY_ICONS_NAMES[id]));
   const uniqueSymbols = [...new Set(allSymbols)];
 
   const instructions = {
     temperature:
-      getWashTemperature(clothes[0]?.careSymbols, careSymbolOptions) || 40,
+      getWashTemperature(clothes[0]?.pictogramIds, careSymbolOptions) || 40,
     symbols: uniqueSymbols,
     warnings: [],
   };
