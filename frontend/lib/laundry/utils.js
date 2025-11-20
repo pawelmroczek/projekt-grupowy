@@ -7,9 +7,9 @@ import { LAUNDRY_ICONS_NAMES } from "../../assets/constants/laundry_icons/laundr
  * @returns {string} color group
  */
 export const getColorGroup = (color) => {
-  const biale = ["Biały"];
-  const ciemne = ["black", "Granatowy", "Bordowy"];
-  const jasne = ["Beżowy", "Błękitny", "Jasnoniebieski", "gray"];
+  const biale = ["white"];
+  const ciemne = ["black", "brown", "navy"];
+  const jasne = ["beige", "Błękitny", "light gray", "gray"];
   if (biale.includes(color)) return "białe";
   if (ciemne.includes(color)) return "ciemne";
   if (jasne.includes(color)) return "jasne";

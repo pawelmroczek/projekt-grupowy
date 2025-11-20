@@ -1,12 +1,13 @@
 import { View, Text, TouchableOpacity, Modal, ScrollView, FlatList, StyleSheet, Image } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
-import { WandSparkles, X } from "lucide-react-native";
+import { WandSparkles, X, Palette } from "lucide-react-native";
 import { router } from "expo-router";
 import { getClothes } from "../../../../lib/clothes/clothes";
 import { TokenContext } from "../../../../lib/TokenContext";
 import { planOutfit } from "../../../../lib/outfits/planOutfit";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../../../assets/constants/types/types";
 import VerticalSelector from "../../../common/VerticalSelector";
+import ColorPalettes from "../ColorPalettes"
 
 export default function SmartOutfitsSettings({visible, onClose}) {
 
@@ -27,6 +28,10 @@ export default function SmartOutfitsSettings({visible, onClose}) {
 
     const { token } = useContext(TokenContext);
     const {clothes, setClothes} = useContext(TokenContext);
+
+    const [colorPalettes, setColorPalettes] = useState([]);
+
+    const [paletteModalVisible, setPaletteModalVisible] = useState(false);
 
 
     useEffect(() => {
@@ -159,7 +164,9 @@ export default function SmartOutfitsSettings({visible, onClose}) {
       );
 
     const createOutfit = async () => {
-      const result = planOutfit(clothes, pickedClothes, minTemp, maxTemp, takeFriends, takeHomies, isHat, isClean, isOutwear);
+      const cleanedPalettes = colorPalettes.filter(palette => palette.length > 0);
+      setColorPalettes(cleanedPalettes);
+      const result = planOutfit(clothes, pickedClothes, minTemp, maxTemp, takeFriends, takeHomies, isHat, isClean, isOutwear, cleanedPalettes);
       console.log(result);
       router.replace({ pathname: "/smartOutfitOffer", params: { outfitIds: JSON.stringify(result) }});
     }
@@ -268,6 +275,30 @@ export default function SmartOutfitsSettings({visible, onClose}) {
                     />
                   </View>
                 </Modal>
+
+                <View className="flex-row items-center justify-between py-3 border-b border-gray-100 h-24">
+                  <View className="flex-1">
+                    <Text className="font-pmedium text-gray-800">Wybierz kolor</Text>
+                    <Text className="text-sm text-gray-600 mt-1">
+                      Dodaj lub wybierz zestawy kolorów dla stylizacji.
+                    </Text>
+                  </View>
+
+                  <TouchableOpacity
+                    className="flex-row items-center justify-center"
+                    onPress={() => setPaletteModalVisible(true)}
+                  >
+                    <Palette size={32} />
+                  </TouchableOpacity>
+                </View>
+
+                <ColorPalettes
+                  paletteModalVisible={paletteModalVisible}
+                  setPaletteModalVisible={setPaletteModalVisible}
+                  colorPalettes={colorPalettes}
+                  setColorPalettes={setColorPalettes}
+                  pickedHex={pickedClothes ? pickedClothes.colorHex : null}
+                ></ColorPalettes>
 
                 <NumberInput
                     title="Minimalna temperatura"

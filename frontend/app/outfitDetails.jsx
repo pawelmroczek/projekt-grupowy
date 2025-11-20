@@ -24,18 +24,21 @@ const outfitDetails = () => {
   const {outfits, setOutfits} = useContext(TokenContext);
 
   const handleDelete = async (id) => {
-    console.log("Usuwam outfit o id:", id);
     const serverresponse = await outfitDeleting(id, token);
     const outfitsData = await fetchOutfits(token);
     setOutfits(outfitsData);
     router.replace("/wardobe");
   };
 
+  const clothesIds = typeof outfit.clothesIds === "string"
+  ? outfit.clothesIds.split(",").map(Number)
+  : outfit.clothesIds;
+
   const outfitClothes = clothes.filter((cloth) =>
-    outfit.clothesIds?.includes(cloth.id)
+    clothesIds?.includes(cloth.id)
   );
 
-  console.log("Outfit clothes:", outfitClothes);
+  console.log("Outfit clothes:", clothesIds);
 
  const dictionary = {
      "Nakrycie głowy": clothingTypeOptions
