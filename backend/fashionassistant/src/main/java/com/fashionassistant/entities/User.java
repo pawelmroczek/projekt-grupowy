@@ -59,6 +59,8 @@ public class User implements UserDetails {
     private List<TradeOffer> receivedTrades;
     @OneToMany(mappedBy = "loanUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Clothes> loanClothes;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Avatar avatar;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
