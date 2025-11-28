@@ -166,7 +166,7 @@ export default function SmartOutfitsSettings({visible, onClose}) {
     const createOutfit = async () => {
       const cleanedPalettes = colorPalettes.filter(palette => palette.length > 0);
       setColorPalettes(cleanedPalettes);
-      const result = planOutfit(clothes, pickedClothes, minTemp, maxTemp, takeFriends, takeHomies, isHat, isClean, isOutwear, cleanedPalettes);
+      const result = await planOutfit(clothes, pickedClothes, minTemp, maxTemp, takeFriends, takeHomies, isHat, isClean, isOutwear, cleanedPalettes, token);
       console.log(result);
       router.replace({ pathname: "/smartOutfitOffer", params: { outfitIds: JSON.stringify(result) }});
     }

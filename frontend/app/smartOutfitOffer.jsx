@@ -19,7 +19,7 @@ const smartOutfitOffer = () => {
 
   const params = useLocalSearchParams();
   const outfitObj = params?.outfitIds ? JSON.parse(params.outfitIds) : null;
-  
+
   const outfitIds = outfitObj?.ids ?? [];
 
 
@@ -29,6 +29,8 @@ const smartOutfitOffer = () => {
 
   
   const [modalVisible, setModalVisible] = useState(false);
+
+  //ENDPOINT do pon=bierania ubrania o id od użytkownika o id
 
   const outfitClothes = clothes.filter((cloth) =>
     outfitIds?.includes(cloth.id)

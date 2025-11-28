@@ -34,11 +34,8 @@ const Wardrobe = () => {
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
 
-  console.log(clothes);
-
   const filteredClothes = useMemo(() => {
     console.log("Filtering clothes...");
-    console.log(clothes);
     let result = clothes;
     result = selectedCategory ? result.filter((item) => item.type === selectedCategory) : result;
     result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));

@@ -133,10 +133,6 @@ export default function index() {
       name: imageName,
       type: imageType,
     });
-    console.log("Dane formularza:");
-    console.log(imageUri);
-    console.log(imageName);
-    console.log(imageType);
     formData.append("size", selectedSize);
     formData.append("color", selectedColor);
     formData.append("colorHex", selectedColorHex);
@@ -152,21 +148,14 @@ export default function index() {
       }
     });
 
-    console.log(formData.get("file").uri);
-    console.log(formData.get("file").name);
-    console.log(formData.get("file").type);
-    //console.log(editing);
     if(editing){
       formData.append("id", params.id);
-      //console.log("Wysyłam formularz");
       const serverresponse = await clothesEditing(formData, token);
       const clothesData = await getClothes(token);
       setClothes(clothesData);
       router.back();
     }
     else{
-      //console.log("Wysyłam formularz");
-      console.log(formData);
       const serverresponse = await clothesSending(formData, token);
       const clothesData = await getClothes(token);
       setClothes(clothesData);
@@ -283,7 +272,6 @@ export default function index() {
               <TouchableOpacity
                 disabled={addButtonDisabled}
                 onPress={() => {
-                  //console.log("submit");
                   setAddButtonDisabled(true);
                   handleSubmit();
                 }}
