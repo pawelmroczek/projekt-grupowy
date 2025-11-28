@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -31,6 +32,8 @@ public class TradeOffer {
     private TradeOfferType type;
     @Column(name = "loan_finish_date")
     private LocalDate loanFinishDate;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
     @ManyToMany
     @JoinTable(
             name = "trade_from_user_clothes",
