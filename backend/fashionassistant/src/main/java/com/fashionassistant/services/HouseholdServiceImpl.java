@@ -24,7 +24,7 @@ public class HouseholdServiceImpl implements HouseholdService {
         Household household = householdRepository.findById(currentUser.getHousehold().getId())
                 .orElseThrow(() -> new NotFoundException("Household not found"));
         List<UserFriendGet> usersFromHousehold = household.getUsers().stream()
-                .map(user -> new UserFriendGet(user.getId(), user.getUsername()))
+                .map(user -> new UserFriendGet(user.getId(), user.getUsername(), user.getAvatar().getUrl()))
                 .toList();
         return usersFromHousehold;
     }

@@ -23,7 +23,8 @@ public class FriendServiceImpl implements FriendService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
         Set<User> friends = currentUser.getFriends();
         List<UserFriendGet> friendsGet = friends.stream()
-                .map(friend -> new UserFriendGet(friend.getId(), friend.getUsername()))
+                .map(friend -> new UserFriendGet(friend.getId(), friend.getUsername(),
+                        friend.getAvatar() != null ? friend.getAvatar().getUrl() : null))
                 .toList();
         return friendsGet;
     }
