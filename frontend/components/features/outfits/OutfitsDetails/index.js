@@ -2,7 +2,6 @@ import { View, Text, Image } from "react-native";
 import React from "react";
 
 export default function OutfitDetailsTile({ clothes, category }) {
-  console.log("OutfitDetailsTile clothes:", clothes);
 
   return (
     <View className="bg-white m-2 p-3 shadow-md">

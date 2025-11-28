@@ -40,8 +40,6 @@ const OutfitsPage = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   
-  console.log("Outfits:", outfits);
-
   
   const [filteredOutfits, setFilteredOutfits] = useState([]);
 
