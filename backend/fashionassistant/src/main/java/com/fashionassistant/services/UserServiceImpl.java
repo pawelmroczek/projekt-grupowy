@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
                 "Fashion Buddy email verification",
                 "<p>Click the link below to activate your account:</p>" +
                         "<p><a href=\"" + verificationUrl + "\">Activate Account</a></p>");
-        return new UserFriendGet(createdUser.getId(), createdUser.getUsername());
+        return new UserFriendGet(createdUser.getId(), createdUser.getUsername(), createdUser.getAvatar().getUrl());
     }
 
     @Override
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
             if (invitationsCount != 0) {
                 return;
             }
-            usersGet.add(new UserFriendGet(user.getId(), user.getUsername()));
+            usersGet.add(new UserFriendGet(user.getId(), user.getUsername(), user.getAvatar().getUrl()));
         });
         return usersGet;
     }
