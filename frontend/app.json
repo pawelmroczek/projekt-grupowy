@@ -3,11 +3,12 @@
     "name": "projekt-grupowy",
     "scheme": "projekt-grupowy",
     "slug": "projekt-grupowy",
+    "owner": "pawel_mroczek",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -31,13 +32,26 @@
     },
     "plugins": [
       "expo-router",
-      
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/Inter-Black.otf"]
+          "fonts": [
+            "./assets/fonts/Inter-Black.otf"
+          ]
         }
       ]
-    ]
+    ],
+    "updates": {
+      "url": "https://u.expo.dev/1e8c7ec1-ca05-4263-9139-5fdafd1b0314"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "1e8c7ec1-ca05-4263-9139-5fdafd1b0314"
+      }
+    }
   }
 }
