@@ -45,10 +45,10 @@ public class UserController {
         userService.verify(token);
         String successHtml = """
             <html>
-                <head><title>Account Verified</title></head>
+                <head><title>Weryfikacja konta</title></head>
                 <body style="font-family: Arial; text-align: center; margin-top: 50px;">
-                    <h1>Your account has been successfully activated!</h1>
-                    <p>You can now log in to Fashion Buddy.</p>
+                    <h1>Twoje konto zostało pomyślnie zweryfikowane!</h1>
+                    <p>Możesz zalogować się do Fashion Buddy.</p>
                 </body>
             </html>
         """;

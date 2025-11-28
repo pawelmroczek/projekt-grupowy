@@ -63,9 +63,9 @@ public class UserServiceImpl implements UserService {
         verificationTokenRepository.save(verificationToken);
         String verificationUrl = "http://185.25.150.139:8080/fashion/users/verify/" + token;
         emailService.sendVerificationEmail(user.getEmail(),
-                "Fashion Buddy email verification",
-                "<p>Click the link below to activate your account:</p>" +
-                        "<p><a href=\"" + verificationUrl + "\">Activate Account</a></p>");
+                "Fashion Buddy potwierdzenie maila",
+                "<p>Kliknij link poniżej, aby aktywować konto:</p>" +
+                        "<p><a href=\"" + verificationUrl + "\">Aktywuj konto</a></p>");
         return new UserFriendGet(createdUser.getId(), createdUser.getUsername());
     }
 
