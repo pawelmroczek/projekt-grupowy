@@ -21,7 +21,6 @@ export default function Index() {
 
   console.log("Clothes", clothes);
 
-  const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
   const dictionary = {
     "Nakrycie głowy": clothingTypeOptions
       .filter(item => item.type === "HAT")

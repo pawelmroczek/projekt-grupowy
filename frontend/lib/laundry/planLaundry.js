@@ -1,10 +1,10 @@
 import { SYMBOL_CATEGORIES, getSymbolDescription } from "../careSymbols.js";
 import {
-  getColorGroup,
   getWashInstructions,
   getWashTemperature,
   hasCareTags,
 } from "./utils.js";
+import { getColorGroup } from "../../assets/constants/colors/colors.js";
 import { LAUNDRY_ICONS_NAMES } from "../../assets/constants/laundry_icons/laundry_icons.js";
 
 const planLaundry = (allClothes, laundryHistory, outfits, options) => {

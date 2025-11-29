@@ -1,6 +1,5 @@
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { colorsTypes } from "../../../../../lib/colors";
-;
+import { colorsTypes } from "../../../../../assets/constants/colors/colors";
 
 const ColorSelector = ({selectColor, setSelectededColor}) => {
 

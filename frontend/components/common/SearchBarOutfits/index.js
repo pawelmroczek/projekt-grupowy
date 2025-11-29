@@ -12,9 +12,10 @@ const SearchBarOutfits = ({
   selectedCategory,
   setSelectedCategory,
   filters,
+  searchText,
+  setSearchText
 }) => {
   const [searchMode, setSearchMode] = useState(false);
-  const [searchText, setSearchText] = useState("");
 
   return (
     <SafeAreaView style={{ backgroundColor: "white" }}>

@@ -17,7 +17,7 @@ import { toggleClean } from "../../lib/clothes/clothes";
 import { getClothes, getClothesHousehold } from "../../lib/clothes/clothes";
 import { addLaundry } from "../../lib/laundry/addLaundry";
 import CareSymbolsDisplay from "../../components/features/laundry/CareSymbolsDisplay";
-import { getColorFromGroup } from "../../lib/colors";
+import { getColorFromGroup } from "../../assets/constants/colors/colors";
 import { getSymbolDescription } from "../../lib/careSymbols";
 import { TokenContext } from "../../lib/TokenContext";
 import useDirtyClothes from "../../lib/useDirtyClothes";

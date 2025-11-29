@@ -19,9 +19,10 @@ import { useFocusEffect } from "@react-navigation/core";
 import { getClothes, toggleClean } from "../../lib/clothes/clothes";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
 import { TokenContext } from "../../lib/TokenContext";
+import { colorsTypes, getColorGroup } from "../../assets/constants/colors/colors";
+
 
 export default function index() {
-  const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
 
   const [filteredClothes, setFilteredClothes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -67,13 +68,16 @@ export default function index() {
     if (clothes) {
       let filtered = clothes.filter((item) => item.clean);
 
-      if (selectedCategory && selectedCategory !== "wszystkie") {
+      if (selectedCategory) {
         filtered = filtered.filter((item) => item.type === selectedCategory);
       }
 
-      if (selectedColor && selectedColor !== "wszystkie") {
-        filtered = filtered.filter((item) => item.color === selectedColor);
+      if (selectedColor) {
+        filtered = filtered.filter(
+            item => getColorGroup(item.color) === selectedColor
+        );
       }
+
 
       setFilteredClothes(filtered);
     }
@@ -113,7 +117,7 @@ export default function index() {
           <View className="items-start mx-auto flex  justify-center w-full rounded-lg ">
             <Text className="text-lg font-pmedium ml-2">Kolor</Text>
             <VerticalSelector
-              options={colors}
+              options={colorsTypes}
               setValue={setSelectedColor}
               value={selectedColor}
             />

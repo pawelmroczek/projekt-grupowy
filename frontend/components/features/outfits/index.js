@@ -54,7 +54,6 @@ const OutfitsPage = () => {
 
   useEffect(() => {
     let result = outfits;
-
     if (selectedCategory) {
       result = result.filter(outfit => outfit.type === selectedCategory);
     }
