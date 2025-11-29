@@ -40,7 +40,8 @@ const OutfitsPage = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   
-  
+  const [searchText, setSearchText] = useState("");
+
   const [filteredOutfits, setFilteredOutfits] = useState([]);
 
   useEffect(() => {
@@ -52,19 +53,23 @@ const OutfitsPage = () => {
   }, [token]);
 
   useEffect(() => {
+    let result = outfits;
+
     if (selectedCategory) {
-      const filtered = outfits.filter(
-        (outfit) => outfit.type === selectedCategory
-      );
-      setFilteredOutfits(filtered);
-    } else {
-      setFilteredOutfits(outfits);
+      result = result.filter(outfit => outfit.type === selectedCategory);
     }
-  }, [selectedCategory, outfits]);
+
+    if (searchText) {
+        result = result.filter(item =>
+          item.name.toLowerCase().includes(searchText.toLowerCase())
+        );
+    }
+    setFilteredOutfits(result);
+  }, [selectedCategory, outfits, searchText]);
 
   const renderItem = ({ item: outfit }) => {
-    const items = outfit?.clothesIds.map((id) => {
-      const item = clothes.find((cloth) => cloth.id === id);
+    const items = outfit?.clothes.map((c) => {
+      const item = clothes.find((cloth) => cloth.id === c.id);
       return item ? { ...item, outfit } : null;
     });
 
@@ -76,7 +81,7 @@ const OutfitsPage = () => {
             pathname: "/outfitDetails",
             params: {
               name: outfit.name,
-              clothesIds: outfit.clothesIds,
+              clothesIds: outfit.clothes.map((c) => c.id).join(","),
               id: outfit.id,
               type: outfit.type,
             },
@@ -110,6 +115,8 @@ const OutfitsPage = () => {
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           filters={filters}
+          searchText={searchText}
+          setSearchText={setSearchText}
         />
         <View className="flex-1">
           {filteredOutfits.length > 0 ? (

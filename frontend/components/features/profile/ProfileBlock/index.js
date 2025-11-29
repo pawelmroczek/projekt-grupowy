@@ -4,32 +4,43 @@ import React from "react";
 import { router } from "expo-router";
 import { getUserInfo } from "../../../../lib/friends/friends";
 import { TokenContext } from "../../../../lib/TokenContext";
-
-
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function ProfileBlock() {
 
     const [userName, setUserName] = useState("User");
+    const [avatarUrl, setAvatarUrl] = useState(null);
     
     const { token, setToken } = useContext(TokenContext);
 
-    useEffect(() => {
+    useFocusEffect(
+        React.useCallback(() => {
         const fetchData = async () => {
-        try {
-            const response = await getUserInfo(token);
-            setUserName(response.username);
-        } catch (error) {
-            console.error("Błąd przy pobieraniu danych:", error);
-        }
-    };
-
-    fetchData();
-  }, []);
+            try {
+                const response = await getUserInfo(token);
+                setUserName(response.username);
+                setAvatarUrl(response.avatar);
+            } catch (error) {
+                console.error("Błąd przy pobieraniu danych:", error);
+            }
+        };
+        fetchData();
+    }, []));
 
     return (
-        <TouchableOpacity className="flex-row justify-between items-center bg-white p-4 rounded-xl m-2" onPress={() => {router.push('profile/profileDetails')}}>
-            <View className="w-16 h-16 bg-gray-300 rounded-full overflow-hidden">
-                <Image source={{ uri: 'https://via.placeholder.com/100' }}/>
+        <TouchableOpacity 
+            className="flex-row justify-between items-center bg-white p-4 rounded-xl m-2" 
+            onPress={() => {router.push({
+                        pathname: "profile/profileDetails",
+                        params: { userName: userName, avatarUrl: avatarUrl}
+                    })}}
+        >
+            <View className="w-16 h-16 bg-gray-100 rounded-full overflow-hidden">
+                <Image 
+                    source={avatarUrl ? {uri: avatarUrl} : require("../../../../assets/images/profile/profilePlaceholder.png")}
+                    className="w-full h-full"
+                    resizeMode="cover" 
+                />
             </View>
             <View className="flex-1 mx-4">
                 <Text className="text-xl font-bold">Cześć, {userName}!</Text>

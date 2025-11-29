@@ -106,6 +106,13 @@ const invites = () => {
 
   const renderInviteItem = ({ item }) => (
     <View className="flex-row items-center justify-between p-3 bg-white rounded-xl border border-gray-200 mb-2">
+      <View className="w-16 h-16 bg-gray-100 rounded-full overflow-hidden">
+        <Image
+          source={item.fromUserAvatar ? {uri: item.fromUserAvatar} : require("../../assets/images/profile/profilePlaceholder.png")}
+          className="w-full h-full"
+          resizeMode="cover" 
+        />
+      </View>                
       <View>
         <Text className="text-base font-semibold"> {item.fromUsername}</Text>
       </View>

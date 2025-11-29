@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, Modal, Pressable } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Modal, Pressable, Image } from "react-native";
 import React, { useState, useContext } from "react";
 import { CircleUser, UserX } from "lucide-react-native";
 
@@ -46,8 +46,15 @@ export default function VerticalList({friends = [],  household = []}) {
           const isInHousehold = householdIds.includes(friend.id);
 
           const content = (
-            <View className="p-4 items-center">
-              <CircleUser size={30} />
+            <View className="px-4 py-2 items-center">
+              <View className="w-12 h-12 bg-gray-100 rounded-full overflow-hidden">
+                <Image 
+                  source={friend.avatar ? {uri: friend.avatar} : require("../../../../../assets/images/profile/profilePlaceholder.png")}
+                  className="w-full h-full"
+                  resizeMode="cover" 
+                />
+              </View>
+                
               <Text className="text-lg">{friend.username}</Text>
             </View>
           );

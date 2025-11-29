@@ -19,12 +19,13 @@ export default function FriendsList() {
       if(!token) return;
       const fetchFriends = async () => {
         const friendsData = await getFriendsList(token);
+        friendsData.sort((a, b) => a.username.localeCompare(b.username));
         setFriends(friendsData);
       };
 
       const fetchHomies = async () => {
         const homiesData = await getHomiesList(token);
-        console.log("Homies data:", homiesData);
+        homiesData.sort((a, b) => a.username.localeCompare(b.username));
         setHomies(homiesData);
       };
 

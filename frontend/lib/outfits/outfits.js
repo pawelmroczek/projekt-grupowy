@@ -1,4 +1,4 @@
-import { ipAddress } from "../ipAddress";
+import { ipAddress, ipAddressNginx } from "../ipAddress";
 
 
 export const outfitsSending = async (formData, token) => {
@@ -39,6 +39,12 @@ export const fetchOutfits = async (token) => {
     }
 
     const data = await response.json();
+    data.forEach((outfit) => {
+      outfit.clothes.forEach((element) => {
+        const parts = element.picture.split("images-server:80");
+        element.picture = ipAddressNginx + parts[1];
+      });
+    });
     return data;
   } catch (error) {
     console.error("Błąd podczas pobierania strojów:", error);

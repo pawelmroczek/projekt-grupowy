@@ -28,6 +28,9 @@ const Wardrobe = () => {
   const filters = useMemo(() => rawFilters, [JSON.stringify(rawFilters)]);
 
   const [displayMode, setDisplayMode] = useState(false);
+
+  const [searchText, setSearchText] = useState("");
+
   const [selectedCategory, setSelectedCategory] = useState(null);
   //const [clothes, setClothes] = useState([]);
   
@@ -35,34 +38,40 @@ const Wardrobe = () => {
   const { clothes, setClothes } = useContext(TokenContext);
 
   const filteredClothes = useMemo(() => {
-    console.log("Filtering clothes...");
     let result = clothes;
     result = selectedCategory ? result.filter((item) => item.type === selectedCategory) : result;
     result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  
+
+    if (searchText) {
+      result = result.filter(item =>
+        item.name.toLowerCase().includes(searchText.toLowerCase())
+      );
+    }
+
     if (Object.keys(filters).length === 0) {
       return result;
     }
   
-    result = filters.cleanliness === "all" 
+    result = filters.cleanliness === "wszystkie" 
       ? result 
-      : result.filter((item) => item.clean === (filters.cleanliness === "clean"));
+      : result.filter((item) => item.clean === (filters.cleanliness === "czyste"));
   
     result = filters.size.length > 0 ? result.filter((item) => filters.size.includes(item.size)) : result;
-  
+    result = filters.category ? result.filter((item) => item.category.toString() === filters.category.toString()) : result;
+
     if (filters.sortBy) {
       result = [...result]; // Tworzymy kopię, aby uniknąć mutacji
-      if (filters.sortBy === "Newest") {
+      if (filters.sortBy === "Od najnowszych") {
         result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      } else if (filters.sortBy === "Oldest") {
+      } else if (filters.sortBy === "Od najstarszych") {
         result.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-      } else if (filters.sortBy === "Alphabetically") {
+      } else if (filters.sortBy === "Alfabetycznie") {
         result.sort((a, b) => a.name.localeCompare(b.name));
       }
     }
-  
+
     return result;
-  }, [filters, clothes, selectedCategory]);
+  }, [filters, clothes, selectedCategory, searchText]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -81,7 +90,7 @@ const Wardrobe = () => {
 
   return (
     <View className="flex-1 bg-gray-100">
-      <SearchBarWardrobe displayMode={displayMode} onDisplayPress={setDisplayMode} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} filters={filters}/>
+      <SearchBarWardrobe displayMode={displayMode} onDisplayPress={setDisplayMode} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} filters={filters} searchText={searchText} setSearchText={setSearchText}/>
       <FlatList
         data={filteredClothes}
         key={displayMode ? "single" : "double"}

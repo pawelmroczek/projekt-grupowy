@@ -17,28 +17,12 @@ import OutfitDetailsTile from "../components/features/outfits/OutfitsDetails";
 import { fetchOutfits, outfitDeleting } from "../lib/outfits/outfits";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../assets/constants/types/types";
 
-const outfitDetails = () => {
+const publicOutfitDetails = () => {
   const outfit = useLocalSearchParams();
-  const { token, setToken } = useContext(TokenContext);
-  const { clothes, setClothes } = useContext(TokenContext);
-  const {outfits, setOutfits} = useContext(TokenContext);
+ 
+  const outfitClothes = outfit.clothes ? JSON.parse(outfit.clothes) : [];
 
-  const handleDelete = async (id) => {
-    const serverresponse = await outfitDeleting(id, token);
-    const outfitsData = await fetchOutfits(token);
-    setOutfits(outfitsData);
-    router.replace("/wardrobe");
-  };
-
-  const clothesIds = typeof outfit.clothesIds === "string"
-  ? outfit.clothesIds.split(",").map(Number)
-  : outfit.clothesIds;
-
-  const outfitClothes = clothes.filter((cloth) =>
-    clothesIds?.includes(cloth.id)
-  );
-
-  console.log("Outfit clothes:", clothesIds);
+  console.log("Outfit clothes:", outfitClothes);
 
  const dictionary = {
      "Nakrycie głowy": clothingTypeOptions
@@ -97,26 +81,15 @@ const outfitDetails = () => {
               clothes={category.clothes}
             />
           ))}
-          <View className="flex mt-8 ">
+          <View className="flex mt-8 mb-10">
             <View className="bg-white  rounded-t-3xl p-5 flex">
               <Text className="text-2xl font-bold mb-2">{outfit.name}</Text>
               <Text className="text-base text-gray-600">
                 Typ: {outfit.type}
               </Text>
-              <View className="items-center space-y-3 py-3.5 rounded-xl w-full flex justify-center bg-white-100 pb-40">
-                <TouchableOpacity
-                  onPress={() => {
-                    handleDelete(outfit.id);
-                  }}
-                  className="px-4 py-2 w-full flex items-center bg-red-500 rounded-lg"
-                >
-                  <Text className="text-white text-xl font-pregular">
-                    {"Usuń"}
-                  </Text>
-                </TouchableOpacity>
-              </View>
             </View>
           </View>
+          
         </ScrollView>
       </View>
     </>
@@ -133,4 +106,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default outfitDetails;
+export default publicOutfitDetails;

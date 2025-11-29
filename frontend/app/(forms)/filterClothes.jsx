@@ -5,23 +5,41 @@ import { X } from "lucide-react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";  
 import { SafeAreaView } from "react-native-safe-area-context";
+import { CLOTHING_SIZES, SHOES_SIZES, ACCESSORY_SIZES } from "../../assets/constants/sizes/sizes";
+
 
 const FilterClothes = () => {
     const params = useLocalSearchParams(); // Pobieramy parametry z routera
 
     // Inicjalizujemy filters na podstawie parametrów lub domyślnych wartości
     const [filters, setFilters] = useState({
-        sortBy: params.sortBy || "Newest",
+        sortBy: params.sortBy || "Od najnowszych",
+        category: params.category ? Number(params.category) : null,
         size: params.size ? params.size.split(",") : [],
-        cleanliness: params.cleanliness || "all",
+        cleanliness: params.cleanliness || "wszystkie",
     });
+
+    
+    const [sizeOptions, setSizeOptions] = useState( filters.category === 2 ? ACCESSORY_SIZES : filters.category === 1 ? SHOES_SIZES : CLOTHING_SIZES);
     
     useEffect(() => {  
         console.log(filters);
     }, [filters]);
 
+    useEffect(() => {
+        setSizeOptions( filters.category === 2 ? ACCESSORY_SIZES : filters.category === 1 ? SHOES_SIZES : CLOTHING_SIZES);
+    }, [filters.category]);
+
     const toggleSort = (option) => {
         setFilters(prev => ({ ...prev, sortBy: option }));
+    };
+
+    const toggleCategory = (option) => {
+        if(!(filters.category === option && filters.category === 0) && !(filters.category === null && option === 0))
+        {
+            setFilters(prev => ({ ...prev, size: [] }));
+        }
+        setFilters(prev => ({ ...prev, category: prev.category === option ? null : option }));
     };
 
     const toggleSize = (option) => {
@@ -42,21 +60,21 @@ const FilterClothes = () => {
     };
 
     const resetFilters = () => {
-        setFilters({ sortBy: "Newest", size: [], cleanliness: "all" });
+        setFilters({ sortBy: "Od najnowszych", size: [], cleanliness: "wszystkie" });
         //router.replace("/wardrobe");
     };
 
     return (
         <SafeAreaView className="flex-1 bg-white p-6">
             <View className="flex-row justify-between items-center mb-6">
-                <Text className="text-lg font-bold">Filter Options</Text>
+                <Text className="text-lg font-bold">Opcje filtrów</Text>
                 <TouchableOpacity onPress={() => router.replace("/wardrobe")}> 
                     <X className="text-black" size={30} />
                 </TouchableOpacity>
             </View>
-            <Text className="text-sm text-gray-500 mb-2">Sort by:</Text>
+            <Text className="text-sm text-gray-500 mb-2">Sortuj:</Text>
             <View className="flex-row justify-between mb-4">
-                {['Newest', 'Oldest', 'Alphabetically'].map(option => (
+                {['Od najnowszych', 'Od najstarszych', 'Alfabetycznie'].map(option => (
                     <TouchableOpacity 
                         key={option}
                         className={`p-2 rounded-full ${filters.sortBy === option ? 'bg-black text-white' : 'bg-gray-200'}`}
@@ -66,9 +84,21 @@ const FilterClothes = () => {
                     </TouchableOpacity>
                 ))}
             </View>
-            <Text className="text-sm text-gray-500 mb-2">Size:</Text>
+            <Text className="text-sm text-gray-500 mb-2">Typ:</Text>
             <View className="flex-row justify-between mb-4">
-                {['XS', 'S', 'M', 'L', 'XL', 'XXL' ].map(option => (
+                {['Ubrania', 'Buty', 'Akcesoria'].map((option, index) => (
+                    <TouchableOpacity 
+                        key={option}
+                        className={`p-2 rounded-full ${filters.category === index ? 'bg-black text-white' : 'bg-gray-200'}`}
+                        onPress={() => toggleCategory(index)}
+                    >
+                        <Text className={`${filters.category === index ? 'text-white' : 'text-black'}`}>{option}</Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
+            <Text className="text-sm text-gray-500 mb-2">Rozmiar:</Text>
+            <View className="flex-row justify-between mb-4">
+                {sizeOptions.map(option => (
                     <TouchableOpacity 
                         key={option}
                         className={`p-2 rounded-full ${filters.size.includes(option) ? 'bg-black text-white' : 'bg-gray-200'}`}
@@ -78,9 +108,9 @@ const FilterClothes = () => {
                     </TouchableOpacity>
                 ))}
             </View>
-            <Text className="text-sm text-gray-500 mb-2">Cleanliness:</Text>
+            <Text className="text-sm text-gray-500 mb-2">Czystość:</Text>
             <View className="flex-row justify-between mb-4">
-                {['all', 'clean', 'dirty'].map(option => (
+                {['wszystkie', 'czyste', 'brudne'].map(option => (
                     <TouchableOpacity 
                         key={option}
                         className={`p-2 rounded-full ${filters.cleanliness === option ? 'bg-black text-white' : 'bg-gray-200'}`}
@@ -94,13 +124,13 @@ const FilterClothes = () => {
                 onPress={applyFilters}
                 className="mt-6 p-3 bg-black rounded-full"
             >
-                <Text className="text-center text-white font-bold">Apply Filters</Text>
+                <Text className="text-center text-white font-bold">Zastosuj</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={resetFilters}
                 className="mt-6 p-3 bg-black rounded-full"
             >
-                <Text className="text-center text-white font-bold">Reset Filters</Text>
+                <Text className="text-center text-white font-bold">Resetuj</Text>
             </TouchableOpacity>
         </SafeAreaView>
     );

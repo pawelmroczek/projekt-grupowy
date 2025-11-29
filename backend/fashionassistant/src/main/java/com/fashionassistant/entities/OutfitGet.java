@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record OutfitGet(int id, String name, String type, LocalDate createdAt, Integer visible, String user,
-                        List<Clothes> clothes) {
+                        List<ClothesGet> clothes) {
 
     public OutfitGet(Outfit outfit) {
         this(outfit.getId(),
@@ -13,6 +13,8 @@ public record OutfitGet(int id, String name, String type, LocalDate createdAt, I
                 outfit.getCreatedAt(),
                 outfit.getVisible(),
                 outfit.getUser().getEmail(),
-                outfit.getClothes());
+                outfit.getClothes().stream()
+                        .map(ClothesGet::new)
+                        .toList());
     }
 }

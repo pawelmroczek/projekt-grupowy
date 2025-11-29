@@ -112,7 +112,7 @@ public class TradeOfferServiceImpl implements TradeOfferService {
     private void removeTradeOffers() {
         List<TradeOffer> tradeOffers = tradeOfferRepository.findAll();
         tradeOffers.forEach(tradeOffer -> {
-            LocalDateTime createdAt = tradeOffer.getCreatedAt().plusSeconds(10);
+            LocalDateTime createdAt = tradeOffer.getCreatedAt().plusDays(1);
             if (createdAt.isBefore(LocalDateTime.now())) {
                 tradeOffer.setFromUser(null);
                 tradeOffer.setToUser(null);

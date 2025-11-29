@@ -15,10 +15,8 @@ import { Search, LayoutGrid, SlidersHorizontal, X } from "lucide-react-native";
 import VerticalSelector from "../VerticalSelector";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../../assets/constants/types/types";
 
-const SearchBarWardrobe = ({ displayMode, onDisplayPress, selectedCategory, setSelectedCategory, filters }) => {
-  const [searchMode, setSearchMode] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  
+const SearchBarWardrobe = ({ displayMode, onDisplayPress, selectedCategory, setSelectedCategory, filters, searchText, setSearchText }) => {
+  const [searchMode, setSearchMode] = useState(false);  
 
 
   return (

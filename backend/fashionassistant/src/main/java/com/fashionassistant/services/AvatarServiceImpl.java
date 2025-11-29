@@ -3,6 +3,7 @@ package com.fashionassistant.services;
 import com.fashionassistant.entities.Avatar;
 import com.fashionassistant.entities.User;
 import com.fashionassistant.exceptions.BadRequestException;
+import com.fashionassistant.exceptions.NotFoundException;
 import com.fashionassistant.repositories.AvatarRepository;
 import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +30,11 @@ public class AvatarServiceImpl implements AvatarService {
     @Override
     public Avatar saveAvatar(MultipartFile file) {
         User currentUser = authService.getCurrentUser();
+        User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
-        Avatar avatar = avatarRepository.findByUserId(currentUser.getId()).orElse(new Avatar());
-        avatar.setUser(currentUser);
+        Avatar avatar = avatarRepository.findByUserId(user.getId()).orElse(new Avatar());
+        avatar.setUser(user);
 
         try {
             String fileName = saveFileToServer(file);
@@ -42,8 +45,8 @@ public class AvatarServiceImpl implements AvatarService {
         }
 
         Avatar saved = avatarRepository.saveAndFlush(avatar);
-        currentUser.setAvatar(saved);
-        userRepository.saveAndFlush(currentUser);
+        user.setAvatar(saved);
+        userRepository.save(user);
         return saved;
     }
 
@@ -51,10 +54,12 @@ public class AvatarServiceImpl implements AvatarService {
     @Override
     public void deleteCurrentUserAvatar() {
         User currentUser = authService.getCurrentUser();
-        Avatar avatar = avatarRepository.findByUserId(currentUser.getId())
+        User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        Avatar avatar = avatarRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new BadRequestException("Avatar not found"));
-        currentUser.setAvatar(null);
-        userRepository.saveAndFlush(currentUser);
+        user.setAvatar(null);
+        userRepository.save(user);
 
         try {
             deleteFileFromServer(avatar);

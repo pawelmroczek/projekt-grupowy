@@ -1,11 +1,10 @@
 import React, { use } from "react";
 import { useState, useContext } from "react";
-import { View, Text, TouchableOpacity, TextInput, FlatList} from "react-native";
+import { View, Text, TouchableOpacity, TextInput, FlatList, Image} from "react-native";
 import { Search } from "lucide-react-native";
 import { getUsers, iviteSending } from "../../lib/friends/friends";
 import { TokenContext } from "../../lib/TokenContext";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 
 
 
@@ -25,7 +24,8 @@ const findFriends = () => {
             const formattedUsers = usersData.map(user => ({
                 id: user.id,
                 username: user.username,
-                isFriend: user.friends
+                isFriend: user.friends,
+                avatar: user.avatar
             }));
             setUserList(formattedUsers);
             setLoading(false);
@@ -77,7 +77,14 @@ const findFriends = () => {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
                 <View className="flex-row items-center justify-between p-3 bg-white rounded-xl border border-gray-200 mb-2">
-                <View>
+                <View className="w-16 h-16 bg-gray-100 rounded-full overflow-hidden">
+                    <Image 
+                        source={item.avatar ? {uri: item.avatar} : require("../../assets/images/profile/profilePlaceholder.png")}
+                        className="w-full h-full"
+                        resizeMode="cover" 
+                    />
+                </View>
+                <View>    
                     <Text className="text-base font-semibold">{item.username}</Text>
                 </View>
                 <View className="flex-row items-center space-x-1">

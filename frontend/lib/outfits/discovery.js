@@ -18,7 +18,12 @@ export const fetchOutfitsFriends = async (token, page, size) => {
     }
 
     const data = await response.json();
-    console.log(data);
+    data.forEach((outfit) => {
+      outfit.clothes.forEach((element) => {
+        const parts = element.picture.split("images-server:80");
+        element.picture = ipAddressNginx + parts[1];
+      });
+    });
     return data;
   } catch (error) {
     console.error("Błąd podczas pobierania strojów:", error);
@@ -42,7 +47,14 @@ export const fetchOutfitsPublic = async (token, page, size) => {
       throw new Error(`HTTP status ${response.status}`);
     }
 
+    
     const data = await response.json();
+    data.forEach((outfit) => {
+      outfit.clothes.forEach((element) => {
+        const parts = element.picture.split("images-server:80");
+        element.picture = ipAddressNginx + parts[1];
+      });
+    });
     return data;
   } catch (error) {
     console.error("Błąd podczas pobierania strojów:", error);
