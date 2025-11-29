@@ -1,7 +1,6 @@
 import { ipAddress } from "../ipAddress";
 
 export const addLaundry = async (selectedClothes, token) => {
-  console.log("selectedClothes w addLaundry:", selectedClothes);
 
   try {
     const response = await fetch(ipAddress + "/fashion/laundries", {

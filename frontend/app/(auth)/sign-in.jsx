@@ -63,7 +63,6 @@ const SignIn = () => {
         setClothes(clothesData);
         router.replace("/discover");
       } else {
-        console.log("❌ Błąd:",data.message.message);
         setError(data.message.message);
       }
     }

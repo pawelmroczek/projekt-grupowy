@@ -5,9 +5,6 @@ const ColorSelector = ({selectColor, setSelectededColor}) => {
 
   const colors = colorsTypes;
 
-  console.log(selectColor);
-  console.log(setSelectededColor);
-
   return (
     <ScrollView
       horizontal

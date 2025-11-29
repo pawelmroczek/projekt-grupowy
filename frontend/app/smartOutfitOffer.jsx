@@ -69,8 +69,6 @@ const smartOutfitOffer = () => {
 
   const categorizedClothes = categorizeClothes(outfitClothes, dictionary);
 
-  console.log("Outfit Clothes:", JSON.stringify(outfitClothes));
-
   const handleSave = () => {
     setModalVisible(true);
   };

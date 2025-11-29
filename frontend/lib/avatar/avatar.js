@@ -16,7 +16,6 @@ export const uploadAvatar = async (token, image) => {
           },
           body: formData,
       });
-      console.log("Odpowiedź serwera:", response);
       if (!response.ok) {
           throw new Error(`HTTP status ${response.status}`);
       }

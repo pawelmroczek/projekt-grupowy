@@ -21,10 +21,6 @@ const FilterClothes = () => {
 
     
     const [sizeOptions, setSizeOptions] = useState( filters.category === 2 ? ACCESSORY_SIZES : filters.category === 1 ? SHOES_SIZES : CLOTHING_SIZES);
-    
-    useEffect(() => {  
-        console.log(filters);
-    }, [filters]);
 
     useEffect(() => {
         setSizeOptions( filters.category === 2 ? ACCESSORY_SIZES : filters.category === 1 ? SHOES_SIZES : CLOTHING_SIZES);

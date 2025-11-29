@@ -46,7 +46,6 @@ const invites = () => {
 
       // Pobierz oferty wymiany
       const offers = await fetchOffers(token);
-      console.log("Offers fetched:", JSON.stringify(offers));
       setTradeOffers(offers || []);
     } catch (error) {
       console.error("Błąd ładowania zaproszeń:", error);
@@ -142,8 +141,6 @@ const invites = () => {
   );
 
   const renderClothItem = (cloth) => {
-
-    console.log("Rendering cloth:", JSON.stringify(cloth));
 
     const parts = cloth.picture.split("images-server:80");
     const photo = ipAddressNginx + parts[1];

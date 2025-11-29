@@ -18,7 +18,6 @@ const ClassifyButton = ({ imageUri, imageType, imageName, predictedType, setPred
 
     const handlePress = async () => {
         
-        console.log(hex);
         setColor(simpleColorName(hex));
 
         /*

@@ -22,7 +22,6 @@ export const selectImageFromLibrary = async () => {
   catch(error)
   {
       alert("Error uploading image form library: " + error.message);
-      console.log("Error uploading image form library: " + error.message);
   }
 };
 
@@ -44,7 +43,6 @@ export const captureImage = async () => {
     catch(error)
     {
         alert("Error uploading image form camera: " + error.message);
-        console.log("Error uploading image form camera: " + error.message);
     }
     return null;
 };

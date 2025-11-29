@@ -41,7 +41,6 @@ const ModalBox = ({ modalVisible, setModalVisible, selectedItems, visible }) => 
       clothesIds: selectedItems.map((item) => item.id),
     };
 
-    console.log("Dane do wysłania:", dataToSend);
     const dataJson =  JSON.stringify(dataToSend);
     await outfitsSending(dataJson, token);
     const outfitsData = await fetchOutfits(token);

@@ -1,7 +1,5 @@
-import React, { useState, useContext } from "react";
 import {
   View,
-  Image,
   Text,
   TouchableOpacity,
   ScrollView,
@@ -9,20 +7,14 @@ import {
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 
-import { X, Pencil } from "lucide-react-native";
-import { clothesDeleting } from "../lib/clothes/clothes";
-import { TokenContext } from "../lib/TokenContext";
-import { getClothes } from "../lib/clothes/clothes";
+import { X } from "lucide-react-native";
 import OutfitDetailsTile from "../components/features/outfits/OutfitsDetails";
-import { fetchOutfits, outfitDeleting } from "../lib/outfits/outfits";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../assets/constants/types/types";
 
 const publicOutfitDetails = () => {
   const outfit = useLocalSearchParams();
  
   const outfitClothes = outfit.clothes ? JSON.parse(outfit.clothes) : [];
-
-  console.log("Outfit clothes:", outfitClothes);
 
  const dictionary = {
      "Nakrycie głowy": clothingTypeOptions

@@ -28,7 +28,6 @@ const TokenProvider = ({ children }) => {
     setClothes(clothesToSave || []);
   };
 
-  console.log("TokenContext clothes:", clothes);
 
   return (
     <TokenContext.Provider

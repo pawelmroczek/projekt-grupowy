@@ -1,4 +1,3 @@
-import React, { use } from "react";
 import { useState, useContext } from "react";
 import {
   View,
@@ -12,7 +11,6 @@ import { ArrowLeft, Search, UserSearch } from "lucide-react-native";
 import { getUsers, iviteSending } from "../../lib/friends/friends";
 import { TokenContext } from "../../lib/TokenContext";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { router } from "expo-router";
 import BackTitleBar from "../../components/common/BackTitleBar";
 
 const findFriends = () => {
@@ -24,7 +22,6 @@ const findFriends = () => {
   const handleSearch = async () => {
     setLoading(true);
     setUserList([]);
-    console.log(token);
     const usersData = await getUsers(token, username);
     if (usersData) {
       const formattedUsers = usersData.map((user) => ({
@@ -42,9 +39,6 @@ const findFriends = () => {
   };
 
   const inviteUser = async (id) => {
-    console.log("Zapraszanie użytkownika o ID:", id);
-    console.log("Token:", token);
-    console.log("Dane do wysłania:", { toUser: id, type: "FRIENDS" });
     const response = await iviteSending(token, id, "FRIENDS");
 
     setUserList((prevList) =>

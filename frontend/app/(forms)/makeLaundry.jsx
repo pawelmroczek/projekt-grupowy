@@ -48,7 +48,6 @@ const makeLaundry = () => {
         : allDirtyClothes;
     } else if (isSuggestedLaundry) {
       laundryData = JSON.parse(params.laundry);
-      console.log(laundryData);
       const clothesIds = laundryData.clothes.map((item) => item.id);
       dirtyClothes = allDirtyClothes.filter((item) =>
         clothesIds.includes(item.id)

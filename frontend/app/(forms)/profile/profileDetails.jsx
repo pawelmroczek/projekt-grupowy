@@ -54,7 +54,6 @@ const profileDetails = () => {
     if (fromCamera) {
       image = await captureImage();
     } else {
-      console.log("Wybieranie z galerii");
       image = await selectImageFromLibrary();
     }
 

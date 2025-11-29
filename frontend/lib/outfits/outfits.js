@@ -3,8 +3,6 @@ import { ipAddress, ipAddressNginx } from "../ipAddress";
 
 export const outfitsSending = async (formData, token) => {
     try {
-      console.log("Rozpoczynam wysyłanie...");
-      console.log("token:",token);
       const response = await fetch(ipAddress+"/fashion/outfits", {
           method: "POST",
           headers: {
@@ -13,7 +11,6 @@ export const outfitsSending = async (formData, token) => {
           },
           body: formData,
       });
-      console.log("Odpowiedź serwera:", response);
       if (!response.ok) {
           throw new Error(`HTTP status ${response.status}`);
       }

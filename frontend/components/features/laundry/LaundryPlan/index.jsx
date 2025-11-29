@@ -19,15 +19,7 @@ const LaundryPlan =({suggestLaundry, options, setOptions}) =>{
   const [expandedLoad, setExpandedLoad] = useState(null);
   const [settingsVisible, setSettingsVisible] = useState(false);
   
-
   const strictnessLevel = wichStrictnessIsActive(options);
-
-  
-
-
-  suggestLaundry.map(load=>{
-    console.log("washGroup",load.washGroup);
-  })
 
   const toggleExpanded = (index) => {
     setExpandedLoad(expandedLoad === index ? null : index);

@@ -4,7 +4,6 @@ import {
   Image,
   Text,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
   TextInput,
   Alert,
@@ -76,11 +75,6 @@ const BorrowClothes = () => {
     setIsLoading(true);
 
     try {
-      console.log("Wysyłanie prośby o pożyczenie:");
-      console.log("Ubranie:", targetCloth);
-      console.log("Okres:", borrowDays, "dni");
-      console.log("Data rozpoczęcia:", formatDate(startDate));
-      console.log("Data zwrotu:", formatDate(calculateReturnDate()));
 
       const response = await sendLoanRequest(
         {

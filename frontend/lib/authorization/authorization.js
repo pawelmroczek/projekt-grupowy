@@ -5,7 +5,6 @@ export const loginUser = async (email, password) => {
     email: email,
     password: password,
   };
-  console.log("logowanie");
 
   try {
     const data = await fetch(ipAddress+"/fashion/users/signIn", {

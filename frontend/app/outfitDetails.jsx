@@ -38,8 +38,6 @@ const outfitDetails = () => {
     clothesIds?.includes(cloth.id)
   );
 
-  console.log("Outfit clothes:", clothesIds);
-
  const dictionary = {
      "Nakrycie głowy": clothingTypeOptions
        .filter(item => item.type === "HAT")

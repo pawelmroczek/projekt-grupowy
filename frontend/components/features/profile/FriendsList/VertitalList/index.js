@@ -30,9 +30,7 @@ export default function VerticalList({
   };
 
   const invite = async () => {
-    console.log("Zapraszanie użytkownika:", selectedFriend.id);
     const response = await iviteSending(token, selectedFriend.id, "HOUSEHOLDS");
-    console.log("Zaproszenie wysłane:");
     setModalVisible(false);
     setSelectedFriend(null);
   };

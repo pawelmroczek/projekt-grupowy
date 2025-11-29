@@ -2,8 +2,6 @@ import { ipAddress, ipAddressNginx } from "../ipAddress.js";
 
 export const clothesSending = async (formData, token) => {
     try {
-      console.log("Rozpoczynam wysyłanie...");
-      console.log(token);
       const response = await fetch(ipAddress+"/fashion/clothes", {
           method: "POST",
           headers: {
@@ -12,7 +10,6 @@ export const clothesSending = async (formData, token) => {
           },
           body: formData,
       });
-      console.log("Odpowiedź serwera:", response);
       if (!response.ok) {
           throw new Error(`HTTP status ${response.status}`);
       }
@@ -48,7 +45,7 @@ export const clothesSending = async (formData, token) => {
   
   export const clothesEditing = async (formData, token) => {
     try {
-      console.log("Rozpoczynam edycję...");
+    
       const response = await fetch(ipAddress+"/fashion/clothes", {
           method: "PUT",
           headers: {
@@ -57,7 +54,6 @@ export const clothesSending = async (formData, token) => {
           },
           body: formData,
       });
-      console.log("Odpowiedź serwera:", response);
       if (!response.ok) {
           throw new Error(`HTTP status ${response.status}`);
       }
@@ -70,14 +66,13 @@ export const clothesSending = async (formData, token) => {
   
   export const clothesDeleting = async (id, token) => {
     try {
-      console.log("Rozpoczynam usuwanie...");
+
       const response = await fetch(ipAddress+"/fashion/clothes/" + id, {
           method: "DELETE",
           headers: {
               "Authentication": `Bearer ${token}`,
           }
       });
-      console.log("Odpowiedź serwera:", response);
       if (!response.ok) {
           throw new Error(`HTTP status ${response.status}`);
       }

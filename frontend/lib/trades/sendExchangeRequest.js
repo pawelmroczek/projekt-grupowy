@@ -1,7 +1,6 @@
 import { ipAddress } from "../ipAddress";
 
 export const sendExchangeRequest = async (exchangeRequestData, token) => {
-  console.log("exchangeRequestData w sendExchangeRequest:", exchangeRequestData);
 
   const dataToSend = {
     toUser: exchangeRequestData.toUserId,
@@ -10,8 +9,6 @@ export const sendExchangeRequest = async (exchangeRequestData, token) => {
     toUserClothesIds: exchangeRequestData.targetClothesIds, // ubrania które chcę otrzymać
     loanFinishDate: new Date().toISOString(), // Dodane pole loanFinishDate
   };
-
-  console.log("Data to send:", dataToSend);
 
   try {
     const response = await fetch(ipAddress + "/fashion/trade-offers/send", {

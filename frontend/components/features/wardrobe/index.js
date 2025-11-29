@@ -34,8 +34,6 @@ const Wardrobe = () => {
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes, fetchClothes } = useContext(TokenContext);
 
-  console.log("Wardrobe clothes:", clothes.filter((item) => item.isLoaned));
-
   useEffect(() => {
     fetchClothes();
   }, [token]);

@@ -20,8 +20,6 @@ export default function Index() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [visibility, setVisibility] = useState(0);
 
-  console.log("Clothes", clothes);
-
   const dictionary = {
     "Nakrycie głowy": clothingTypeOptions
       .filter(item => item.type === "HAT")

@@ -37,7 +37,6 @@ export const iviteSending = async (token, id, type) => {
               type: type
           })
       });
-      console.log("Odpowiedź serwera:", response);
       if (!response.ok) {
           throw new Error(`HTTP status ${response.status}`);
       }

@@ -88,8 +88,6 @@ const ExchangeClothes = () => {
         targetClothesIds: [targetCloth.id],
       };
 
-      console.log("Wysyłanie propozycji wymiany:", exchangeData);
-
       await sendExchangeRequest(exchangeData, token);
 
       Alert.alert(

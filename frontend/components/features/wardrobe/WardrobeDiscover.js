@@ -48,8 +48,6 @@ const WardrobeDiscover = ({ selectedCategory }) => {
 
   const { token, setToken } = useContext(TokenContext);
 
-  console.log("selectedItem:", selectedItem);
-
   const fetchClothes = async (page) => {
     if (page != 1 && (loading || !hasMore)) return;
     setLoading(true);
@@ -86,12 +84,10 @@ const WardrobeDiscover = ({ selectedCategory }) => {
 
   const handleItemPress = (item) => {
     setSelectedItem(item);
-    console.log("Wybrano ubranie:", item);
     setModalVisible(true);
   };
 
   const handleExchange = () => {
-    console.log("Wymiana ubrania:", selectedItem);
     setModalVisible(false);
 
     // Przekazujemy dane o wybranym ubraniu do strony wymiany
@@ -106,7 +102,6 @@ const WardrobeDiscover = ({ selectedCategory }) => {
   };
 
   const handleBorrow = () => {
-    console.log("Pożyczenie ubrania:", selectedItem);
     setModalVisible(false);
 
     // Przekazujemy dane o wybranym ubraniu do strony pożyczenia

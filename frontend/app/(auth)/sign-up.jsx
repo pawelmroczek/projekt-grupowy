@@ -73,7 +73,6 @@ const SignUp = () => {
   }
 
   const handleRegister = async () => {
-    console.log("Próba rejestracji z danymi:", form);
     const validate = validateForm();
     if (validate === 0) {
       setRegistryStatus(true)
@@ -83,7 +82,6 @@ const SignUp = () => {
       setRegistryStatus(false);
       
       if (response.success) {
-        console.log("✅ Sukces:");
         // setToken(token);
         // const clothesData = await getClothes(token);
         // setClothes(clothesData);

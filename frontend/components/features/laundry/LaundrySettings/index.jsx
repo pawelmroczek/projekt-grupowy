@@ -33,7 +33,6 @@ export default function LaundrySettings({
     onOptionsChange(localOptions);
     // cos nie dziala na backendzie?
     await saveLaundryPreferences(token, localOptions);
-    console.log("Saved options:", localOptions);
     onClose();
   };
 
@@ -43,7 +42,6 @@ export default function LaundrySettings({
 
   const setSetting = (level) => {
     if (level === "custom") return;
-    console.log(`Setting strictness level to: ${level}`);
     setLocalOptions((prev) => {
       let newOptions;
       if (level === "loose") {
@@ -82,9 +80,6 @@ export default function LaundrySettings({
 
   const StrictnessButton = ({ level, title, description }) => {
     const choosenLevel = wichStrictnessIsActive(localOptions);
-    if (choosenLevel == level) {
-      console.log("Selected level:", level);
-    }
 
     return (
       <TouchableOpacity
