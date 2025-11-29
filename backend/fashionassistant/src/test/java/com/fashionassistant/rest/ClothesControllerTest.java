@@ -57,7 +57,7 @@ public class ClothesControllerTest {
     @Container
     @ServiceConnection
     private static final MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0.44");
-    private final com.fasterxml.jackson.databind.ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private User testUser, user;
     private Clothes clothes, clothes1, clothes2, clothes3;
     private Outfit outfit;

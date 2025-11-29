@@ -26,6 +26,8 @@ public class SecurityConfig {
                                 .requestMatchers("/fashion/users/**",
                                         "fashion/clothes/**",
                                         "fashion/invitations/**",
+                                        "fashion/friends/**",
+                                        "fashion/household/**",
                                         "/fashion/outfits/**",
                                         "/fashion/laundries/**",
                                         "/fashion/user-preferences/**",

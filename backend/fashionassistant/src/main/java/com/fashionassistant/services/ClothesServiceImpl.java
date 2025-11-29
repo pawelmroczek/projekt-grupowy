@@ -178,6 +178,7 @@ public class ClothesServiceImpl implements ClothesService {
             clothes.setPicture(null);
             pictureService.deleteById(pictureId);
             clothes.setName(clothesRequest.name());
+            clothes.setType(clothesRequest.type());
             clothes.setCategory(clothesRequest.category());
             clothes.setColor(clothesRequest.color());
             clothes.setColorHex(clothesRequest.colorHex());
