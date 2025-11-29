@@ -1,14 +1,13 @@
-import { View, Text, TouchableOpacity, Modal  } from "react-native";
+import { View, Text, TouchableOpacity, Modal } from "react-native";
 import VerticalList from "./VertitalList";
 import { getHomiesList, getFriendsList } from "../../../../lib/friends/friends";
-import React, { useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { leaveHousehold } from "../../../../lib/friends/friends";
 import { TokenContext } from "../../../../lib/TokenContext";
+import { HouseHeart, Users } from "lucide-react-native";
 
 export default function FriendsList() {
-
-
   const [friends, setFriends] = useState([]);
   const [homies, setHomies] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -16,7 +15,7 @@ export default function FriendsList() {
 
   useFocusEffect(
     React.useCallback(() => {
-      if(!token) return;
+      if (!token) return;
       const fetchFriends = async () => {
         const friendsData = await getFriendsList(token);
         friendsData.sort((a, b) => a.username.localeCompare(b.username));
@@ -34,25 +33,38 @@ export default function FriendsList() {
     }, [token])
   );
 
-
   return (
-    <View className=" bg-white rounded-xl mx-2">
-      <Text className="text-sm text-gray-500 uppercase font-bold p-2">Znajomi:</Text>
-      <VerticalList friends={friends} household={homies}/>
-      <View className="mb-2 h-[1px] mx-2  bg-gray-300" />
-      <View className="flex-row items-center justify-between p-2">
-         <Text className="text-sm text-gray-500 uppercase font-bold ">Domownicy:</Text>
-        {homies.length !== 0 && (
-          <TouchableOpacity
-            className="mx-4 px-4 py-2 bg-red-500 rounded-lg"
-            onPress={() => setModalVisible(true)}
-          >
-            <Text className="text-white text-l font-pregular">Opuść</Text>
-          </TouchableOpacity>
-        )}
+    <View className="  mx-2">
+      <View className="bg-white rounded-xl">
+        <View className="flex-row flex space-x-1 items-center px-3 py-3">
+          <Users size={20} />
+          <Text className="text-sm text-gray-500 uppercase font-bold ">
+            Znajomi:
+          </Text>
+        </View>
+        <VerticalList friends={friends} household={homies} />
       </View>
-      
-      <VerticalList friends={homies} household={homies} />
+
+      <View className="bg-white rounded-xl mt-2">
+        <View className="flex-row items-center justify-between">
+          <View className="flex-row flex space-x-1 items-center px-3 py-3">
+            <HouseHeart size={20} />
+            <Text className="text-sm text-gray-500 uppercase font-bold ">
+              Domownicy:
+            </Text>
+          </View>
+          {homies.length !== 0 && (
+            <TouchableOpacity
+              className="mx-4 px-4 py-2 bg-red-500 rounded-lg"
+              onPress={() => setModalVisible(true)}
+            >
+              <Text className="text-white text-l font-pregular">Opuść</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        <VerticalList friends={homies} household={homies} isHouseHold={true} />
+      </View>
       <Modal
         transparent={true}
         visible={modalVisible}

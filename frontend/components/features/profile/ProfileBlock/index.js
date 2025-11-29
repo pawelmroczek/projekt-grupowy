@@ -5,6 +5,7 @@ import { router } from "expo-router";
 import { getUserInfo } from "../../../../lib/friends/friends";
 import { TokenContext } from "../../../../lib/TokenContext";
 import { useFocusEffect } from '@react-navigation/native';
+import { ArrowRight, CircleArrowRight } from "lucide-react-native";
 
 export default function ProfileBlock() {
 
@@ -46,8 +47,8 @@ export default function ProfileBlock() {
                 <Text className="text-xl font-bold">Cześć, {userName}!</Text>
                 <Text className="text-gray-500 italic text-sm">Zarządzaj kontem</Text>
             </View>
-            <View className="w-6 h-6 bg-gray-200 rounded-full items-center justify-center">
-                <Text className="text-xl">&gt;</Text>
+            <View className="text-primary-200  rounded-full items-center justify-center">
+               <CircleArrowRight size={30} color="#9CA3AF" />
             </View>
         </TouchableOpacity>
     );

@@ -1,117 +1,135 @@
 import React, { use } from "react";
 import { useState, useContext } from "react";
-import { View, Text, TouchableOpacity, TextInput, FlatList, Image} from "react-native";
-import { Search } from "lucide-react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  FlatList,
+  Image,
+} from "react-native";
+import { ArrowLeft, Search, UserSearch } from "lucide-react-native";
 import { getUsers, iviteSending } from "../../lib/friends/friends";
 import { TokenContext } from "../../lib/TokenContext";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-
+import { router } from "expo-router";
+import BackTitleBar from "../../components/common/BackTitleBar";
 
 const findFriends = () => {
+  const [username, setUsername] = useState("");
+  const [userList, setUserList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { token, setToken } = useContext(TokenContext);
 
-    const [username, setUsername] = useState('');
-    const [userList, setUserList] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const { token, setToken } = useContext(TokenContext);
-
-    const handleSearch = async () => {
-        setLoading(true);
-        setUserList([]);
-        console.log(token);
-        const usersData = await getUsers(token, username);
-        if (usersData) {
-            const formattedUsers = usersData.map(user => ({
-                id: user.id,
-                username: user.username,
-                isFriend: user.friends,
-                avatar: user.avatar
-            }));
-            setUserList(formattedUsers);
-            setLoading(false);
-        } else {
-            console.error("Błąd podczas pobierania użytkowników");
-            setLoading(false);
-        }
-    };
-
-    const inviteUser = async (id) => {
-        console.log("Zapraszanie użytkownika o ID:", id);
-        console.log("Token:", token);
-        console.log("Dane do wysłania:", { toUser: id, type: "FRIENDS" });
-        const response = await iviteSending(token, id, "FRIENDS");
-
-        setUserList((prevList) =>
-            prevList.map((user) =>
-                user.id === id ? { ...user, isFriend: true } : user
-            )
-        );
+  const handleSearch = async () => {
+    setLoading(true);
+    setUserList([]);
+    console.log(token);
+    const usersData = await getUsers(token, username);
+    if (usersData) {
+      const formattedUsers = usersData.map((user) => ({
+        id: user.id,
+        username: user.username,
+        isFriend: user.friends,
+        avatar: user.avatar,
+      }));
+      setUserList(formattedUsers);
+      setLoading(false);
+    } else {
+      console.error("Błąd podczas pobierania użytkowników");
+      setLoading(false);
     }
+  };
 
-    return (
-        <SafeAreaView className="p-4 space-y-4">
-            <View className="flex-row items-center space-x-2">
-                <View className="flex-row items-center flex-1 bg-gray-100 rounded-xl px-3 py-5">
-                    <Search size={20} color="#6B7280" />
-                    <TextInput
-                    placeholder="Znajdź znajomego"
-                    value={username}
-                    onChangeText={setUsername}
-                    className="ml-2 flex-1 text-base"
-                    placeholderTextColor="#9CA3AF"
-                    />
-                </View>
-                <TouchableOpacity
-                    onPress={handleSearch}
-                    className="bg-primary-100 px-4 py-2 rounded-xl"
-                >
-                    <Text className="text-white font-semibold">Wyszukaj</Text>
-                </TouchableOpacity>
-            </View>
+  const inviteUser = async (id) => {
+    console.log("Zapraszanie użytkownika o ID:", id);
+    console.log("Token:", token);
+    console.log("Dane do wysłania:", { toUser: id, type: "FRIENDS" });
+    const response = await iviteSending(token, id, "FRIENDS");
 
-        {loading ? (
-            <Text className="text-gray-500">Wyszukiwanie...</Text>
-        ) : userList.length > 0 ? (
-            <FlatList
-            data={userList}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-                <View className="flex-row items-center justify-between p-3 bg-white rounded-xl border border-gray-200 mb-2">
-                <View className="w-16 h-16 bg-gray-100 rounded-full overflow-hidden">
-                    <Image 
-                        source={item.avatar ? {uri: item.avatar} : require("../../assets/images/profile/profilePlaceholder.png")}
-                        className="w-full h-full"
-                        resizeMode="cover" 
-                    />
-                </View>
-                <View>    
-                    <Text className="text-base font-semibold">{item.username}</Text>
-                </View>
-                <View className="flex-row items-center space-x-1">
-                    {item.isFriend ? (
-                        <View className="bg-gray-100 px-4 py-2 rounded-xl">
-                            <Text className="text-black font-semibold">Zaproszono</Text>
-                        </View>
-                    ) : (
-                        <TouchableOpacity
-                            onPress={() => inviteUser(item.id)}
-                            className="bg-secondary-100 px-4 py-2 rounded-xl"
-                        >
-                            <Text className="text-white font-semibold">Zaproś</Text>
-                        </TouchableOpacity>  
-                    )}
-                </View>
-                </View>
-            )}
-            />
-        ) : (
-            <View className="flex-1 items-center justify-center">
-                <Text className="text-gray-400">Brak wyników</Text>
-            </View>
-        )}
-        </SafeAreaView>
+    setUserList((prevList) =>
+      prevList.map((user) =>
+        user.id === id ? { ...user, isFriend: true } : user
+      )
     );
-}
+  };
+
+  return (
+    <SafeAreaView className="p-4 space-y-4">
+      <BackTitleBar>
+        <View className="flex-row items-center space-x-1">
+          <Text className="text-2xl font-bold text-gray-800 ">
+            Zaproś znajomego
+          </Text>
+          <UserSearch />
+        </View>
+      </BackTitleBar>
+
+      <View className="flex-row items-center space-x-2">
+        <View className="flex-row items-center flex-1 bg-gray-100 rounded-xl px-3 py-5">
+          <Search size={20} color="#6B7280" />
+          <TextInput
+            placeholder="Znajdź znajomego"
+            value={username}
+            onChangeText={setUsername}
+            className="ml-2 flex-1 text-base"
+            placeholderTextColor="#9CA3AF"
+          />
+        </View>
+        <TouchableOpacity
+          onPress={handleSearch}
+          className="bg-primary-100 px-4 py-2 rounded-xl"
+        >
+          <Text className="text-white font-semibold">Wyszukaj</Text>
+        </TouchableOpacity>
+      </View>
+
+      {loading ? (
+        <Text className="text-gray-500">Wyszukiwanie...</Text>
+      ) : userList.length > 0 ? (
+        <FlatList
+          data={userList}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View className="flex-row items-center justify-between p-3 bg-white rounded-xl border border-gray-200 mb-2">
+              <View className="w-16 h-16 bg-gray-100 rounded-full overflow-hidden">
+                <Image
+                  source={
+                    item.avatar
+                      ? { uri: item.avatar }
+                      : require("../../assets/images/profile/profilePlaceholder.png")
+                  }
+                  className="w-full h-full"
+                  resizeMode="cover"
+                />
+              </View>
+              <View>
+                <Text className="text-base font-semibold">{item.username}</Text>
+              </View>
+              <View className="flex-row items-center space-x-1">
+                {item.isFriend ? (
+                  <View className="bg-gray-100 px-4 py-2 rounded-xl">
+                    <Text className="text-black font-semibold">Zaproszono</Text>
+                  </View>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => inviteUser(item.id)}
+                    className="bg-secondary-100 px-4 py-2 rounded-xl"
+                  >
+                    <Text className="text-white font-semibold">Zaproś</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+          )}
+        />
+      ) : (
+        <View className="flex-1 items-center justify-center">
+          <Text className="text-gray-400">Brak wyników</Text>
+        </View>
+      )}
+    </SafeAreaView>
+  );
+};
 
 export default findFriends;
-
