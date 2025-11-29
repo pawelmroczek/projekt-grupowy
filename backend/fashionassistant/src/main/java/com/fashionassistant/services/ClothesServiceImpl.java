@@ -171,7 +171,10 @@ public class ClothesServiceImpl implements ClothesService {
         Clothes clothes = clothesRepository.findById(clothesRequest.id())
                 .orElseThrow(() -> new BadRequestException("Clothes not found"));
         if (clothes.getUser().getId() == user.getId()) {
-            int pictureId = clothes.getPicture().getId();
+            int pictureId = 0;
+            if (clothes.getPicture() != null) {
+                pictureId = clothes.getPicture().getId();
+            }
             clothes.setPicture(null);
             pictureService.deleteById(pictureId);
             clothes.setName(clothesRequest.name());
@@ -219,8 +222,9 @@ public class ClothesServiceImpl implements ClothesService {
             for (Laundry laundry : laundries) {
                 laundry.getClothes().remove(clothes);
             }
-
-            pictureService.deleteById(clothes.getPicture().getId());
+            if (clothes.getPicture() != null) {
+                pictureService.deleteById(clothes.getPicture().getId());
+            }
 
             clothes.setUser(null);
             user.getClothes().remove(clothes);
@@ -236,7 +240,7 @@ public class ClothesServiceImpl implements ClothesService {
                     .orElseThrow(() -> new BadRequestException("Clothes not found"));
             User user = authService.getCurrentUser();
             if (clothes.getUser().getId() == user.getId() ||
-                    clothes.getUser().getHousehold().getId() == user.getHousehold().getId()) {
+                    (clothes.getUser().getHousehold() != null && clothes.getUser().getHousehold().getId() == user.getHousehold().getId())) {
                 clothes.setClean(!clothes.isClean());
                 Clothes changedClothes = clothesRepository.save(clothes);
                 response.add(new ClothesGet(changedClothes));
