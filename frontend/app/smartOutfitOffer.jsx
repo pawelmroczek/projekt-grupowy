@@ -1,7 +1,6 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import {
   View,
-  Image,
   Text,
   TouchableOpacity,
   ScrollView,
@@ -10,24 +9,26 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import { TokenContext } from "../lib/TokenContext";
 import OutfitDetailsTile from "../components/features/outfits/OutfitsDetails";
-import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../assets/constants/types/types";
+import {
+  clothingTypeOptions,
+  shoesTypeOptions,
+  accessoryTypeOptions,
+} from "../assets/constants/types/types";
 import ModalBox from "../components/features/outfits/ModalBox";
 import VisibiltySelector from "../components/common/VisibiltySelector";
+import VisibilityWarning from "../components/common/VisibilityWarning";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const smartOutfitOffer = () => {
-
   const params = useLocalSearchParams();
   const outfitObj = params?.outfitIds ? JSON.parse(params.outfitIds) : null;
 
   const outfitIds = outfitObj?.ids ?? [];
 
-
   const { clothes, setClothes } = useContext(TokenContext);
-  
+
   const [visibility, setVisibility] = useState(0);
 
-  
   const [modalVisible, setModalVisible] = useState(false);
 
   //ENDPOINT do pon=bierania ubrania o id od użytkownika o id
@@ -36,22 +37,22 @@ const smartOutfitOffer = () => {
     outfitIds?.includes(cloth.id)
   );
 
- const dictionary = {
-     "Nakrycie głowy": clothingTypeOptions
-       .filter(item => item.type === "HAT")
-       .map(item => item.label),
-     "Górna część": clothingTypeOptions
-       .filter(item => item.type === "TOP" || item.type === "FULLBODY")
-       .map(item => item.label), 
-     "Dolna część": clothingTypeOptions
-       .filter(item => item.type === "BOTTOM")
-       .map(item => item.label),
-      "Odzież wierzchnia": clothingTypeOptions
-      .filter(item => item.type === "OUTWEAR")
-      .map(item => item.label),
-     Buty: shoesTypeOptions.map(item => item.label),
-     Akcesoria: accessoryTypeOptions.map(item => item.label),
-   };
+  const dictionary = {
+    "Nakrycie głowy": clothingTypeOptions
+      .filter((item) => item.type === "HAT")
+      .map((item) => item.label),
+    "Górna część": clothingTypeOptions
+      .filter((item) => item.type === "TOP" || item.type === "FULLBODY")
+      .map((item) => item.label),
+    "Dolna część": clothingTypeOptions
+      .filter((item) => item.type === "BOTTOM")
+      .map((item) => item.label),
+    "Odzież wierzchnia": clothingTypeOptions
+      .filter((item) => item.type === "OUTWEAR")
+      .map((item) => item.label),
+    Buty: shoesTypeOptions.map((item) => item.label),
+    Akcesoria: accessoryTypeOptions.map((item) => item.label),
+  };
 
   const categorizeClothes = (clothes, dictionary) => {
     const result = [];
@@ -68,6 +69,8 @@ const smartOutfitOffer = () => {
 
   const categorizedClothes = categorizeClothes(outfitClothes, dictionary);
 
+  console.log("Outfit Clothes:", JSON.stringify(outfitClothes));
+
   const handleSave = () => {
     setModalVisible(true);
   };
@@ -83,30 +86,33 @@ const smartOutfitOffer = () => {
               clothes={category.clothes}
             />
           ))}
-          <VisibiltySelector
-            value={visibility}
-            setValue={setVisibility}
+          <VisibiltySelector value={visibility} setValue={setVisibility} />
+
+          <VisibilityWarning 
+            clothes={outfitClothes} 
+            outfitVisibility={visibility} 
           />
+
           <View className="items-center   py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4 ">
             <TouchableOpacity
-                onPress={() => {
-                    handleSave();
-                }}
-                className="px-4 py-2 bg-primary-100 rounded-lg"
+              onPress={() => {
+                handleSave();
+              }}
+              className="px-4 py-2 bg-primary-100 rounded-lg"
             >
-            <Text className="text-white text-xl font-pregular">
+              <Text className="text-white text-xl font-pregular">
                 {"ZAPISZ"}
-            </Text>
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => {
-                    router.replace("/wardrobe");
-                }}
-                className="px-4 py-2 bg-red-500 rounded-lg"
+              onPress={() => {
+                router.replace("/wardrobe");
+              }}
+              className="px-4 py-2 bg-red-500 rounded-lg"
             >
-                <Text className="text-white text-xl font-pregular">
-                    {"ANULUJ"}
-                </Text>
+              <Text className="text-white text-xl font-pregular">
+                {"ANULUJ"}
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

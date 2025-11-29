@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { getClothes } from "./clothes/clothes";
 import { TokenContext } from "./TokenContext";
+import { getClothesHouseholdFiltered } from "./clothes/clothesFriendsParams";
 
 // Funkcja do symulacji symboli prania na podstawie typu i koloru ubrania
 const addSimulatedCareSymbols = (item) => {
@@ -60,9 +61,15 @@ const addSimulatedCareSymbols = (item) => {
 
 const useDirtyClothes = () => {
   const [dirtyClothes, setDirtyClothes] = useState([]);
-  const { clothes } = useContext(TokenContext);
+  const { token, clothes } = useContext(TokenContext);
 
-  useEffect(() => {
+  const fetchDirtyClothes = async () => {
+    const dirtyHousehold = await getClothesHouseholdFiltered(
+      token,
+      undefined,
+      false
+    ) || [];
+
     const dirty = (clothes || [])
       .filter((item) => !item.clean)
       .map(addSimulatedCareSymbols); // Dodaj symulowane symbole prania
@@ -71,7 +78,11 @@ const useDirtyClothes = () => {
       console.log("Brak brudnych ubrań do wyświetlenia.");
     }
 
-    setDirtyClothes(dirty);
+    setDirtyClothes([...dirty, ...(dirtyHousehold || [])]);
+  };
+
+  useEffect(() => {
+    fetchDirtyClothes();
   }, [clothes]); // Efekt odpala się tylko, gdy zmienią się `clothes`
 
   return dirtyClothes;

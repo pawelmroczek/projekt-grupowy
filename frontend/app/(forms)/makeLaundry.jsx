@@ -98,13 +98,14 @@ const makeLaundry = () => {
       </View>
       <ScrollView
         contentContainerStyle={{
+          width:"100%",
           alignItems: "center",
           paddingVertical: 20,
           paddingHorizontal: 10,
         }}
         showsHorizontalScrollIndicator={false}
       >
-        <View className="flex-row flex-wrap justify-start">
+        <View className="flex-row flex-wrap justify-start w-full">
           {dirtyClothes.map((item) => (
             <TouchableOpacity
               key={item.id}

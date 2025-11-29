@@ -27,12 +27,37 @@ export const getClothesFriendsFiltered = async (token, season) => {
     }
 }
 
-export const getClothesHouseholdFiltered = async (token, season) => {
+export const getClothesHouseholdFiltered = async (token, season, clean=true) => {
     try {
       const url = new URL(ipAddress + "/fashion/clothes/friends/filtered");
-      url.searchParams.append("clean", true);
+      url.searchParams.append("clean", clean);
       if (season !== undefined) url.searchParams.append("season", season);
 
+      const response = await fetch(url, {
+          method: "GET",
+          headers: {
+              "Authentication": `Bearer ${token}`
+          }
+      });
+      if (!response.ok) {
+          throw new Error(`HTTP status ${response.status}`);
+      }
+      const data = await response.json();   
+  
+      data.forEach((element) => {
+        const parts = element.picture.split("images-server:80");
+        element.picture = ipAddressNginx + parts[1];
+      });
+      return data;
+    } catch (error) {
+      console.error('Błąd:', error);
+    }
+}
+
+export const getLoanedClothes = async (token) => {
+    try {
+      const url = new URL(ipAddress + "/fashion/clothes/loan");
+  
       const response = await fetch(url, {
           method: "GET",
           headers: {

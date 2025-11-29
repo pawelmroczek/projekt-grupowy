@@ -146,9 +146,15 @@ export default function MakeLaundryButton({ suggestedLaundry }) {
                     <TouchableOpacity
                       disabled={!selectedColor && selectedLoad === null}
                       onPress={() => handleSubmit()}
-                      className="px-4 w-1/2  py-2 bg-primary-100 rounded-lg"
+                      className={`px-4 w-1/2  py-2 bg-primary-100 rounded-lg ${
+                        !selectedColor && selectedLoad === null
+                          ? "bg-gray-300"
+                          : ""
+                      }`}
                     >
-                      <Text className="text-white text-center text-xl font-pregular">
+                      <Text
+                        className={`text-white text-center text-xl font-pregular `}
+                      >
                         Dalej
                       </Text>
                     </TouchableOpacity>

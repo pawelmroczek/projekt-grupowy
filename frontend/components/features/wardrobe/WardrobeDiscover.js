@@ -48,6 +48,8 @@ const WardrobeDiscover = ({ selectedCategory }) => {
 
   const { token, setToken } = useContext(TokenContext);
 
+  console.log("selectedItem:", selectedItem);
+
   const fetchClothes = async (page) => {
     if (page != 1 && (loading || !hasMore)) return;
     setLoading(true);
@@ -55,12 +57,16 @@ const WardrobeDiscover = ({ selectedCategory }) => {
       if (selectedCategory === "public") {
         const data = await getClothesPublic(token, page - 1, 10);
 
-        setClothes((prev) => [...prev, ...data]);
+        const filteredData = data.filter((item) => !item.isLoaned);
+
+        setClothes((prev) => [...prev, ...filteredData]);
         if (data.length < 10) setHasMore(false);
       } else {
         const data = await getClothesFriends(token, page - 1, 10);
 
-        setClothes((prev) => [...prev, ...data]);
+        const filteredData = data.filter((item) => !item.isLoaned);
+
+        setClothes((prev) => [...prev, ...filteredData]);
         if (data.length < 10) setHasMore(false);
       }
       setPage(page);
@@ -79,40 +85,38 @@ const WardrobeDiscover = ({ selectedCategory }) => {
   }, [selectedCategory]);
 
   const handleItemPress = (item) => {
-    if (selectedCategory === "friends") {
-      setSelectedItem(item);
-      console.log("Wybrano ubranie do wymiany/pożyczenia:", item);
-      setModalVisible(true);
-    }
+    setSelectedItem(item);
+    console.log("Wybrano ubranie:", item);
+    setModalVisible(true);
   };
 
   const handleExchange = () => {
     console.log("Wymiana ubrania:", selectedItem);
     setModalVisible(false);
-    
+
     // Przekazujemy dane o wybranym ubraniu do strony wymiany
     router.push({
       pathname: "/exchangeClothes",
       params: {
-        targetCloth: JSON.stringify(selectedItem)
-      }
+        targetCloth: JSON.stringify(selectedItem),
+      },
     });
-    
+
     setSelectedItem(null);
   };
 
   const handleBorrow = () => {
     console.log("Pożyczenie ubrania:", selectedItem);
     setModalVisible(false);
-    
+
     // Przekazujemy dane o wybranym ubraniu do strony pożyczenia
     router.push({
       pathname: "/borrowClothes",
       params: {
-        targetCloth: JSON.stringify(selectedItem)
-      }
+        targetCloth: JSON.stringify(selectedItem),
+      },
     });
-    
+
     setSelectedItem(null);
   };
 
@@ -154,7 +158,7 @@ const WardrobeDiscover = ({ selectedCategory }) => {
         }
       />
 
-      {/* Modal dla opcji wymiany i pożyczenia */}
+      {/* Modal dla opcji wymiany/pożyczenia lub informacji o ubraniu */}
       <Modal
         visible={modalVisible}
         transparent
@@ -162,81 +166,132 @@ const WardrobeDiscover = ({ selectedCategory }) => {
         onRequestClose={handleCloseModal}
       >
         <TouchableWithoutFeedback onPress={handleCloseModal}>
-          <View className="flex-1 justify-center items-center bg-black/50">
+          <View className="flex-1 justify-center items-center bg-black/60">
             <TouchableWithoutFeedback>
-              <View className="w-11/12 bg-white p-6 rounded-2xl items-center shadow-lg">
+              <View className="w-11/12 bg-white p-6 rounded-3xl items-center shadow-lg">
                 {selectedItem && (
                   <>
-                    <View
-                      className="flex items-center justify-center bg-gray-200 rounded-full p-5 mb-2"
-                    >
+                    <View className="flex items-center justify-center bg-gray-100 rounded-2xl p-4 mb-4 w-full">
                       <Image
                         source={{ uri: selectedItem.picture }}
                         style={{
-                          width: 150,
-                          height: 150,
-                         
-                          
+                          width: 180,
+                          height: 180,
+                          borderRadius: 12,
                         }}
+                        resizeMode="cover"
                       />
                     </View>
-                    <Text className="text-xl font-bold mb-2">
+                    <Text className="text-2xl font-bold mb-2 text-gray-800">
                       {selectedItem.name}
                     </Text>
-                    <View className="w-full mb-4 border-b flex items-center border-gray-300 ">
-                      <View>
-                        <View className="flex flex-row items-center mb-4 space-x-1    w-full ">
-                          <Shirt size={20} />
-                          <Text className="text-base text-gray-600 ">
-                            rozmiar:
-                          </Text>
-                          <Text className="text-base text-gray-700 font-bold ">
-                            {selectedItem.size}
-                          </Text>
-                        </View>
-                        <View className="flex flex-row items-center mb-4   w-full ">
-                          <User size={20} />
-                          <Text className="text-base text-gray-600 ">
-                            {selectedItem.user}
-                          </Text>
+
+                    <View className="w-full mb-6 pb-4 border-b border-gray-200">
+                      <View className="space-y-3">
+                        {selectedCategory === "friends" && (
+                          <View className="flex flex-row items-center space-x-2 bg-gray-50 p-3 rounded-xl">
+                            <View className="w-10 h-10 bg-blue-100 rounded-full items-center justify-center">
+                              <Shirt size={20} color="#3B82F6" />
+                            </View>
+                            <View className="flex-1">
+                              <Text className="text-xs text-gray-500">
+                                Rozmiar
+                              </Text>
+                              <Text className="text-base text-gray-800 font-bold">
+                                {selectedItem.size}
+                              </Text>
+                            </View>
+                          </View>
+                        )}
+
+                        <View className="flex flex-row items-center space-x-2 bg-gray-50 p-3 rounded-xl">
+                          <View className="w-10 h-10  rounded-full items-center justify-center">
+                            <Image
+                              source={
+                                selectedItem.userAvatar
+                                  ? { uri: selectedItem.userAvatar }
+                                  : require("../../../assets/images/profile/profilePlaceholder.png")
+                              }
+                              className="w-full h-full"
+                              resizeMode="cover"
+                            />
+                          </View>
+                          <View className="flex-1">
+                            <Text className="text-xs text-gray-500">
+                              Właściciel
+                            </Text>
+                            <Text className="text-base text-gray-800 font-semibold">
+                              {selectedItem.user}
+                            </Text>
+                          </View>
                         </View>
                       </View>
                     </View>
-                    <Text className="text-gray-600 mb-6">
-                      Co chcesz zrobić?
-                    </Text>
+
+                    {selectedCategory === "friends" && (
+                      <Text className="text-gray-600 mb-4 text-center">
+                        Co chcesz zrobić z tym ubraniem?
+                      </Text>
+                    )}
                   </>
                 )}
 
-                <View className="w-full space-y-3">
-                  <TouchableOpacity
-                    onPress={handleExchange}
-                    className="w-full flex flex-row space-x-2 justify-center items-center bg-primary-100 py-3 rounded-lg"
-                  >
-                    <ArrowLeftRight color="white" size="20" />
-                    <Text className="text-white text-center text-lg pr-3  font-pmedium">
-                      Wymiana
-                    </Text>
-                  </TouchableOpacity>
+                <View className="w-full flex space-y-3">
+                  {selectedCategory === "friends" ? (
+                    <View className="w-full space-y-2">
+                      <TouchableOpacity
+                        onPress={handleExchange}
+                        className="w-full flex flex-row space-x-2 justify-center items-center bg-primary-100 py-2 rounded-lg active:scale-95"
+                      >
+                        <ArrowLeftRight color="white" size={22} />
+                        <Text className="text-white text-center text-lg font-bold">
+                          Wymiana
+                        </Text>
+                      </TouchableOpacity>
 
-                  <TouchableOpacity
-                    onPress={handleBorrow}
-                    className="w-full flex flex-row space-x-2 justify-center items-center bg-primary-200 py-3 rounded-lg"
-                  >
-                    <ArrowLeftFromLine color="white" size="20" />
-                    <Text className="text-white text-center text-lg font-pmedium">
-                      Pożyczenie
-                    </Text>
-                  </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={handleBorrow}
+                        className="w-full flex flex-row space-x-2 justify-center items-center bg-primary-200 py-2 rounded-lg active:scale-95"
+                        style={{
+                          shadowColor: "#2A9D8F",
+                          shadowOffset: { width: 0, height: 4 },
+                          shadowOpacity: 0.3,
+                          shadowRadius: 8,
+                          elevation: 5,
+                        }}
+                      >
+                        <ArrowLeftFromLine color="white" size={22} />
+                        <Text className="text-white text-center text-lg font-bold">
+                          Pożyczenie
+                        </Text>
+                      </TouchableOpacity>
 
-                  <TouchableOpacity
-                    onPress={handleCloseModal}
-                    className="w-full border-secondary-300 border py-2 rounded-lg"
-                  >
-                    <Text className="text-secondary-300 text-center text-lg font-pmedium">
-                      Anuluj
-                    </Text>
-                  </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={handleCloseModal}
+                        className="w-full shadow-xs bg-gray-100 py-2 rounded-lg active:scale-95"
+                      >
+                        <Text className="text-gray-700 text-center text-lg font-bold">
+                          Anuluj
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={handleCloseModal}
+                      className="w-full bg-blue-500 py-2 rounded-lg active:scale-95"
+                      style={{
+                        shadowColor: "#3B82F6",
+                        shadowOffset: { width: 0, height: 4 },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 8,
+                        elevation: 5,
+                      }}
+                    >
+                      <Text className="text-white text-center text-lg font-bold">
+                        Zamknij
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
             </TouchableWithoutFeedback>

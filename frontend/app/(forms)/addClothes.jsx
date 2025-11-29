@@ -9,11 +9,9 @@ import {
   ScrollView,
 } from "react-native";
 import FormField from "../../components/common/FormField";
-import {
-  Shirt
-} from "lucide-react-native";
+import { Shirt } from "lucide-react-native";
 import { clothesSending, clothesEditing } from "../../lib/clothes/clothes";
-import { router, useLocalSearchParams} from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 import AddPhoto from "../../components/features/wardrobe/AddPhoto";
 import ColorSelector from "../../components/features/wardrobe/ColorSelector";
@@ -22,8 +20,16 @@ import LaundryIconsSelector from "../../components/features/wardrobe/LaundryIcon
 import VerticalSelector from "../../components/common/VerticalSelector";
 import { getClothes } from "../../lib/clothes/clothes";
 import ThreeOptionSelector from "../../components/common/ThreeOptionSelector";
-import { CLOTHING_SIZES, SHOES_SIZES, ACCESSORY_SIZES } from "../../assets/constants/sizes/sizes";
-import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
+import {
+  CLOTHING_SIZES,
+  SHOES_SIZES,
+  ACCESSORY_SIZES,
+} from "../../assets/constants/sizes/sizes";
+import {
+  clothingTypeOptions,
+  shoesTypeOptions,
+  accessoryTypeOptions,
+} from "../../assets/constants/types/types";
 import { Seasons } from "../../assets/constants/seasons/seasons";
 import ClassifyButton from "../../components/common/ClassifyButton";
 import VisibiltySelector from "../../components/common/VisibiltySelector";
@@ -42,8 +48,8 @@ export default function index() {
 
   const [selectedCategory, setSelectedCategory] = useState(0);
 
-  const { token, setToken } = useContext(TokenContext);
-  const { clothes, setClothes } = useContext(TokenContext);
+  const { token } = useContext(TokenContext);
+  const { setClothes, fetchClothes } = useContext(TokenContext);
 
   const [addButtonDisabled, setAddButtonDisabled] = useState(false);
   const [nonValidAlert, setNonValidAlert] = useState("");
@@ -66,18 +72,18 @@ export default function index() {
 
   const sizesByCategory = [CLOTHING_SIZES, SHOES_SIZES, ACCESSORY_SIZES];
   const typeOptions = [
-    (clothingTypeOptions?.map(item => item.label) || []),
-    (shoesTypeOptions?.map(item => item.label) || []),
-    (accessoryTypeOptions?.map(item => item.label) || []),
+    clothingTypeOptions?.map((item) => item.label) || [],
+    shoesTypeOptions?.map((item) => item.label) || [],
+    accessoryTypeOptions?.map((item) => item.label) || [],
   ];
-  const seasonOptions = Seasons.map(item => item.label);
+  const seasonOptions = Seasons.map((item) => item.label);
   const params = useLocalSearchParams();
   useEffect(() => {
     if (Object.keys(params).length > 0) {
       setEditing(true);
       setForm({
-      name: params.name,
-      type: params.type,
+        name: params.name,
+        type: params.type,
       });
       setSelectedColor(params.color);
       setSelectedColorHex(params.colorHex);
@@ -92,37 +98,37 @@ export default function index() {
       setCleanStatus(params.clean);
       setSelectedIcons(
         params.pictogramIds
-          ? params.pictogramIds.split(",").map(Number).sort((a, b) => a - b)
+          ? params.pictogramIds
+              .split(",")
+              .map(Number)
+              .sort((a, b) => a - b)
           : []
       );
-      
-      const seasonsArray = params.seasons
-        ? params.seasons.split(",")
-        : [];
 
-      const seasonLabels = Seasons
-        .filter(season => seasonsArray.includes(season.value))
-        .map(season => season.label);
+      const seasonsArray = params.seasons ? params.seasons.split(",") : [];
+
+      const seasonLabels = Seasons.filter((season) =>
+        seasonsArray.includes(season.value)
+      ).map((season) => season.label);
 
       setSelectedSeason(seasonLabels);
-}
+    }
   }, []);
 
   const handleSubmit = async () => {
-
     const isValid =
-    form.name &&
-    selectedType &&
-    imageUri &&
-    selectedSize &&
-    selectedColor &&
-    selectedSeason.length > 0;
+      form.name &&
+      selectedType &&
+      imageUri &&
+      selectedSize &&
+      selectedColor &&
+      selectedSeason.length > 0;
 
-  if (!isValid) {
-    setNonValidAlert("Uzupełnij wszystkie pola!");
-    setAddButtonDisabled(false);
-    return;
-  }
+    if (!isValid) {
+      setNonValidAlert("Uzupełnij wszystkie pola!");
+      setAddButtonDisabled(false);
+      return;
+    }
 
     const formData = new FormData();
     formData.append("name", form.name);
@@ -141,24 +147,21 @@ export default function index() {
     formData.append("priority", priority);
     formData.append("pictogramIds", selectedIcons.join(", "));
 
-    selectedSeason.forEach(label => {
-      const season = Seasons.find(s => s.label === label);
+    selectedSeason.forEach((label) => {
+      const season = Seasons.find((s) => s.label === label);
       if (season) {
         formData.append("seasons", season.value);
       }
     });
 
-    if(editing){
+    if (editing) {
       formData.append("id", params.id);
       const serverresponse = await clothesEditing(formData, token);
-      const clothesData = await getClothes(token);
-      setClothes(clothesData);
+      await fetchClothes();
       router.back();
-    }
-    else{
+    } else {
       const serverresponse = await clothesSending(formData, token);
-      const clothesData = await getClothes(token);
-      setClothes(clothesData);
+      await fetchClothes();
       router.back();
     }
   };
@@ -189,7 +192,7 @@ export default function index() {
               selectedColorHex={selectedColorHex}
               setSelectedColorHex={setSelectedColorHex}
             />
-            { selectedCategory === 0 && imageUri ? (
+            {selectedCategory === 0 && imageUri ? (
               <ClassifyButton
                 imageUri={imageUri}
                 imageType={imageType}
@@ -200,7 +203,7 @@ export default function index() {
                 hex={selectedColorHex}
                 setColor={setSelectedColor}
               />
-            ) : null}  
+            ) : null}
             <FormField
               value={form.name}
               handleChangeText={(e) => setForm({ ...form, name: e })}
@@ -234,7 +237,7 @@ export default function index() {
             </Text>
             <View>
               <VerticalSelector
-                options={ seasonOptions || []}
+                options={seasonOptions || []}
                 setValue={setSelectedSeason}
                 value={selectedSeason}
                 multiSelect={true}
@@ -249,7 +252,7 @@ export default function index() {
                 setSelectedColor={setSelectedColor}
               />
             </View>
-            { selectedCategory === 0 ? (
+            {selectedCategory === 0 ? (
               <View>
                 <LaundryIconsSelector
                   selectedIcons={selectedIcons}
@@ -257,16 +260,12 @@ export default function index() {
                 />
               </View>
             ) : null}
-            <VisibiltySelector
-              value={visible}
-              setValue={setVisible}
-            />
-            <PioritySelector
-              value={priority}
-              setValue={setPriority}
-            />
+            <VisibiltySelector value={visible} setValue={setVisible} />
+            <PioritySelector value={priority} setValue={setPriority} />
             {nonValidAlert !== "" ? (
-              <Text className="text-red-500 mt-2 mb-2 text-center">{nonValidAlert}</Text>
+              <Text className="text-red-500 mt-2 mb-2 text-center">
+                {nonValidAlert}
+              </Text>
             ) : null}
             <View className="items-center   py-3.5 rounded-xl w-full flex-row justify-center bg-white-100 space-x-4 ">
               <TouchableOpacity

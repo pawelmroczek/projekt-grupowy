@@ -5,7 +5,7 @@ import React, { useState, useContext } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { leaveHousehold } from "../../../../lib/friends/friends";
 import { TokenContext } from "../../../../lib/TokenContext";
-import { HouseHeart, Users } from "lucide-react-native";
+import { HouseHeart, LogOut, Users } from "lucide-react-native";
 
 export default function FriendsList() {
   const [friends, setFriends] = useState([]);
@@ -55,10 +55,10 @@ export default function FriendsList() {
           </View>
           {homies.length !== 0 && (
             <TouchableOpacity
-              className="mx-4 px-4 py-2 bg-red-500 rounded-lg"
+              className="mx-4 my-2 px-4 py-2 bg-red-500 rounded-lg"
               onPress={() => setModalVisible(true)}
             >
-              <Text className="text-white text-l font-pregular">Opuść</Text>
+              <LogOut size="15" color={"white"} />
             </TouchableOpacity>
           )}
         </View>
