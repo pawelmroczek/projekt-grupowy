@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useFocusEffect } from '@react-navigation/native';
+import { useState, useContext, useEffect } from "react";
+
 import {
   View,
   FlatList,
@@ -8,15 +8,9 @@ import {
   TouchableOpacity,
   StyleSheet
 } from "react-native";
-
 import { router } from "expo-router";
-import { useLocalSearchParams } from "expo-router";
-import { useMemo } from "react";
-import { fetchOutfits } from "../../../lib/outfits/outfits";
-import { TokenContext } from "../../../lib/TokenContext";
-import { fetchOutfitsFriends, fetchOutfitsPublic } from "../../../lib/outfits/discovery";
-
-
+import { TokenContext } from "../../../../lib/TokenContext";
+import { fetchOutfitsFriends, fetchOutfitsPublic } from "../../../../lib/outfits/discovery";
 
 const OutfitsDiscover = ({selectedCategory}) => {
   

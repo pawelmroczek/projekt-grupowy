@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+import { useState, useContext, useEffect } from "react";
 import {
   View,
   FlatList,
@@ -12,20 +11,17 @@ import {
 } from "react-native";
 
 import { router } from "expo-router";
-
 import { useLocalSearchParams } from "expo-router";
 import { useMemo } from "react";
-
-import { TokenContext } from "../../../lib/TokenContext";
+import { TokenContext } from "../../../../lib/TokenContext";
 import {
   getClothesFriends,
   getClothesPublic,
-} from "../../../lib/clothes/discovery";
+} from "../../../../lib/clothes/discovery";
 import {
   ArrowLeftFromLine,
   ArrowLeftRight,
   Shirt,
-  User,
 } from "lucide-react-native";
 
 const FormData = global.FormData;
