@@ -27,7 +27,10 @@ const publicOutfitDetails = () => {
        .map(item => item.label), 
      "Dolna część": clothingTypeOptions
        .filter(item => item.type === "BOTTOM")
-       .map(item => item.label),
+       .map(item => item.label), 
+      "Odzież wierzchnia": clothingTypeOptions
+        .filter(item => item.type === "OUTWEAR")
+        .map(item => item.label),
      Buty: shoesTypeOptions.map(item => item.label),
      Akcesoria: accessoryTypeOptions.map(item => item.label),
    };

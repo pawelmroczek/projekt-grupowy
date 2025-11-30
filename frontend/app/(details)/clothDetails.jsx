@@ -52,6 +52,8 @@ const clothDetails = () => {
 
   const VisibilityIcon = visibilityImages[cloth.visible];
 
+  console.log("Cloth details:", cloth.isLoaned);
+
   return (
     <>
       <View className="relative">
@@ -155,7 +157,7 @@ const clothDetails = () => {
                 </View>
               </View>
               <View className="items-center space-y-3   py-3.5 rounded-xl w-full flex justify-center bg-white-100 pb-40">
-                {!cloth.isLoaned && (
+                {cloth.isLoaned === "false" ? (
                   <TouchableOpacity
                     onPress={() =>
                       router.replace({
@@ -183,7 +185,7 @@ const clothDetails = () => {
                       {"EDYTUJ"}
                     </Text>
                   </TouchableOpacity>
-                )}
+                ) : null}
                 <TouchableOpacity
                   onPress={() => {
                     handleDelete(cloth.id);
