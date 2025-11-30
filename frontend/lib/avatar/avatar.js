@@ -5,8 +5,8 @@ export const uploadAvatar = async (token, image) => {
       const formData = new FormData();
       formData.append("file", {
         uri: image.uri,
-        type: image.type || "image/jpeg",
-        name: image.fileName || "avatar.jpg",
+        type: "image/jpeg",
+        name: "avatar.jpg",
       });
       const response = await fetch(ipAddress+"/fashion/users/avatar", {
           method: "POST",

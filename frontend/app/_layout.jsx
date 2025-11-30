@@ -3,7 +3,6 @@ import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import TokenProvider from "../lib/TokenContext";
 
-
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
@@ -29,14 +28,23 @@ const RootLayout = () => {
 
   return (
     <TokenProvider>
-      <Stack>
+      <Stack initialRouteName="index">
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(forms)" options={{ headerShown: false }} />
-        <Stack.Screen name="(details)/clothDetails" options={{ headerShown: false }} />
-        <Stack.Screen name="(details)/outfitDetails" options={{ headerShown: false }} />
-        <Stack.Screen name="(details)/publicOutfitDetails" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(details)/clothDetails"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="(details)/outfitDetails"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="(details)/publicOutfitDetails"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </TokenProvider>
   );
