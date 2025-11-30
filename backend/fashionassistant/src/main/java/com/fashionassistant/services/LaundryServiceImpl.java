@@ -37,6 +37,7 @@ public class LaundryServiceImpl implements LaundryService {
                 user.getHousehold(),
                 new HashSet<>()
         );
+        user.addLaundry(laundry);
         List<ClothesHouseholdGet> householdClothes = new ArrayList<>();
         if (user.getHousehold() != null) {
             householdClothes = clothesService.getClothesFromHousehold();

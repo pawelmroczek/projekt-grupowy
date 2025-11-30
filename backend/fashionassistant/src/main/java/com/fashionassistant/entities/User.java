@@ -162,6 +162,11 @@ public class User implements UserDetails {
         friends.add(user);
     }
 
+    public void addLaundry(Laundry laundry) {
+        if (laundries == null) laundries = new ArrayList<>();
+        laundries.add(laundry);
+    }
+
     public void deleteLoanClothes(Clothes clothes) {
         if (loanClothes != null) {
             loanClothes.remove(clothes);
