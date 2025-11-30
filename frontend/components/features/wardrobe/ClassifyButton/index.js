@@ -59,7 +59,7 @@ const ClassifyButton = ({ imageUri, imageType, imageName, predictedType, setPred
                 <Text className="text-white font-pregular">{predictedType}</Text>
             ) : (
                 <View className="flex-row items-center gap-x-2">
-                    <Text className="text-white font-pregular">Co to za ubranie? </Text>
+                    <Text className="text-white font-pregular">Wykryj kolor </Text>
                     <WandSparkles size={14} color="#FFFFFF" />
                 </View>
             )}

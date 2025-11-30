@@ -91,7 +91,9 @@ const planLaundry = (allClothes, laundryHistory, outfits, options) => {
   };
 
   const getOutfitCount = (clothingId) => {
-    return outfits.filter((o) => o.clothesIds.includes(clothingId)).length;
+    return outfits.filter(o =>
+      o.clothes.some(c => c.id === clothingId)
+    ).length;
   };
 
   // 1. Przygotuj listę brudnych ubrań z priorytetem

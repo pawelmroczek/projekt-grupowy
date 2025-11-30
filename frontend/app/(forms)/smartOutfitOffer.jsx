@@ -77,6 +77,11 @@ const smartOutfitOffer = () => {
     <SafeAreaView className="p-2">
       <View className="relative">
         <ScrollView className="mt-5">
+          {outfitClothes.length === 0 ?
+            <Text className="text-center text-gray-500">
+              Brak ubrań do wyświetlenia.
+            </Text> : null
+          }
           {categorizedClothes.map((category) => (
             <OutfitDetailsTile
               key={category.category}
@@ -96,6 +101,7 @@ const smartOutfitOffer = () => {
               onPress={() => {
                 handleSave();
               }}
+              disabled={outfitClothes.length === 0}
               className="px-4 py-2 bg-primary-100 rounded-lg"
             >
               <Text className="text-white text-xl font-pregular">
