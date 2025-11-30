@@ -24,6 +24,7 @@ import AddButton from "../wardrobe/AddButton";
 import { fetchOutfits } from "../../../lib/outfits/outfits";
 import { TokenContext } from "../../../lib/TokenContext";
 import SmartOutfitsSettings from "./SmartOutfitsSettings";
+import { ipAddressNginx } from "../../../lib/ipAddress";
 
 const FormData = global.FormData;
 
@@ -67,11 +68,8 @@ const OutfitsPage = () => {
   }, [selectedCategory, outfits, searchText]);
 
   const renderItem = ({ item: outfit }) => {
-    const items = outfit?.clothes.map((c) => {
-      const item = clothes.find((cloth) => cloth.id === c.id);
-      return item ? { ...item, outfit } : null;
-    });
-
+    const items = outfit.clothes;
+    console.log("Outfit items:", items);
     return (
       <TouchableOpacity
         style={[styles.item, displayMode ? styles.single : styles.double]}
