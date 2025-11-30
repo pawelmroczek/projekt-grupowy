@@ -88,7 +88,7 @@ public class InvitationServiceImpl implements InvitationService {
             fromUser.addFriend(toUser);
             toUser.addFriend(fromUser);
         }
-        if (invitation.getType().equals("HOUSEHOLDS")) {
+        if (invitation.getType().equals("HOUSEHOLDS") && fromUser.getHousehold() != null) {
             Household household = householdRepository.findById(fromUser.getHousehold().getId())
                     .orElseThrow(() -> new NotFoundException("Household not found"));
             if (toUser.getHousehold() != null) {

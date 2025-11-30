@@ -49,7 +49,7 @@ public class HouseholdControllerTest {
     @Container
     @ServiceConnection
     private static final MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0.44");
-    private final com.fasterxml.jackson.databind.ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private User testUser, user, user1;
 
     @BeforeEach
@@ -96,8 +96,6 @@ public class HouseholdControllerTest {
                 new ArrayList<>(),
                 null
         );
-        user.addFriend(testUser);
-        testUser.addFriend(user);
         user = userRepository.save(user);
         user1 = new User(
                 0,
@@ -118,9 +116,7 @@ public class HouseholdControllerTest {
                 new ArrayList<>(),
                 null
         );
-        user1.addFriend(testUser);
         user1 = userRepository.save(user1);
-        testUser.addFriend(user1);
         testUser = userRepository.save(testUser);
         when(authService.getCurrentUser()).thenReturn(testUser);
     }

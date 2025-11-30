@@ -46,7 +46,7 @@ public class FriendControllerTest {
     @Container
     @ServiceConnection
     private static final MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0.44");
-    private final com.fasterxml.jackson.databind.ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private User testUser, user, user1;
 
     @BeforeEach
