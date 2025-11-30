@@ -46,26 +46,35 @@ const publicOutfitDetails = () => {
   const categorizedClothes = categorizeClothes(outfitClothes, dictionary);
 
   return (
-    <>
-      <View className="relative">
-        <View className=" w-full flex-row items-center justify-between p-4 bg-white shadow-md pt-14 px-6">
-          <TouchableOpacity
-            onPress={() =>
-              router.push({
-                pathname: "/addOutfits",
-                params: {                  
-                  id: outfit.id,              
-                },
-              })
-            }
-          >
-            {/* <Pencil className="text-black" size={30} /> */}
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.back()}>
-            <X className="text-black" size={30} />
-          </TouchableOpacity>
+    <View className="flex-1 bg-gray-50">
+      {/* Header */}
+      <View className="w-full flex-row items-center justify-between p-4 bg-white shadow-sm pt-14 px-6">
+        <View className="w-10 h-10" />
+        <Text className="text-lg font-pbold" numberOfLines={1}>Szczegóły stroju</Text>
+        <TouchableOpacity 
+          onPress={() => router.back()}
+          className="w-10 h-10 items-center justify-center"
+        >
+          <X className="text-black" size={28} />
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView 
+        className="flex-1"
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Outfit Name Card */}
+        <View className="bg-white mx-4 mt-4 p-5 rounded-xl shadow-sm">
+          <Text className="text-2xl font-pbold mb-2" numberOfLines={2}>{outfit.name}</Text>
+          <View className="flex-row items-center">
+            <View className="bg-primary-100 px-3 py-1.5 rounded-full">
+              <Text className="text-white font-pmedium text-sm">{outfit.type}</Text>
+            </View>
+          </View>
         </View>
-        <ScrollView className="mt-5">
+
+        {/* Categorized Clothes */}
+        <View className="mt-4 px-4 mb-6">
           {categorizedClothes.map((category) => (
             <OutfitDetailsTile
               key={category.category}
@@ -73,18 +82,9 @@ const publicOutfitDetails = () => {
               clothes={category.clothes}
             />
           ))}
-          <View className="flex mt-8 mb-10">
-            <View className="bg-white  rounded-t-3xl p-5 flex">
-              <Text className="text-2xl font-bold mb-2">{outfit.name}</Text>
-              <Text className="text-base text-gray-600">
-                Typ: {outfit.type}
-              </Text>
-            </View>
-          </View>
-          
-        </ScrollView>
-      </View>
-    </>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

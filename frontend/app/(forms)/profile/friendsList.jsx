@@ -48,38 +48,57 @@ const friendsList = () => {
   };
 
   const renderItem = ({ item }) => (
-    <View className="flex-row justify-between items-center p-4 border-b border-gray-200">
-      <Text>{item.username}</Text>
+    <View className="flex-row justify-between items-center p-4 bg-white rounded-xl mb-3 shadow-sm border border-gray-100">
+      <View className="flex-1 pr-3">
+        <Text 
+          className="text-base font-psemibold text-gray-800" 
+          numberOfLines={1} 
+          ellipsizeMode="tail"
+        >
+          {item.username}
+        </Text>
+      </View>
       <TouchableOpacity
         onPress={() => {
           setModalVisible(true);
           setIdToDelete(item.id);
         }}
-        className="bg-red-500 px-3 py-1 rounded-full"
+        className="bg-red-500 px-4 py-2 rounded-xl"
       >
-        <Text className="text-white font-medium">Usuń</Text>
+        <Text className="text-white font-pmedium">Usuń</Text>
       </TouchableOpacity>
     </View>
   );
 
   return (
-    <SafeAreaView className="p-4 space-y-4 mt-4">
-      <View className="flex flex-row items-center justify-between mb-8 ">
-        <BackTitleBar>
-            Lista znajomych
-        </BackTitleBar>
-        <TouchableOpacity
-          onPress={() => router.push("/(forms)/findFriends")}
-          className="bg-secondary-200 p-3 rounded-xl "
-        >
-          <UserPlus size={20} />
-        </TouchableOpacity>
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <View className="p-4">
+        <View className="flex flex-row items-center justify-between mb-6">
+          <BackTitleBar>
+              Lista znajomych
+          </BackTitleBar>
+          <TouchableOpacity
+            onPress={() => router.push("/(forms)/findFriends")}
+            className="bg-secondary-200 p-3 rounded-xl"
+          >
+            <UserPlus size={20} color="#000" />
+          </TouchableOpacity>
+        </View>
+        
+        {friends.length > 0 ? (
+          <FlatList
+            data={friends}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderItem}
+            contentContainerStyle={{ paddingBottom: 16 }}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <View className="flex-1 justify-center items-center mt-20">
+            <Text className="text-gray-400 text-base">Brak znajomych</Text>
+          </View>
+        )}
       </View>
-      <FlatList
-        data={friends}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-      />
       <Modal
         transparent={true}
         visible={modalVisible}

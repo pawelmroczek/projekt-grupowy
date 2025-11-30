@@ -18,11 +18,8 @@ import {
   getClothesFriends,
   getClothesPublic,
 } from "../../../../lib/clothes/discovery";
-import {
-  ArrowLeftFromLine,
-  ArrowLeftRight,
-  Shirt,
-} from "lucide-react-native";
+import { ArrowLeftFromLine, ArrowLeftRight, Shirt } from "lucide-react-native";
+import { ipAddressNginx } from "../../../../lib/ipAddress";
 
 const FormData = global.FormData;
 
@@ -124,6 +121,11 @@ const WardrobeDiscover = ({ selectedCategory }) => {
     </TouchableOpacity>
   );
 
+  console.log("Clothes:", selectedItem);
+
+  const parts = selectedItem?.userAvatar.split("images-server:80") || [];
+  const userAvatar = ipAddressNginx + parts[1];
+
   return (
     <View className="flex-1 bg-gray-100">
       <FlatList
@@ -197,7 +199,7 @@ const WardrobeDiscover = ({ selectedCategory }) => {
                             <Image
                               source={
                                 selectedItem.userAvatar
-                                  ? { uri: selectedItem.userAvatar }
+                                  ? { uri: userAvatar }
                                   : require("../../../../assets/images/profile/profilePlaceholder.png")
                               }
                               className="w-full h-full rounded-full"
@@ -231,7 +233,7 @@ const WardrobeDiscover = ({ selectedCategory }) => {
                         onPress={handleExchange}
                         className="w-full flex flex-row space-x-2 justify-center items-center bg-primary-100 py-2 rounded-lg active:scale-95 pr-4"
                       >
-                        <ArrowLeftRight color="white"  size={22} />
+                        <ArrowLeftRight color="white" size={22} />
                         <Text className="text-white text-center text-lg font-semibold">
                           Wymiana
                         </Text>

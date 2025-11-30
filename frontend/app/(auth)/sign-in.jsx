@@ -19,8 +19,8 @@ const SignIn = () => {
   const [form, setForm] = useState({
     // email: "admin@gmail.com", //tymczasowe dane do logowania
     // password: "admin", //tymczasowe dane do logowania
-    email: "",
-    password: "",
+    email:"vincenzo.piras@o2.pl",
+    password: "12345678",
   });
 
   const { token, setToken } = useContext(TokenContext);
@@ -84,7 +84,7 @@ const SignIn = () => {
             handleChangeText={(e) => setForm({ ...form, email: e })}
             autoComplete="email"
             keyboardType="email-address"
-            textContentType="emailAddress"
+            textContentType="username"
           />
           <FormField
             value={form.password}
@@ -92,7 +92,7 @@ const SignIn = () => {
             title="Hasło"
             placeholder="Wprowadź swoje hasło"
             otherStyles={"mt-4"}
-            autoComplete="password"
+            autoComplete="current-password"
             textContentType="password"
           />
         </View>

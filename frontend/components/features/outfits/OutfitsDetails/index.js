@@ -4,27 +4,37 @@ import React from "react";
 export default function OutfitDetailsTile({ clothes, category }) {
 
   return (
-    <View className="bg-white m-2 p-3 shadow-md">
-      <Text className="text-center uppercase font-bold text-lg border-b pb-2 border-gray-300">
+    <View className="bg-white rounded-xl p-4 shadow-sm mb-3">
+      <Text className="text-center uppercase font-pbold text-base mb-3 text-gray-700">
         {category}
       </Text>
-      <View className="flex-row flex-wrap justify-center mt-2">
+      <View>
         {clothes.map((cloth) => (
           <View
             key={cloth.id}
-            className="bg-white  rounded-lg w-full h-[200px] items-center justify-start flex-row space-x-6"
+            className="bg-gray-50 rounded-xl mb-2 p-3 flex-row items-center"
           >
             <Image
               source={{ uri: cloth.picture }}
-              className="w-[200px] h-[170px] mb-2 rounded-full border-r pr-4 border-gray-300"
+              className="w-24 h-24 rounded-lg"
               resizeMode="cover"
             />
-            <View className="p-3 border-l border-gray-400">
-              <Text className="text-xl font-medium">{cloth.name}</Text>
-              <Text className="text-gray-500">{cloth.type}</Text>
-              <Text className="text-gray-500">
-                stan: {cloth.clean ? "czyste" : "brudne"}
+            <View className="flex-1 ml-4 pr-2">
+              <Text 
+                className="text-lg font-psemibold text-gray-800 mb-1" 
+                numberOfLines={2}
+                ellipsizeMode="tail"
+              >
+                {cloth.name}
               </Text>
+              <Text className="text-sm text-gray-600 mb-1">{cloth.type}</Text>
+              <View className="flex-row items-center">
+                <View className={`px-2 py-1 rounded-full ${cloth.clean ? 'bg-green-100' : 'bg-orange-100'}`}>
+                  <Text className={`text-xs font-pmedium ${cloth.clean ? 'text-green-700' : 'text-orange-700'}`}>
+                    {cloth.clean ? "Czyste" : "Brudne"}
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
         ))}

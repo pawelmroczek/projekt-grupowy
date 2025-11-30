@@ -68,26 +68,47 @@ const outfitDetails = () => {
   const categorizedClothes = categorizeClothes(outfitClothes, dictionary);
 
   return (
-    <>
-      <View className="relative">
-        <View className=" w-full flex-row items-center justify-between p-4 bg-white shadow-md pt-14 px-6">
-          <TouchableOpacity
-            onPress={() =>
-              router.push({
-                pathname: "/addOutfits",
-                params: {                  
-                  id: outfit.id,              
-                },
-              })
-            }
-          >
-            {/* <Pencil className="text-black" size={30} /> */}
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.back()}>
-            <X className="text-black" size={30} />
-          </TouchableOpacity>
+    <View className="flex-1 bg-gray-50">
+      {/* Header */}
+      <View className="w-full flex-row items-center justify-between p-4 bg-white shadow-sm pt-14 px-6">
+        <TouchableOpacity
+          onPress={() =>
+            router.push({
+              pathname: "/addOutfits",
+              params: {                  
+                id: outfit.id,              
+              },
+            })
+          }
+          className="w-10 h-10 items-center justify-center"
+        >
+          {/* <Pencil className="text-black" size={24} /> */}
+        </TouchableOpacity>
+        <Text className="text-lg font-pbold" numberOfLines={1}>Szczegóły stroju</Text>
+        <TouchableOpacity 
+          onPress={() => router.back()}
+          className="w-10 h-10 items-center justify-center"
+        >
+          <X className="text-black" size={28} />
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView 
+        className="flex-1"
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Outfit Name Card */}
+        <View className="bg-white mx-4 mt-4 p-5 rounded-xl shadow-sm">
+          <Text className="text-2xl font-pbold mb-2" numberOfLines={2}>{outfit.name}</Text>
+          <View className="flex-row items-center">
+            <View className="bg-primary-100 px-3 py-1.5 rounded-full">
+              <Text className="text-white font-pmedium text-sm">{outfit.type}</Text>
+            </View>
+          </View>
         </View>
-        <ScrollView className="mt-5">
+
+        {/* Categorized Clothes */}
+        <View className="mt-4 px-4">
           {categorizedClothes.map((category) => (
             <OutfitDetailsTile
               key={category.category}
@@ -95,29 +116,21 @@ const outfitDetails = () => {
               clothes={category.clothes}
             />
           ))}
-          <View className="flex mt-8 ">
-            <View className="bg-white  rounded-t-3xl p-5 flex">
-              <Text className="text-2xl font-bold mb-2">{outfit.name}</Text>
-              <Text className="text-base text-gray-600">
-                Typ: {outfit.type}
-              </Text>
-              <View className="items-center space-y-3 py-3.5 rounded-xl w-full flex justify-center bg-white-100 pb-40">
-                <TouchableOpacity
-                  onPress={() => {
-                    handleDelete(outfit.id);
-                  }}
-                  className="px-4 py-2 w-full flex items-center bg-red-500 rounded-lg"
-                >
-                  <Text className="text-white text-xl font-pregular">
-                    {"Usuń"}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
-      </View>
-    </>
+        </View>
+
+        {/* Delete Button */}
+        <View className="px-4 mt-6 mb-8">
+          <TouchableOpacity
+            onPress={() => handleDelete(outfit.id)}
+            className="bg-red-500 py-4 rounded-xl items-center shadow-sm"
+          >
+            <Text className="text-white text-lg font-pmedium">
+              Usuń strój
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

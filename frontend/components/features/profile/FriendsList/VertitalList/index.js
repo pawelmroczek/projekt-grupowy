@@ -65,7 +65,13 @@ export default function VerticalList({
                 />
               </View>
 
-              <Text className="text-lg">{friend.username}</Text>
+              <Text
+                className="text-lg max-w-[100px] text-center "
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {friend.username}
+              </Text>
             </View>
           );
 

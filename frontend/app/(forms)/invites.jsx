@@ -5,7 +5,6 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
-  
   ActivityIndicator,
   Image,
   ScrollView,
@@ -24,6 +23,7 @@ import {
 } from "../../lib/trades/handleTradeOffers";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ipAddressNginx } from "../../lib/ipAddress";
+import { Ban, Check, CircleX, X } from "lucide-react-native";
 
 const invites = () => {
   const [invitesArray, setInvitesArray] = useState([]);
@@ -104,35 +104,41 @@ const invites = () => {
   }, []);
 
   const renderInviteItem = ({ item }) => (
-    <View className="flex-row items-center justify-between p-3 bg-white rounded-xl border border-gray-200 mb-2">
-      <View className="w-16 h-16 bg-gray-100 rounded-full overflow-hidden">
-        <Image
-          source={item.fromUserAvatar ? {uri: item.fromUserAvatar} : require("../../assets/images/profile/profilePlaceholder.png")}
-          className="w-full h-full"
-          resizeMode="cover" 
-        />
-      </View>                
-      <View>
-        <Text className="text-base font-semibold"> {item.fromUsername}</Text>
+    <View className="flex-row flex-wrap items-center justify-between p-3 bg-white rounded-xl space-y-4 border border-gray-200 mb-2">
+      <View className="flex-row items-center space-x-2 flex-1">
+        <View className="w-10 h-10 bg-gray-100 rounded-full overflow-hidden">
+          <Image
+            source={
+              item.fromUserAvatar
+                ? { uri: item.fromUserAvatar }
+                : require("../../assets/images/profile/profilePlaceholder.png")
+            }
+            className="w-full h-full"
+            resizeMode="cover"
+          />
+        </View>
+        <View className="flex-1 pr-2">
+          <Text className="text-base font-semibold" numberOfLines={1} ellipsizeMode="tail">{item.fromUsername}</Text>
+        </View>
       </View>
       <View className="flex-row items-center space-x-2">
         {item.isFriend ? (
-          <View className="bg-green-500 px-4 py-2 rounded-xl">
+          <View className="bg-green-500 px-4 py-2 rounded-lg">
             <Text className="text-black font-semibold">Zaakceptowano</Text>
           </View>
         ) : (
-          <View className="flex-row space-x-2">
+          <View className="flex-row space-x-1">
             <TouchableOpacity
               onPress={() => acceptUser(item.id)}
-              className="bg-green-500 px-4 py-2 rounded-xl"
+              className="bg-primary-100 px-2 py-2 rounded-lg"
             >
-              <Text className="text-white font-semibold">Akceptuj</Text>
+              <Check size={18} color={"white"} />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => rejectUser(item.id)}
-              className="bg-red-500 px-4 py-2 rounded-xl"
+              className="bg-red-500 px-2 py-2 rounded-lg"
             >
-              <Text className="text-white font-semibold">Odrzuć</Text>
+              <X size={18} color={"white"} />
             </TouchableOpacity>
           </View>
         )}
@@ -141,30 +147,29 @@ const invites = () => {
   );
 
   const renderClothItem = (cloth) => {
-
     const parts = cloth.picture.split("images-server:80");
     const photo = ipAddressNginx + parts[1];
 
     return (
-    <View key={cloth.id} className="bg-gray-50 rounded-lg p-2 mr-2 mb-2">
-      {cloth.picture ? (
-         <Image
-          source={{ uri: photo }}
-          style={{ width: 80, height: 80, borderRadius: 8 }}
-        />
-      ) : (
-        <View className="w-20 h-20 bg-gray-200 rounded-lg mb-1 items-center justify-center">
-          <Text className="text-gray-400 text-xs">Brak zdjęcia</Text>
-        </View>
-      )}
-      <Text className="text-xs font-semibold text-center" numberOfLines={1}>
-        {cloth.name}
-      </Text>
-      <Text className="text-xs text-gray-600 text-center" numberOfLines={1}>
-        {cloth.size}
-      </Text>
-    </View>
-  )
+      <View key={cloth.id} className="bg-gray-50 rounded-lg p-2 mr-2 mb-2">
+        {cloth.picture ? (
+          <Image
+            source={{ uri: photo }}
+            style={{ width: 80, height: 80, borderRadius: 8 }}
+          />
+        ) : (
+          <View className="w-20 h-20 bg-gray-200 rounded-lg mb-1 items-center justify-center">
+            <Text className="text-gray-400 text-xs">Brak zdjęcia</Text>
+          </View>
+        )}
+        <Text className="text-xs font-semibold text-center" numberOfLines={1}>
+          {cloth.name}
+        </Text>
+        <Text className="text-xs text-gray-600 text-center" numberOfLines={1}>
+          {cloth.size}
+        </Text>
+      </View>
+    );
   };
 
   const renderTradeOfferItem = ({ item }) => {
@@ -178,11 +183,11 @@ const invites = () => {
         {/* Nagłówek */}
         <View className="bg-[#2A9D8F] p-3">
           <View className="flex-row justify-between items-center">
-            <View>
+            <View className="flex-1 pr-2">
               <Text className="text-white font-bold text-base">
                 {tradeTypeText}
               </Text>
-              <Text className="text-white/90 text-sm">
+              <Text className="text-white/90 text-sm" numberOfLines={1} ellipsizeMode="tail">
                 od: {item.fromUserUsername}
               </Text>
             </View>
@@ -201,7 +206,7 @@ const invites = () => {
           {/* Ubrania od nadawcy */}
           {item.fromUserClothes && item.fromUserClothes.length > 0 && (
             <View className="mb-3">
-              <Text className="font-semibold text-sm mb-2 text-gray-700">
+              <Text className="font-semibold text-sm mb-2 text-gray-700" numberOfLines={1} ellipsizeMode="tail">
                 {item.fromUserUsername} oferuje:
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -264,7 +269,6 @@ const invites = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-        
       <View className="flex-1 p-4 pt-6">
         {loading ? (
           <View className="flex-1 justify-center items-center">
