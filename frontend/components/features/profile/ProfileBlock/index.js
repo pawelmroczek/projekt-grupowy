@@ -17,6 +17,7 @@ export default function ProfileBlock() {
     useFocusEffect(
         React.useCallback(() => {
         const fetchData = async () => {
+            if(!token) return;
             try {
                 const response = await getUserInfo(token);
                 setUserName(response.username);

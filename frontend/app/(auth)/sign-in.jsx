@@ -34,7 +34,7 @@ const SignIn = () => {
     }
 
     // Walidacja hasła
-    if (password) {
+    if (!password) {
       setError("Hasło jest wymagane.");
       return 1;
     }

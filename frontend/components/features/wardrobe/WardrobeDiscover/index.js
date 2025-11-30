@@ -123,7 +123,7 @@ const WardrobeDiscover = ({ selectedCategory }) => {
 
   console.log("Clothes:", selectedItem);
 
-  const parts = selectedItem?.userAvatar.split("images-server:80") || [];
+  const parts = selectedItem?.userAvatar?.split("images-server:80") || [];
   const userAvatar = ipAddressNginx + parts[1];
 
   return (

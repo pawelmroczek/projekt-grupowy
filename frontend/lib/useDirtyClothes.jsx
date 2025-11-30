@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { getClothes } from "./clothes/clothes";
 import { TokenContext } from "./TokenContext";
-import { getClothesHouseholdFiltered } from "./clothes/clothesFriendsParams";
+import { getClothesHousehold } from "./clothes/clothes";
 
 // Funkcja do symulacji symboli prania na podstawie typu i koloru ubrania
 const addSimulatedCareSymbols = (item) => {
@@ -64,26 +64,28 @@ const useDirtyClothes = () => {
   const { token, clothes } = useContext(TokenContext);
 
   const fetchDirtyClothes = async () => {
-    const dirtyHousehold = await getClothesHouseholdFiltered(
-      token,
-      undefined,
-      false
-    ) || [];
+    if(!token) {
+      console.log("Brak tokenu, nie można pobrać brudnych ubrań.");
+      return;
+    }
+    const dirtyHousehold = (await getClothesHousehold(token) || []).filter(
+      (item) => !item.clean
+    ).map(addSimulatedCareSymbols); // Dodaj symulowane symbole prania
 
+    if(dirtyHousehold.length != 0) {
+      setDirtyClothes(dirtyHousehold);
+      return;
+    }
     const dirty = (clothes || [])
       .filter((item) => !item.clean)
       .map(addSimulatedCareSymbols); // Dodaj symulowane symbole prania
-
-    if (dirty.length === 0) {
-      console.log("Brak brudnych ubrań do wyświetlenia.");
-    }
-
-    setDirtyClothes([...dirty, ...(dirtyHousehold || [])]);
+      
+    setDirtyClothes(dirty);
   };
 
   useEffect(() => {
     fetchDirtyClothes();
-  }, [clothes]); // Efekt odpala się tylko, gdy zmienią się `clothes`
+  }, [clothes]);
 
   return dirtyClothes;
 };

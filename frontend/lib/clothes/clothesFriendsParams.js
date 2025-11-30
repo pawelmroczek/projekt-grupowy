@@ -39,6 +39,7 @@ export const getClothesHouseholdFiltered = async (token, season, clean=true) => 
               "Authentication": `Bearer ${token}`
           }
       });
+      console.log(response);
       if (!response.ok) {
           throw new Error(`HTTP status ${response.status}`);
       }
