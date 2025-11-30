@@ -2,7 +2,7 @@ import { ipAddress, ipAddressNginx } from "../ipAddress.js";
 
 export const getUsers = async (token, username) => {
     try {
-      const response = await fetch(ipAddress+"/fashion/users/"+ username , {
+      const response = await fetch(ipAddress+"/fashion/users/"+ username, {
           method: "GET",
           headers: {
               "Authentication": `Bearer ${token}`
@@ -10,6 +10,7 @@ export const getUsers = async (token, username) => {
       });
       if (!response.ok) {
           throw new Error(`HTTP status ${response.status}`);
+          console.log("Błąd HTTP: " + response);
       }
       const data = await response.json();   
       data.forEach(user => {
