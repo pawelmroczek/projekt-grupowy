@@ -29,7 +29,7 @@ export const getClothesFriendsFiltered = async (token, season) => {
 
 export const getClothesHouseholdFiltered = async (token, season, clean=true) => {
     try {
-      const url = new URL(ipAddress + "/fashion/clothes/friends/filtered");
+      const url = new URL(ipAddress + "/fashion/clothes/household/filtered");
       url.searchParams.append("clean", clean);
       if (season !== undefined) url.searchParams.append("season", season);
 
