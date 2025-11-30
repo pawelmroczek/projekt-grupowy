@@ -198,9 +198,9 @@ const WardrobeDiscover = ({ selectedCategory }) => {
                               source={
                                 selectedItem.userAvatar
                                   ? { uri: selectedItem.userAvatar }
-                                  : require("../../../assets/images/profile/profilePlaceholder.png")
+                                  : require("../../../../assets/images/profile/profilePlaceholder.png")
                               }
-                              className="w-full h-full"
+                              className="w-full h-full rounded-full"
                               resizeMode="cover"
                             />
                           </View>
@@ -229,10 +229,10 @@ const WardrobeDiscover = ({ selectedCategory }) => {
                     <View className="w-full space-y-2">
                       <TouchableOpacity
                         onPress={handleExchange}
-                        className="w-full flex flex-row space-x-2 justify-center items-center bg-primary-100 py-2 rounded-lg active:scale-95"
+                        className="w-full flex flex-row space-x-2 justify-center items-center bg-primary-100 py-2 rounded-lg active:scale-95 pr-4"
                       >
-                        <ArrowLeftRight color="white" size={22} />
-                        <Text className="text-white text-center text-lg font-bold">
+                        <ArrowLeftRight color="white"  size={22} />
+                        <Text className="text-white text-center text-lg font-semibold">
                           Wymiana
                         </Text>
                       </TouchableOpacity>
@@ -249,7 +249,7 @@ const WardrobeDiscover = ({ selectedCategory }) => {
                         }}
                       >
                         <ArrowLeftFromLine color="white" size={22} />
-                        <Text className="text-white text-center text-lg font-bold">
+                        <Text className="text-white text-center text-lg font-semibold">
                           Pożyczenie
                         </Text>
                       </TouchableOpacity>
@@ -258,7 +258,7 @@ const WardrobeDiscover = ({ selectedCategory }) => {
                         onPress={handleCloseModal}
                         className="w-full shadow-xs bg-gray-100 py-2 rounded-lg active:scale-95"
                       >
-                        <Text className="text-gray-700 text-center text-lg font-bold">
+                        <Text className="text-gray-700 text-center text-lg font-semibold">
                           Anuluj
                         </Text>
                       </TouchableOpacity>
