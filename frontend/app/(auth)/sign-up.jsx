@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React, { useState, useRef, useContext} from "react";
+import React, { useState, useRef, useContext } from "react";
 import InitialBackground from "../../components/common/InitialBackground";
 
 import logo from "../../assets/logo.png";
@@ -20,16 +20,14 @@ import { CircleX } from "lucide-react-native";
 import ErrorText from "../../components/common/ErrorText";
 import { registerUser } from "../../lib/authorization/authorization";
 
-
 import EmailConfirmation from "../../components/features/auth/EmailConfirmation";
 
-
 const SignUp = () => {
-  const [emailNotificationVisible, setEmailNotificationVisible] = useState(false);
+  const [emailNotificationVisible, setEmailNotificationVisible] =
+    useState(false);
   const [registryStatus, setRegistryStatus] = useState(false);
   const [error, setError] = useState(null);
-  
-  
+
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -75,21 +73,20 @@ const SignUp = () => {
   const handleRegister = async () => {
     const validate = validateForm();
     if (validate === 0) {
-      setRegistryStatus(true)
+      setRegistryStatus(true);
       const response = await registerUser(form);
-      const token = response.message.token ? response.message.token : null; 
+      const token = response.message.token ? response.message.token : null;
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setRegistryStatus(false);
-      
+
       if (response.success) {
         // setToken(token);
         // const clothesData = await getClothes(token);
         // setClothes(clothesData);
         setEmailNotificationVisible(true);
-
       } else {
         console.log("❌ Błąd:", response.message);
-        setError(response.message); 
+        setError(response.message);
       }
     }
   };
@@ -137,6 +134,8 @@ const SignUp = () => {
                 <FormField
                   title="Email"
                   placeholder="Wprowadź swój email"
+                  autoComplete="email"
+                  keyboardType="email-address"
                   value={form.email}
                   otherStyles={"mt-4"}
                   handleChangeText={(e) => setForm({ ...form, email: e })}
@@ -160,7 +159,7 @@ const SignUp = () => {
                   }}
                 >
                   <Text className="text-white text-xl font-pregular">
-                   {registryStatus ? "Rejestracja..." : "ZAREJESTRUJ SIĘ"}
+                    {registryStatus ? "Rejestracja..." : "ZAREJESTRUJ SIĘ"}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -182,12 +181,14 @@ const SignUp = () => {
                   </Text>
                 </TouchableOpacity>
               </View>
-              <EmailConfirmation visible={emailNotificationVisible} setVisible={setEmailNotificationVisible}/>
+              <EmailConfirmation
+                visible={emailNotificationVisible}
+                setVisible={setEmailNotificationVisible}
+              />
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
       </InitialBackground>
-      
     </TouchableWithoutFeedback>
   );
 };

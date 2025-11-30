@@ -18,7 +18,8 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "Potrzebujemy dostępu do kamery, aby zrobić zdjęcia.",
-        "NSPhotoLibraryUsageDescription": "Potrzebujemy dostępu do galerii, aby wybrać zdjęcie."
+        "NSPhotoLibraryUsageDescription": "Potrzebujemy dostępu do galerii, aby wybrać zdjęcie.",
+        "NSLocationWhenInUseUsageDescription": "Potrzebujemy dostępu do lokalizacji, aby pobrać dane pogodowe dla Twojego regionu."
       }
     },
     "android": {

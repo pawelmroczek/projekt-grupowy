@@ -1,7 +1,8 @@
-import { View, Text, TouchableOpacity, Modal, ScrollView, FlatList, StyleSheet, Image } from "react-native";
+import { View, Text, TouchableOpacity, Modal, ScrollView, FlatList, StyleSheet, Image, Alert } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
-import { WandSparkles, X, Palette } from "lucide-react-native";
+import { WandSparkles, X, Palette, MapPin } from "lucide-react-native";
 import { router } from "expo-router";
+import * as Location from 'expo-location';
 import { getClothes } from "../../../../lib/clothes/clothes";
 import { TokenContext } from "../../../../lib/TokenContext";
 import { planOutfit } from "../../../../lib/outfits/planOutfit";
@@ -18,6 +19,7 @@ export default function SmartOutfitsSettings({visible, onClose}) {
     const [takeHomies, setTakeHomies] = useState(false);
     const [isOutwear, setIsOutwear] = useState(false);
     const [isHat, setIsHat] = useState(true);
+    const [loadingWeather, setLoadingWeather] = useState(false);
 
     const [pickedClothes, setPickedClothes] = useState(null);
 
@@ -59,6 +61,43 @@ export default function SmartOutfitsSettings({visible, onClose}) {
         setFilteredClothes(filtered);
         }
       }, [selectedCategory, clothes, isClean]);
+
+    const fetchWeatherData = async () => {
+      setLoadingWeather(true);
+      try {
+        // Pobierz uprawnienia do lokalizacji
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert('Błąd', 'Brak dostępu do lokalizacji');
+          setLoadingWeather(false);
+          return;
+        }
+
+        // Pobierz lokalizację użytkownika
+        const location = await Location.getCurrentPositionAsync({});
+        const { latitude, longitude } = location.coords;
+
+        // Pobierz dane pogodowe z Open-Meteo API
+        const response = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m&hourly=temperature_2m&forecast_days=1&timezone=auto`
+        );
+        const data = await response.json();
+
+        if (data.hourly && data.hourly.temperature_2m) {
+          const temps = data.hourly.temperature_2m;
+          const min = Math.floor(Math.min(...temps));
+          const max = Math.ceil(Math.max(...temps));
+          
+          setMinTemp(min);
+          setMaxTemp(max);
+        }
+      } catch (error) {
+        console.error('Error fetching weather:', error);
+        Alert.alert('Błąd', 'Nie udało się pobrać danych pogodowych');
+      } finally {
+        setLoadingWeather(false);
+      }
+    };
 
     const SettingRow = ({
         title,
@@ -298,6 +337,20 @@ export default function SmartOutfitsSettings({visible, onClose}) {
                   setColorPalettes={setColorPalettes}
                   pickedHex={pickedClothes ? pickedClothes.colorHex : null}
                 ></ColorPalettes>
+
+                <View className="flex-row items-center justify-between py-3 border-b border-gray-100">
+                  <View className="flex-1 mr-4">
+                    <Text className="font-pmedium text-gray-800">Pobierz temperaturę</Text>
+                    <Text className="text-sm text-gray-600 mt-1">Automatycznie ustaw zakres temperatury na podstawie pogody w Twojej lokalizacji</Text>
+                  </View>
+                  <TouchableOpacity
+                    className={`p-3 rounded-lg ${loadingWeather ? 'bg-gray-300' : 'bg-primary-100'}`}
+                    onPress={fetchWeatherData}
+                    disabled={loadingWeather}
+                  >
+                    <MapPin size={24} color="white" />
+                  </TouchableOpacity>
+                </View>
 
                 <NumberInput
                     title="Minimalna temperatura"
