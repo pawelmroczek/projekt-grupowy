@@ -9,9 +9,9 @@ import { useState } from "react";
 
 import { WandSparkles  } from "lucide-react-native";
 
-import { clothesClassification } from "../../../lib/ml/index.js";
+import { clothesClassification } from "../../../../lib/ml/index.js";
 
-import { simpleColorName } from "../../../assets/constants/colors/colors.js";
+import { simpleColorName } from "../../../../assets/constants/colors/colors.js";
 
 const ClassifyButton = ({ imageUri, imageType, imageName, predictedType, setPredictedType, setSelectedType, hex, setColor }) => {
     const [loading, setLoading] = useState(false);

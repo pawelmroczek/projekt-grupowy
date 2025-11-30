@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import FormField from "../../../common/FormField";
-import VerticalSelector from "../../../common/VerticalSelector";
+import HorizontalSelector from "../../../common/HorizontalSelector";
 import { outfitsTypes } from "../../../../lib/outfitsTypes";
 
 import { fetchOutfits, outfitsSending } from "../../../../lib/outfits/outfits";
@@ -64,7 +64,7 @@ const ModalBox = ({ modalVisible, setModalVisible, selectedItems, visible }) => 
                 onChangeText={(text) => setOutfitName(text)}
               />
 
-              <VerticalSelector
+              <HorizontalSelector
                 options={outfitsTypes}
                 setValue={setSelectType}
                 value={selectType}

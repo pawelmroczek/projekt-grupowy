@@ -16,8 +16,6 @@ import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
 import { useMemo } from "react";
 
-import SearchBarWardrobe from "../../common/SearchBarWardrobe";
-import AddButton from "./AddButton";
 import { TokenContext } from "../../../lib/TokenContext";
 import {
   getClothesFriends,
@@ -132,7 +130,6 @@ const WardrobeDiscover = ({ selectedCategory }) => {
 
   return (
     <View className="flex-1 bg-gray-100">
-      {/* <SearchBarWardrobe displayMode={displayMode} onDisplayPress={setDisplayMode} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} filters={filters}/> */}
       <FlatList
         data={clothes}
         key={displayMode ? "single" : "double"}

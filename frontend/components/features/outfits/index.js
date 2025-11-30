@@ -19,7 +19,7 @@ import { useMemo } from "react";
 
 
 
-import SearchBarOutfits from "../../common/SearchBarOutfits";
+import SearchBarOutfits from "./SearchBarOutfits";
 import AddButton from "../wardrobe/AddButton";
 import { fetchOutfits } from "../../../lib/outfits/outfits";
 import { TokenContext } from "../../../lib/TokenContext";

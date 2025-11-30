@@ -6,7 +6,7 @@ import { getClothes } from "../../../../lib/clothes/clothes";
 import { TokenContext } from "../../../../lib/TokenContext";
 import { planOutfit } from "../../../../lib/outfits/planOutfit";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../../../assets/constants/types/types";
-import VerticalSelector from "../../../common/VerticalSelector";
+import HorizontalSelector from "../../../common/HorizontalSelector";
 import ColorPalettes from "../ColorPalettes"
 
 export default function SmartOutfitsSettings({visible, onClose}) {
@@ -256,7 +256,7 @@ export default function SmartOutfitsSettings({visible, onClose}) {
                     </View>
                     <View className="items-start mx-auto flex  justify-center w-full rounded-lg ">
                       <Text className="text-lg font-pmedium ml-2">Rodzaj</Text>
-                      <VerticalSelector
+                      <HorizontalSelector
                         options={[...clothingTypeOptions.map(item => item.label), ...shoesTypeOptions.map(item => item.label), ...accessoryTypeOptions.map(item => item.label)]}
                         setValue={setSelectedCategory}
                         value={selectedCategory}

@@ -11,15 +11,15 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 
 import { X, Pencil, UserCircle } from "lucide-react-native";
-import { clothesDeleting, getOutfitsCount } from "../lib/clothes/clothes";
+import { clothesDeleting, getOutfitsCount } from "../../lib/clothes/clothes";
 
-import { getClothes } from "../lib/clothes/clothes";
-import { TokenContext } from "../lib/TokenContext";
+import { getClothes } from "../../lib/clothes/clothes";
+import { TokenContext } from "../../lib/TokenContext";
 import {
   visibilityDescription,
   visibilityImages,
   visibilityLabel,
-} from "../assets/constants/visibilty/visibilty";
+} from "../../assets/constants/visibilty/visibilty";
 
 const clothDetails = () => {
   const cloth = useLocalSearchParams();

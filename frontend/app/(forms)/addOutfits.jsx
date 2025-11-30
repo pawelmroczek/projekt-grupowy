@@ -8,7 +8,7 @@ import { router } from "expo-router";
 import ModalBox from "../../components/features/outfits/ModalBox";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
 import VisibiltySelector from "../../components/common/VisibiltySelector";
-import VisibilityWarning from "../../components/common/VisibilityWarning";
+import VisibilityWarning from "../../components/features/outfits/VisibilityWarning";
 import { TokenContext } from "../../lib/TokenContext";
 
 export default function Index() {

@@ -7,16 +7,16 @@ import {
   StyleSheet,
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
-import { TokenContext } from "../lib/TokenContext";
-import OutfitDetailsTile from "../components/features/outfits/OutfitsDetails";
+import { TokenContext } from "../../lib/TokenContext";
+import OutfitDetailsTile from "../../components/features/outfits/OutfitsDetails";
 import {
   clothingTypeOptions,
   shoesTypeOptions,
   accessoryTypeOptions,
-} from "../assets/constants/types/types";
-import ModalBox from "../components/features/outfits/ModalBox";
-import VisibiltySelector from "../components/common/VisibiltySelector";
-import VisibilityWarning from "../components/common/VisibilityWarning";
+} from "../../assets/constants/types/types";
+import ModalBox from "../../components/features/outfits/ModalBox";
+import VisibiltySelector from "../../components/common/VisibiltySelector";
+import VisibilityWarning from "../../components/features/outfits/VisibilityWarning";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const smartOutfitOffer = () => {

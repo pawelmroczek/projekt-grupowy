@@ -17,7 +17,7 @@ import AddPhoto from "../../components/features/wardrobe/AddPhoto";
 import ColorSelector from "../../components/features/wardrobe/ColorSelector";
 import LaundryIconsSelector from "../../components/features/wardrobe/LaundryIconsSelector";
 
-import VerticalSelector from "../../components/common/VerticalSelector";
+import HorizontalSelector from "../../components/common/HorizontalSelector";
 import { getClothes } from "../../lib/clothes/clothes";
 import ThreeOptionSelector from "../../components/common/ThreeOptionSelector";
 import {
@@ -31,10 +31,11 @@ import {
   accessoryTypeOptions,
 } from "../../assets/constants/types/types";
 import { Seasons } from "../../assets/constants/seasons/seasons";
-import ClassifyButton from "../../components/common/ClassifyButton";
+import ClassifyButton from "../../components/features/wardrobe/ClassifyButton";
 import VisibiltySelector from "../../components/common/VisibiltySelector";
-import PioritySelector from "../../components/common/PioritySelector";
+
 import { TokenContext } from "../../lib/TokenContext";
+import PioritySelector from "../../components/features/wardrobe/PioritySelector";
 
 export default function index() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -216,7 +217,7 @@ export default function index() {
               {"Rozmiar:"}
             </Text>
             <View>
-              <VerticalSelector
+              <HorizontalSelector
                 options={sizesByCategory[selectedCategory] || []}
                 setValue={setSelectedSize}
                 value={selectedSize}
@@ -226,7 +227,7 @@ export default function index() {
               {"Typ:"}
             </Text>
             <View>
-              <VerticalSelector
+              <HorizontalSelector
                 options={typeOptions[selectedCategory] || []}
                 setValue={setSelectedType}
                 value={selectedType}
@@ -236,7 +237,7 @@ export default function index() {
               {"Sezon:"}
             </Text>
             <View>
-              <VerticalSelector
+              <HorizontalSelector
                 options={seasonOptions || []}
                 setValue={setSelectedSeason}
                 value={selectedSeason}

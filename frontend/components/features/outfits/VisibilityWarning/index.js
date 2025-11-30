@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import { AlertCircle } from "lucide-react-native";
-import { visibilityLabelAlert } from "../../../assets/constants/visibilty/visibilty";
+import { visibilityLabelAlert } from "../../../../assets/constants/visibilty/visibilty";
 
 const VisibilityWarning = ({ clothes, outfitVisibility }) => {
   const clothesWithLowerVisibility = clothes.filter(

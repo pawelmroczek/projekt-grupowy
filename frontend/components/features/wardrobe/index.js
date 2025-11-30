@@ -14,7 +14,7 @@ import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
 import { useMemo } from "react";
 
-import SearchBarWardrobe from "../../common/SearchBarWardrobe";
+import SearchBarWardrobe from "./SearchBarWardrobe";
 import AddButton from "./AddButton";
 import { TokenContext } from "../../../lib/TokenContext";
 

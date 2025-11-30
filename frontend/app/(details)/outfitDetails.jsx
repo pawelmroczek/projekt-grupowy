@@ -1,5 +1,7 @@
+import React, { useState, useContext } from "react";
 import {
   View,
+  Image,
   Text,
   TouchableOpacity,
   ScrollView,
@@ -7,14 +9,34 @@ import {
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 
-import { X } from "lucide-react-native";
-import OutfitDetailsTile from "../components/features/outfits/OutfitsDetails";
-import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../assets/constants/types/types";
+import { X, Pencil } from "lucide-react-native";
+import { clothesDeleting } from "../../lib/clothes/clothes";
+import { TokenContext } from "../../lib/TokenContext";
+import { getClothes } from "../../lib/clothes/clothes";
+import OutfitDetailsTile from "../../components/features/outfits/OutfitsDetails";
+import { fetchOutfits, outfitDeleting } from "../../lib/outfits/outfits";
+import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
 
-const publicOutfitDetails = () => {
+const outfitDetails = () => {
   const outfit = useLocalSearchParams();
- 
-  const outfitClothes = outfit.clothes ? JSON.parse(outfit.clothes) : [];
+  const { token, setToken } = useContext(TokenContext);
+  const { clothes, setClothes } = useContext(TokenContext);
+  const {outfits, setOutfits} = useContext(TokenContext);
+
+  const handleDelete = async (id) => {
+    const serverresponse = await outfitDeleting(id, token);
+    const outfitsData = await fetchOutfits(token);
+    setOutfits(outfitsData);
+    router.replace("/wardrobe");
+  };
+
+  const clothesIds = typeof outfit.clothesIds === "string"
+  ? outfit.clothesIds.split(",").map(Number)
+  : outfit.clothesIds;
+
+  const outfitClothes = clothes.filter((cloth) =>
+    clothesIds?.includes(cloth.id)
+  );
 
  const dictionary = {
      "Nakrycie głowy": clothingTypeOptions
@@ -73,15 +95,26 @@ const publicOutfitDetails = () => {
               clothes={category.clothes}
             />
           ))}
-          <View className="flex mt-8 mb-10">
+          <View className="flex mt-8 ">
             <View className="bg-white  rounded-t-3xl p-5 flex">
               <Text className="text-2xl font-bold mb-2">{outfit.name}</Text>
               <Text className="text-base text-gray-600">
                 Typ: {outfit.type}
               </Text>
+              <View className="items-center space-y-3 py-3.5 rounded-xl w-full flex justify-center bg-white-100 pb-40">
+                <TouchableOpacity
+                  onPress={() => {
+                    handleDelete(outfit.id);
+                  }}
+                  className="px-4 py-2 w-full flex items-center bg-red-500 rounded-lg"
+                >
+                  <Text className="text-white text-xl font-pregular">
+                    {"Usuń"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-          
         </ScrollView>
       </View>
     </>
@@ -98,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default publicOutfitDetails;
+export default outfitDetails;
