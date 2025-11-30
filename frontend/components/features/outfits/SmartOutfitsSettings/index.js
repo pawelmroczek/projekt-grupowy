@@ -58,7 +58,7 @@ export default function SmartOutfitsSettings({visible, onClose}) {
     
         setFilteredClothes(filtered);
         }
-      }, [selectedCategory, clothes]);
+      }, [selectedCategory, clothes, isClean]);
 
     const SettingRow = ({
         title,
