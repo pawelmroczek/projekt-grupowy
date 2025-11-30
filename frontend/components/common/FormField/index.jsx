@@ -1,5 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Eye, EyeClosed } from "lucide-react-native";
 
 /**
@@ -24,6 +24,7 @@ const FormField = ({
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const isPasswordField = title === "Hasło" || title === "Powtórz hasło";
 
   return (
     <View className={`space-y-2 ${otherStyles}`}>
@@ -41,10 +42,8 @@ const FormField = ({
           placeholder={placeholder}
           placeholderTextColor="#7B7B8B"
           onChangeText={handleChangeText}
-          secureTextEntry={
-            (title === "Hasło" || title === "Powtórz hasło") && !showPassword
-          }
-          autoCapitalize={"none"}
+          secureTextEntry={isPasswordField && !showPassword}
+          autoCapitalize="none"
           {...props}
         />
         {(title === "Hasło" || title === "Powtórz hasło") && (

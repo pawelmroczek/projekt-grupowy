@@ -21,9 +21,6 @@ const Profile = () => {
         className="absolute bottom-6 bg-white border-2 border-secondary-300 rounded-xl pb-4 items-center w-[90%] self-center"
         onPress={() => {
           router.replace("/");
-          setToken(null);
-          setClothes([]);
-          setOutfits([]);
         }}
       >
         <Text className="text-center text-secondary-300 text-base mt-4 font-semibold">

@@ -79,7 +79,7 @@ const smartOutfitOffer = () => {
         <ScrollView className="mt-5">
           {outfitClothes.length === 0 ?
             <Text className="text-center text-gray-500">
-              Brak ubrań do wyświetlenia.
+              Brak ubrań pasujących do ustawień.
             </Text> : null
           }
           {categorizedClothes.map((category) => (
@@ -102,9 +102,10 @@ const smartOutfitOffer = () => {
                 handleSave();
               }}
               disabled={outfitClothes.length === 0}
-              className="px-4 py-2 bg-primary-100 rounded-lg"
-            >
-              <Text className="text-white text-xl font-pregular">
+              className={`px-4 py-2 bg-primary-100 rounded-lg ${
+                outfitClothes.length === 0 ? "opacity-50" : ""
+              }`}>
+                <Text className="text-white text-xl font-pregular">
                 {"ZAPISZ"}
               </Text>
             </TouchableOpacity>

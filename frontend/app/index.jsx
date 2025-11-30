@@ -1,10 +1,23 @@
+import React, { useEffect, useContext } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import backgroundImage from "../assets/backgrounds/initialBackground.png";
 import logo from "../assets/logo.png";
 import { router } from "expo-router";
 import InitialBackground from "../components/common/InitialBackground";
+import { TokenContext } from "../lib/TokenContext";
 
 export default function App() {
+  const { token, setToken } = useContext(TokenContext);
+  const { clothes, setClothes } = useContext(TokenContext);
+  const { outfits, setOutfits } = useContext(TokenContext);
+
+  useEffect(() => {
+    setToken(null);
+    setClothes([]);
+    setOutfits([]);
+  }, []);
+
+
   return (
     <InitialBackground image={backgroundImage}>
       <View className="items-center  p-6 rounded-xl">

@@ -16,29 +16,25 @@ import { getClothes } from "../../lib/clothes/clothes";
 const SignIn = () => {
   const [loginStatus, setLoginStatus] = useState(false);
   const [error, setError] = useState(null);
-  const [form, setForm] = useState({
-    // email: "admin@gmail.com", //tymczasowe dane do logowania
-    // password: "admin", //tymczasowe dane do logowania
-    email:"vincenzo.piras@o2.pl",
-    password: "12345678",
-  });
 
   const { token, setToken } = useContext(TokenContext);
   const { clothes, setClothes } = useContext(TokenContext);
+  const [ email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   function validateForm()
   {
     // Walidacja e-mail
-    if (!form.email) {
+    if (!email) {
       setError("Adres e-mail jest wymagany.");
       return 1;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError("Podaj poprawny adres e-mail.");
       return 1;
     }
 
     // Walidacja hasła
-    if (!form.password) {
+    if (password) {
       setError("Hasło jest wymagane.");
       return 1;
     }
@@ -51,7 +47,7 @@ const SignIn = () => {
     const validate = validateForm();
     if(validate == 0){
       setLoginStatus(true);
-      const data = await loginUser(form.email, form.password);
+      const data = await loginUser(email, password);
       const token = data.message.token ? data.message.token : null;
       //symulacja ładowania
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -80,21 +76,20 @@ const SignIn = () => {
           <FormField
             title="Email"
             placeholder="Wprowadź swój email"
-            value={form.email}
-            handleChangeText={(e) => setForm({ ...form, email: e })}
+            value={email}
+            handleChangeText={(e) => setEmail(e)}
             autoComplete="email"
             keyboardType="email-address"
-            textContentType="username"
           />
           <FormField
-            value={form.password}
-            handleChangeText={(e) => setForm({ ...form, password: e })}
+            value={password}
+            handleChangeText={(e) => setPassword(e)}
             title="Hasło"
             placeholder="Wprowadź swoje hasło"
             otherStyles={"mt-4"}
             autoComplete="current-password"
-            textContentType="password"
           />
+          
         </View>
         <View className="items-center mt-5 py-3.5 rounded-xl w-full flex-row justify-center bg-primary-100">
           <TouchableOpacity
