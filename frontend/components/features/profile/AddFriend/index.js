@@ -22,7 +22,6 @@ export default function AddFriend() {
         setInvites(response);
 
         const offers = await fetchOffers(token);
-        console.log("Offers fetched:", offers);
         setTradesOffers(offers);
 
         setLoading(false);

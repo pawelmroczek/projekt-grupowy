@@ -5,12 +5,8 @@ export const loginUser = async (email, password) => {
     email: email,
     password: password,
   };
-  console.log("logowanie");
 
   try {
-    // !!!!!! UWAGA !!!!!!
-    //tu zamiast localhost podajecie adres IP swojego komputera
-
     const data = await fetch(ipAddress+"/fashion/users/signIn", {
       method: "POST",
       headers: {

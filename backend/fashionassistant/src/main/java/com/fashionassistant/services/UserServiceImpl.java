@@ -61,12 +61,12 @@ public class UserServiceImpl implements UserService {
         VerificationToken verificationToken =
                 new VerificationToken(0, token, LocalDateTime.now().plusHours(24), user);
         verificationTokenRepository.save(verificationToken);
-        String verificationUrl = "http://localhost:8080/fashion/users/verify/" + token;
+        String verificationUrl = "http://185.25.150.139:8080/fashion/users/verify/" + token;
         emailService.sendVerificationEmail(user.getEmail(),
-                "Fashion Buddy email verification",
-                "<p>Click the link below to activate your account:</p>" +
-                        "<p><a href=\"" + verificationUrl + "\">Activate Account</a></p>");
-        return new UserFriendGet(createdUser.getId(), createdUser.getUsername());
+                "Fashion Buddy potwierdzenie maila",
+                "<p>Kliknij link poniżej, aby aktywować konto:</p>" +
+                        "<p><a href=\"" + verificationUrl + "\">Aktywuj konto</a></p>");
+        return new UserFriendGet(createdUser.getId(), createdUser.getUsername(), createdUser.getAvatar() != null ? createdUser.getAvatar().getUrl() : null);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
             if (invitationsCount != 0) {
                 return;
             }
-            usersGet.add(new UserFriendGet(user.getId(), user.getUsername()));
+            usersGet.add(new UserFriendGet(user.getId(), user.getUsername(), user.getAvatar() != null ? user.getAvatar().getUrl() : null));
         });
         return usersGet;
     }

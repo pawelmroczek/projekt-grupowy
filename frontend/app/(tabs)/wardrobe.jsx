@@ -7,12 +7,15 @@ import {
 import Wardrobe from "../../components/features/wardrobe";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OutfitsPage from "../../components/features/outfits";
+import { TokenContext } from "../../lib/TokenContext";
 
 
 const FormData = global.FormData;
 
 const WardrobePage = () => {
   const [selectedPage, setSelectedPage] = useState("wardrobe");
+
+  
 
   // const rawFilters = useLocalSearchParams();
   // const filters = useMemo(() => rawFilters, [JSON.stringify(rawFilters)]);

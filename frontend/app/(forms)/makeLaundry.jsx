@@ -17,7 +17,7 @@ import { toggleClean } from "../../lib/clothes/clothes";
 import { getClothes, getClothesHousehold } from "../../lib/clothes/clothes";
 import { addLaundry } from "../../lib/laundry/addLaundry";
 import CareSymbolsDisplay from "../../components/features/laundry/CareSymbolsDisplay";
-import { getColorFromGroup } from "../../lib/colors";
+import { getColorFromGroup } from "../../assets/constants/colors/colors";
 import { getSymbolDescription } from "../../lib/careSymbols";
 import { TokenContext } from "../../lib/TokenContext";
 import useDirtyClothes from "../../lib/useDirtyClothes";
@@ -48,7 +48,6 @@ const makeLaundry = () => {
         : allDirtyClothes;
     } else if (isSuggestedLaundry) {
       laundryData = JSON.parse(params.laundry);
-      console.log(laundryData);
       const clothesIds = laundryData.clothes.map((item) => item.id);
       dirtyClothes = allDirtyClothes.filter((item) =>
         clothesIds.includes(item.id)
@@ -98,13 +97,14 @@ const makeLaundry = () => {
       </View>
       <ScrollView
         contentContainerStyle={{
+          width:"100%",
           alignItems: "center",
           paddingVertical: 20,
           paddingHorizontal: 10,
         }}
         showsHorizontalScrollIndicator={false}
       >
-        <View className="flex-row flex-wrap justify-start">
+        <View className="flex-row flex-wrap justify-start w-full">
           {dirtyClothes.map((item) => (
             <TouchableOpacity
               key={item.id}

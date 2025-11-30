@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useFocusEffect } from '@react-navigation/native';
+import { useState, useContext, useEffect } from "react";
+
 import {
   View,
   FlatList,
@@ -8,15 +8,9 @@ import {
   TouchableOpacity,
   StyleSheet
 } from "react-native";
-
 import { router } from "expo-router";
-import { useLocalSearchParams } from "expo-router";
-import { useMemo } from "react";
-import { fetchOutfits } from "../../../lib/outfits/outfits";
-import { TokenContext } from "../../../lib/TokenContext";
-import { fetchOutfitsFriends, fetchOutfitsPublic } from "../../../lib/outfits/discovery";
-
-
+import { TokenContext } from "../../../../lib/TokenContext";
+import { fetchOutfitsFriends, fetchOutfitsPublic } from "../../../../lib/outfits/discovery";
 
 const OutfitsDiscover = ({selectedCategory}) => {
   
@@ -31,7 +25,7 @@ const OutfitsDiscover = ({selectedCategory}) => {
 
 
   const fetchOutfits = async (page) => {
-    if (loading || !hasMore) return;
+    if (page != 1 && (loading || !hasMore)) return;
     setLoading(true);
       try {
         if (selectedCategory === "public") {
@@ -58,25 +52,21 @@ const OutfitsDiscover = ({selectedCategory}) => {
     setPage(1);
     setHasMore(true);
     fetchOutfits(1);
-    console.log(outfits);
   }, [selectedCategory]);
 
 
   const renderItem = ({ item: outfit }) => {
-    const items = outfit?.clothesIds.map((id) => {
-      const item = clothes.find((cloth) => cloth.id === id);
-      return item ? { ...item, outfit } : null;
-    });
+    const items = outfit?.clothes;
 
     return (
       <TouchableOpacity
         style={[styles.item, displayMode ? styles.single : styles.double]}
         onPress={() =>
           router.push({
-            pathname: "/outfitDetails",
+            pathname: "/publicOutfitDetails",
             params: {
               name: outfit.name,
-              clothesIds: outfit.clothesIds,
+              clothes: outfit.clothes ? JSON.stringify(outfit.clothes) : JSON.stringify([]),
               id: outfit.id,
               type: outfit.type,
             },

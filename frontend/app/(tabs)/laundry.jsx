@@ -12,6 +12,7 @@ import { fetchLaundries } from "../../lib/laundry/fetchLaundries";
 import planLaundry from "../../lib/laundry/planLaundry";
 import { fetchLaundyPreferences } from "../../lib/laundry/fetchLaundyPreferences";
 import { TokenContext } from "../../lib/TokenContext";
+import useDirtyClothes from "../../lib/useDirtyClothes";
 
 {
   /*
@@ -34,7 +35,10 @@ const Laundry = () => {
 
   const [laundryPlan, setLaundryPlan] = useState([]);
 
-  const { token, clothes, outfits } = useContext(TokenContext);
+  const { token, outfits } = useContext(TokenContext);
+
+  const clothes = useDirtyClothes();
+
 
   const [options, setOptions] = useState({
     minItemsPerLoad: 1,
@@ -46,22 +50,21 @@ const Laundry = () => {
     allowDelicateWithNormal: true,
   });
 
-   const fetchData = async () => {
+  const fetchData = async () => {
     const data = await fetchLaundries(token);
     const preferences = await fetchLaundyPreferences(token);
     setOptions(preferences);
     setLaundries(data);
   };
 
-
-
   useEffect(() => {
-    fetchData();    
+    fetchData();
   }, []);
 
-
   useEffect(() => {
-    setLaundryPlan(planLaundry(clothes || [], laundries, outfits || [], options));
+    setLaundryPlan(
+      planLaundry(clothes || [], laundries, outfits || [], options)
+    );
   }, [options, clothes, laundries, outfits]);
 
   return (

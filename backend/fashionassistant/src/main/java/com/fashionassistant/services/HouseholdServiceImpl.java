@@ -9,6 +9,7 @@ import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,10 +22,13 @@ public class HouseholdServiceImpl implements HouseholdService {
     @Override
     public List<UserFriendGet> getUsersFromHousehold() {
         User currentUser = authService.getCurrentUser();
+        if(currentUser.getHousehold() ==  null){
+            return new ArrayList<>();
+        };
         Household household = householdRepository.findById(currentUser.getHousehold().getId())
                 .orElseThrow(() -> new NotFoundException("Household not found"));
         List<UserFriendGet> usersFromHousehold = household.getUsers().stream()
-                .map(user -> new UserFriendGet(user.getId(), user.getUsername()))
+                .map(user -> new UserFriendGet(user.getId(), user.getUsername(), user.getAvatar() != null ? user.getAvatar().getUrl() : null))
                 .toList();
         return usersFromHousehold;
     }

@@ -8,18 +8,10 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import AddButton from "../../components/features/wardrobe/AddButton";
-import { router } from "expo-router";
-import SearchBarWardrobe from "../../components/common/SearchBarWardrobe";
 
-import { getClothes } from "../../lib/clothes/clothes";
-
-import { useLocalSearchParams } from "expo-router";
-import { useMemo } from "react";
-import Wardrobe from "../../components/features/wardrobe";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import OutfitsPage from "../../components/features/outfits";
+
 import WardrobeDiscover from "../../components/features/wardrobe/WardrobeDiscover";
 import { Globe, Users } from "lucide-react-native";
 import OutfitsDiscover from "../../components/features/outfits/OutfitsDiscover";

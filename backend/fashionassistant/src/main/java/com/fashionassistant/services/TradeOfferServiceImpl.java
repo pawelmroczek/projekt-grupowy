@@ -7,8 +7,11 @@ import com.fashionassistant.repositories.ClothesRepository;
 import com.fashionassistant.repositories.TradeOfferRepository;
 import com.fashionassistant.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,6 +41,7 @@ public class TradeOfferServiceImpl implements TradeOfferService {
                 toUser,
                 tradeOfferCreate.type(),
                 tradeOfferCreate.loanFinishDate(),
+                LocalDateTime.now(),
                 getSetOfClothesByIds(tradeOfferCreate.fromUserClothesIds(), fromUser.getId()),
                 getSetOfClothesByIds(tradeOfferCreate.toUserClothesIds(), toUser.getId())
         );
@@ -87,6 +91,34 @@ public class TradeOfferServiceImpl implements TradeOfferService {
         fromUser.deleteTradeOffer(tradeOffer);
         toUser.deleteTradeOffer(tradeOffer);
         tradeOfferRepository.delete(tradeOffer);
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    private void getBackClothesFromLoan() {
+        List<Clothes> clothes = clothesRepository.findAll();
+        clothes.forEach(singleClothes -> {
+            LocalDate finishDate = singleClothes.getLoanFinishDate();
+            if (finishDate != null && finishDate.isBefore(LocalDate.now())) {
+                singleClothes.setLoanFinishDate(null);
+                User user = singleClothes.getUser();
+                user.deleteLoanClothes(singleClothes);
+                singleClothes.setLoanUser(null);
+                userRepository.save(user);
+            }
+        });
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    private void removeTradeOffers() {
+        List<TradeOffer> tradeOffers = tradeOfferRepository.findAll();
+        tradeOffers.forEach(tradeOffer -> {
+            LocalDateTime createdAt = tradeOffer.getCreatedAt().plusDays(1);
+            if (createdAt.isBefore(LocalDateTime.now())) {
+                tradeOffer.setFromUser(null);
+                tradeOffer.setToUser(null);
+                tradeOfferRepository.delete(tradeOffer);
+            }
+        });
     }
 
     private void deleteTradeOffersWithClothesIds(Set<Integer> clothesIds, User fromUser, User toUser) {

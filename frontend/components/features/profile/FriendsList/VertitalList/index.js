@@ -1,20 +1,28 @@
-import { View, Text, ScrollView, TouchableOpacity, Modal, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+  Pressable,
+  Image,
+} from "react-native";
 import React, { useState, useContext } from "react";
 import { CircleUser, UserX } from "lucide-react-native";
 
 import { iviteSending } from "../../../../../lib/friends/friends";
 import { TokenContext } from "../../../../../lib/TokenContext";
 
-export default function VerticalList({friends = [],  household = []}) {
-
-
+export default function VerticalList({
+  friends = [],
+  household = [],
+  isHouseHold = false,
+}) {
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const { token, setToken } = useContext(TokenContext);
 
-
   const householdIds = household.map((member) => member.id);
-
 
   const showModal = (friend) => {
     setSelectedFriend(friend);
@@ -22,9 +30,7 @@ export default function VerticalList({friends = [],  household = []}) {
   };
 
   const invite = async () => {
-    console.log("Zapraszanie użytkownika:", selectedFriend.id);
     const response = await iviteSending(token, selectedFriend.id, "HOUSEHOLDS");
-    console.log("Zaproszenie wysłane:");
     setModalVisible(false);
     setSelectedFriend(null);
   };
@@ -46,8 +52,19 @@ export default function VerticalList({friends = [],  household = []}) {
           const isInHousehold = householdIds.includes(friend.id);
 
           const content = (
-            <View className="p-4 items-center">
-              <CircleUser size={30} />
+            <View className="px-4 py-2 items-center">
+              <View className="w-12 h-12 bg-gray-100 rounded-full overflow-hidden">
+                <Image
+                  source={
+                    friend.avatar
+                      ? { uri: friend.avatar }
+                      : require("../../../../../assets/images/profile/profilePlaceholder.png")
+                  }
+                  className="w-full h-full"
+                  resizeMode="cover"
+                />
+              </View>
+
               <Text className="text-lg">{friend.username}</Text>
             </View>
           );
@@ -64,7 +81,9 @@ export default function VerticalList({friends = [],  household = []}) {
         {friends.length === 0 && (
           <View className="p-4  w-full flex items-center flex-row justify-center space-x-2">
             <UserX size={30} color="#e76f51" />
-            <Text className="text-base text-secondary-300">Brak znajomych</Text>
+            <Text className="text-base text-secondary-300">
+              {isHouseHold ? "Brak domowników" : "Brak znajomych"}
+            </Text>
           </View>
         )}
       </ScrollView>

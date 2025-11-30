@@ -1,10 +1,8 @@
-import { ipAddress } from "../ipAddress";
+import { ipAddress, ipAddressNginx } from "../ipAddress";
 
 
 export const outfitsSending = async (formData, token) => {
     try {
-      console.log("Rozpoczynam wysyłanie...");
-      console.log("token:",token);
       const response = await fetch(ipAddress+"/fashion/outfits", {
           method: "POST",
           headers: {
@@ -13,7 +11,6 @@ export const outfitsSending = async (formData, token) => {
           },
           body: formData,
       });
-      console.log("Odpowiedź serwera:", response);
       if (!response.ok) {
           throw new Error(`HTTP status ${response.status}`);
       }
@@ -39,6 +36,12 @@ export const fetchOutfits = async (token) => {
     }
 
     const data = await response.json();
+    data.forEach((outfit) => {
+      outfit.clothes.forEach((element) => {
+        const parts = element.picture.split("images-server:80");
+        element.picture = ipAddressNginx + parts[1];
+      });
+    });
     return data;
   } catch (error) {
     console.error("Błąd podczas pobierania strojów:", error);

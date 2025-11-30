@@ -10,12 +10,12 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 
 import { X, Pencil } from "lucide-react-native";
-import { clothesDeleting } from "../lib/clothes/clothes";
-import { TokenContext } from "../lib/TokenContext";
-import { getClothes } from "../lib/clothes/clothes";
-import OutfitDetailsTile from "../components/features/outfits/OutfitsDetails";
-import { fetchOutfits, outfitDeleting } from "../lib/outfits/outfits";
-import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../assets/constants/types/types";
+import { clothesDeleting } from "../../lib/clothes/clothes";
+import { TokenContext } from "../../lib/TokenContext";
+import { getClothes } from "../../lib/clothes/clothes";
+import OutfitDetailsTile from "../../components/features/outfits/OutfitsDetails";
+import { fetchOutfits, outfitDeleting } from "../../lib/outfits/outfits";
+import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
 
 const outfitDetails = () => {
   const outfit = useLocalSearchParams();
@@ -27,7 +27,7 @@ const outfitDetails = () => {
     const serverresponse = await outfitDeleting(id, token);
     const outfitsData = await fetchOutfits(token);
     setOutfits(outfitsData);
-    router.replace("/wardobe");
+    router.replace("/wardrobe");
   };
 
   const clothesIds = typeof outfit.clothesIds === "string"
@@ -37,8 +37,6 @@ const outfitDetails = () => {
   const outfitClothes = clothes.filter((cloth) =>
     clothesIds?.includes(cloth.id)
   );
-
-  console.log("Outfit clothes:", clothesIds);
 
  const dictionary = {
      "Nakrycie głowy": clothingTypeOptions

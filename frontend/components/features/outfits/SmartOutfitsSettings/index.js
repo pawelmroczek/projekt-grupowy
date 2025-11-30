@@ -6,7 +6,7 @@ import { getClothes } from "../../../../lib/clothes/clothes";
 import { TokenContext } from "../../../../lib/TokenContext";
 import { planOutfit } from "../../../../lib/outfits/planOutfit";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../../../assets/constants/types/types";
-import VerticalSelector from "../../../common/VerticalSelector";
+import HorizontalSelector from "../../../common/HorizontalSelector";
 import ColorPalettes from "../ColorPalettes"
 
 export default function SmartOutfitsSettings({visible, onClose}) {
@@ -166,8 +166,7 @@ export default function SmartOutfitsSettings({visible, onClose}) {
     const createOutfit = async () => {
       const cleanedPalettes = colorPalettes.filter(palette => palette.length > 0);
       setColorPalettes(cleanedPalettes);
-      const result = await planOutfit(clothes, pickedClothes, minTemp, maxTemp, takeFriends, takeHomies, isHat, isClean, isOutwear, cleanedPalettes, token);
-      console.log(result);
+      const result = await planOutfit(clothes, pickedClothes, minTemp, maxTemp, false, false, isHat, isClean, isOutwear, cleanedPalettes, token);
       router.replace({ pathname: "/smartOutfitOffer", params: { outfitIds: JSON.stringify(result) }});
     }
 
@@ -257,7 +256,7 @@ export default function SmartOutfitsSettings({visible, onClose}) {
                     </View>
                     <View className="items-start mx-auto flex  justify-center w-full rounded-lg ">
                       <Text className="text-lg font-pmedium ml-2">Rodzaj</Text>
-                      <VerticalSelector
+                      <HorizontalSelector
                         options={[...clothingTypeOptions.map(item => item.label), ...shoesTypeOptions.map(item => item.label), ...accessoryTypeOptions.map(item => item.label)]}
                         setValue={setSelectedCategory}
                         value={selectedCategory}
@@ -322,7 +321,7 @@ export default function SmartOutfitsSettings({visible, onClose}) {
                     value={isClean}
                     onValueChange={setIsClean}
                 />
-                <SettingRow
+                {/*<SettingRow
                     title="Pożyczyć od znajomych"
                     description="Uwzględnij ubrania, które mogą być dostępne u znajomych."
                     value={takeFriends}
@@ -333,7 +332,7 @@ export default function SmartOutfitsSettings({visible, onClose}) {
                     description="Uwzględnij ubrania należące do innych użytkowników w Twoim domostwie."
                     value={takeHomies}
                     onValueChange={setTakeHomies}
-                />
+                />*/}
                 <SettingRow
                     title="Uwzględnij nakrycie głowy"
                     description="Dodaj nakrycie głowy do propozycji outfitu."

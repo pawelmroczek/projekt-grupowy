@@ -1,21 +1,6 @@
 import { SYMBOL_CATEGORIES } from "../careSymbols";
 import { LAUNDRY_ICONS_NAMES } from "../../assets/constants/laundry_icons/laundry_icons";
 
-/**
- * Function to get color group based on color name
- * @param {*} color
- * @returns {string} color group
- */
-export const getColorGroup = (color) => {
-  const biale = ["white"];
-  const ciemne = ["black", "brown", "navy"];
-  const jasne = ["beige", "Błękitny", "light gray", "gray"];
-  if (biale.includes(color)) return "białe";
-  if (ciemne.includes(color)) return "ciemne";
-  if (jasne.includes(color)) return "jasne";
-  return "kolorowe";
-};
-
 // Funkcja do określenia temperatury prania na podstawie symboli
 export const getWashTemperature = (careSymbols) => {
 

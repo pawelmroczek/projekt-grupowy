@@ -12,7 +12,12 @@ export const getUsers = async (token, username) => {
           throw new Error(`HTTP status ${response.status}`);
       }
       const data = await response.json();   
-        console.log("Odpowiedź serwera:", data);
+      data.forEach(user => {
+        if(user.avatar){   
+            const parts = user.avatar.split("images-server:80");
+            user.avatar = ipAddressNginx + parts[1];
+        }
+      });
       return data;
     } catch (error) {
       console.error('Błąd:', error);
@@ -32,7 +37,6 @@ export const iviteSending = async (token, id, type) => {
               type: type
           })
       });
-      console.log("Odpowiedź serwera:", response);
       if (!response.ok) {
           throw new Error(`HTTP status ${response.status}`);
       }
@@ -54,8 +58,13 @@ export const getInvites = async (token) => {
       if (!response.ok) {
           throw new Error(`HTTP status ${response.status}`);
       }
-      const data = await response.json();   
-        console.log("Odpowiedź serwera:", data);
+      const data = await response.json();
+      data.forEach(invite => {
+        if(invite.fromUserAvatar){   
+            const parts = invite.fromUserAvatar.split("images-server:80");
+            invite.fromUserAvatar = ipAddressNginx + parts[1];
+        }
+      });
       return data;
     } catch (error) {
       console.error('Błąd:', error);
@@ -108,6 +117,12 @@ export const getFriendsList = async (token) => {
           throw new Error(`HTTP status ${response.status}`);
       }
       const data = await response.json();   
+      data.forEach(user => {
+        if(user.avatar){
+            const parts = user.avatar.split("images-server:80");
+            user.avatar = ipAddressNginx + parts[1];
+        }
+      });
       return data;
     } catch (error) {
       console.error('Błąd:', error);
@@ -126,6 +141,12 @@ export const getHomiesList = async (token) => {
           return [];
       }
       const data = await response.json();
+      data.forEach(user => {
+        if(user.avatar){
+            const parts = user.avatar.split("images-server:80");
+            user.avatar = ipAddressNginx + parts[1];
+        }
+      });
       return data;
     } catch (error) {
       console.error('Błąd:', error);
@@ -192,8 +213,11 @@ export const getUserInfo = async (token) => {
       if (!response.ok) {
           throw new Error(`HTTP status ${response.status}`);
       }
-      const data = await response.json();   
-      console.log("Odpowiedź serwera:", data);
+      const data = await response.json();
+      if(data.avatar){   
+        const parts = data.avatar.split("images-server:80");
+        data.avatar = ipAddressNginx + parts[1];
+      }
       return data;
     } catch (error) {
       console.error('Błąd:', error);

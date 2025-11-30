@@ -1,4 +1,4 @@
 package com.fashionassistant.entities;
 
-public record UserFriendGet(int id, String username) {
+public record UserFriendGet(int id, String username, String avatar) {
 }

@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import FormField from "../../../common/FormField";
-import VerticalSelector from "../../../common/VerticalSelector";
+import HorizontalSelector from "../../../common/HorizontalSelector";
 import { outfitsTypes } from "../../../../lib/outfitsTypes";
 
 import { fetchOutfits, outfitsSending } from "../../../../lib/outfits/outfits";
@@ -41,7 +41,6 @@ const ModalBox = ({ modalVisible, setModalVisible, selectedItems, visible }) => 
       clothesIds: selectedItems.map((item) => item.id),
     };
 
-    console.log("Dane do wysłania:", dataToSend);
     const dataJson =  JSON.stringify(dataToSend);
     await outfitsSending(dataJson, token);
     const outfitsData = await fetchOutfits(token);
@@ -65,7 +64,7 @@ const ModalBox = ({ modalVisible, setModalVisible, selectedItems, visible }) => 
                 onChangeText={(text) => setOutfitName(text)}
               />
 
-              <VerticalSelector
+              <HorizontalSelector
                 options={outfitsTypes}
                 setValue={setSelectType}
                 value={selectType}

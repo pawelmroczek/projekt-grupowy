@@ -6,10 +6,7 @@ import { fetchLaundries } from "../../../../lib/laundry/fetchLaundries";
 
 export default function LaundryHistory({ laundries }) {
   // Tutaj można dodać fetch do pobrania historii prania
-
-  
   const laundriesSorted = [...laundries].reverse();
-  console.log("laundriesSorted", laundriesSorted);
 
   return (
     <View className="mt-4">

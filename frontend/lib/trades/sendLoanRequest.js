@@ -1,8 +1,6 @@
 import { ipAddress } from "../ipAddress";
 
 export const sendLoanRequest = async (loanRequestData, token) => {
-  console.log("loanRequestData w addLoanRequest:", loanRequestData);
-
   // Formatuj datę do formatu YYYY-MM-DD
   const formatDateForAPI = (date) => {
     const d = new Date(date);
@@ -19,8 +17,6 @@ export const sendLoanRequest = async (loanRequestData, token) => {
     fromUserClothesIds: [],
     toUserClothesIds: [loanRequestData.clothId],
   };
-
-  console.log("Data to send:", datatoSend);
 
   try {
     const response = await fetch(ipAddress + "/fashion/trade-offers/send", {

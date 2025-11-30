@@ -161,4 +161,10 @@ public class User implements UserDetails {
         }
         friends.add(user);
     }
+
+    public void deleteLoanClothes(Clothes clothes) {
+        if (loanClothes != null) {
+            loanClothes.remove(clothes);
+        }
+    }
 }

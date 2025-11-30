@@ -4,24 +4,21 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Modal,
   SafeAreaView,
-  ScrollView,
   FlatList,
   StyleSheet,
   Image,
 } from "react-native";
 import { Search, Shirt, WashingMachine } from "lucide-react-native";
-import { router, useLocalSearchParams } from "expo-router";
-
-import VerticalSelector from "../../components/common/VerticalSelector";
-import { useFocusEffect } from "@react-navigation/core";
+import { router } from "expo-router";
 import { getClothes, toggleClean } from "../../lib/clothes/clothes";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
 import { TokenContext } from "../../lib/TokenContext";
+import { colorsTypes, getColorGroup } from "../../assets/constants/colors/colors";
+import HorizontalSelector from "../../components/common/HorizontalSelector";
+
 
 export default function index() {
-  const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
 
   const [filteredClothes, setFilteredClothes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -67,13 +64,16 @@ export default function index() {
     if (clothes) {
       let filtered = clothes.filter((item) => item.clean);
 
-      if (selectedCategory && selectedCategory !== "wszystkie") {
+      if (selectedCategory) {
         filtered = filtered.filter((item) => item.type === selectedCategory);
       }
 
-      if (selectedColor && selectedColor !== "wszystkie") {
-        filtered = filtered.filter((item) => item.color === selectedColor);
+      if (selectedColor) {
+        filtered = filtered.filter(
+            item => getColorGroup(item.color) === selectedColor
+        );
       }
+
 
       setFilteredClothes(filtered);
     }
@@ -112,13 +112,13 @@ export default function index() {
         <View className="h-[85%] ">
           <View className="items-start mx-auto flex  justify-center w-full rounded-lg ">
             <Text className="text-lg font-pmedium ml-2">Kolor</Text>
-            <VerticalSelector
-              options={colors}
+            <HorizontalSelector
+              options={colorsTypes}
               setValue={setSelectedColor}
               value={selectedColor}
             />
             <Text className="text-lg font-pmedium ml-2">Rodzaj</Text>
-            <VerticalSelector
+            <HorizontalSelector
               options={[...clothingTypeOptions.map(item => item.label), ...shoesTypeOptions.map(item => item.label), ...accessoryTypeOptions.map(item => item.label)]}
               setValue={setSelectedCategory}
               value={selectedCategory}

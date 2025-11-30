@@ -14,7 +14,6 @@ export const saveLaundryPreferences = async (token, newOptions) => {
           throw new Error(`HTTP status ${response.status}`);
       }
       const data = await response.json();   
-      console.log('Preferences saved successfully:', data);
       return data;
     } catch (error) {
       console.error('Błąd:', error);

@@ -2,26 +2,25 @@ import React from "react";
 import { View, Text, FlatList } from "react-native";
 import { BarChart } from "react-native-chart-kit";
 import useDirtyClothes from "../../../../lib/useDirtyClothes";
-
+import { getColorGroup } from "../../../../assets/constants/colors/colors";
 
 
 const getClothingColorCounts = (clothes) => {
-  const categories = { Ciemne: 0, Białe: 0, Kolorowe: 0, Jasne: 0 };
-  
+  const categories = {
+    białe: 0,
+    jasne: 0,
+    ciemne: 0,
+    kolorowe: 0,
+  };
+
   clothes.forEach((item) => {
-    if (item.color === "black" || item.color === "gray") {
-      categories.Ciemne += 1;
-    } else if (item.color === "white") {
-      categories.Białe += 1;
-    } else if (item.color === "other" || item.color === "pink") {
-      categories.Jasne += 1;
-    } else {
-      categories.Kolorowe += 1;
-    }
+    const group = getColorGroup(item.color);
+    categories[group] += 1;
   });
-  
+
   return categories;
 };
+
 
 
 

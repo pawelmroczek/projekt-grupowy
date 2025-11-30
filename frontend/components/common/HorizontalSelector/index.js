@@ -1,7 +1,7 @@
 
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-const VerticalSelector = ({ options, value, setValue, multiSelect=false }) => {
+const HorizontalSelector = ({ options, value, setValue, multiSelect=false }) => {
 
   const handlePress = (opt) => {
     if (multiSelect) {
@@ -47,4 +47,4 @@ const VerticalSelector = ({ options, value, setValue, multiSelect=false }) => {
   );
 };
 
-export default VerticalSelector;
+export default HorizontalSelector;

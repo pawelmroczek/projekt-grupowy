@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import InitialBackground from "../../components/common/InitialBackground";
 
 import logo from "../../assets/logo.png";
@@ -17,10 +17,10 @@ const SignIn = () => {
   const [loginStatus, setLoginStatus] = useState(false);
   const [error, setError] = useState(null);
   const [form, setForm] = useState({
-    email: "admin@gmail.com", //tymczasowe dane do logowania
-    password: "admin", //tymczasowe dane do logowania
-    //email: "vincenzo.piras@o2.pl",
-    //password: "12345678",
+    // email: "admin@gmail.com", //tymczasowe dane do logowania
+    // password: "admin", //tymczasowe dane do logowania
+    email: "vincenzo.piras@o2.pl",
+    password: "12345678",
   });
 
   const { token, setToken } = useContext(TokenContext);
@@ -63,7 +63,6 @@ const SignIn = () => {
         setClothes(clothesData);
         router.replace("/discover");
       } else {
-        console.log("❌ Błąd:",data.message.message);
         setError(data.message.message);
       }
     }
@@ -83,6 +82,9 @@ const SignIn = () => {
             placeholder="Wprowadź swój email"
             value={form.email}
             handleChangeText={(e) => setForm({ ...form, email: e })}
+            autoComplete="email"
+            keyboardType="email-address"
+            textContentType="emailAddress"
           />
           <FormField
             value={form.password}
@@ -90,6 +92,8 @@ const SignIn = () => {
             title="Hasło"
             placeholder="Wprowadź swoje hasło"
             otherStyles={"mt-4"}
+            autoComplete="password"
+            textContentType="password"
           />
         </View>
         <View className="items-center mt-5 py-3.5 rounded-xl w-full flex-row justify-center bg-primary-100">

@@ -6,6 +6,12 @@ export const visibilityLabel = {
   2: "Publiczne",
 };
 
+export const visibilityLabelAlert = {
+  0: "Prywatny",
+  1: "Dla znajomych",
+  2: "Publiczny",
+};
+
 export const visibilityDescription = {
   0: "Tylko Ty możesz zobaczyć tę rzecz.",
   1: "Twoi znajomi mogą zobaczyć tę rzecz.",

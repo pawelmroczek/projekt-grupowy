@@ -51,6 +51,7 @@ public class InvitationServiceImpl implements InvitationService {
         fromUser.addSentInvitation(invitation);
         return new InvitationGet(invitation.getId(), invitation.getFromUser().getId(),
                 invitation.getFromUser().getUsername(),
+                invitation.getFromUser().getAvatar() != null ? invitation.getFromUser().getAvatar().getUrl() : null,
                 invitation.getToUser().getId(), invitation.getType());
     }
 
@@ -66,6 +67,7 @@ public class InvitationServiceImpl implements InvitationService {
                                     invitation.getId(),
                                     invitation.getFromUser().getId(),
                                     invitation.getFromUser().getUsername(),
+                                    invitation.getFromUser().getAvatar() != null ? invitation.getFromUser().getAvatar().getUrl() : null,
                                     invitation.getToUser().getId(),
                                     invitation.getType()
                             )

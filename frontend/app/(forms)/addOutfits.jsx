@@ -1,13 +1,14 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState, useMemo } from "react";
 import { ArrowLeft, CirclePlus } from "lucide-react-native";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OutfitSelector from "../../components/features/outfits/OutfitSelector";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 
 import ModalBox from "../../components/features/outfits/ModalBox";
 import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../assets/constants/types/types";
 import VisibiltySelector from "../../components/common/VisibiltySelector";
+import VisibilityWarning from "../../components/features/outfits/VisibilityWarning";
 import { TokenContext } from "../../lib/TokenContext";
 
 export default function Index() {
@@ -19,9 +20,6 @@ export default function Index() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [visibility, setVisibility] = useState(0);
 
-  console.log("Clothes", clothes);
-
-  const colors = ["wszystkie", "ciemne", "jasne", "kolorowe"];
   const dictionary = {
     "Nakrycie głowy": clothingTypeOptions
       .filter(item => item.type === "HAT")
@@ -39,6 +37,12 @@ export default function Index() {
 
   const clothesFiltredByType = (type) =>
     clothes.filter((item) => dictionary[type].includes(item.type));
+
+  // Pobierz wybrane ubrania na podstawie selectedItems
+  const selectedClothes = useMemo(() => {
+    const selectedIds = selectedItems.map(item => item.id);
+    return clothes.filter(cloth => selectedIds.includes(cloth.id));
+  }, [selectedItems, clothes]);
 
   const handleSave = () => {
     if(selectedItems.length === 0) {
@@ -99,6 +103,12 @@ export default function Index() {
           value={visibility}
           setValue={setVisibility}
         />
+        
+        <VisibilityWarning 
+          clothes={selectedClothes} 
+          outfitVisibility={visibility} 
+        />
+        
         {nonValidAlert !== "" ? (
           <Text className="text-red-500 mt-2 mb-2 text-center">{nonValidAlert}</Text>
         ) : null}

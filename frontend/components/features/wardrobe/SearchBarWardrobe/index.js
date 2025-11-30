@@ -1,20 +1,23 @@
-import { View, TextInput, TouchableOpacity, SafeAreaView } from "react-native";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Text,
+  Modal,
+  SafeAreaView,
+} from "react-native";
+import React from "react";
 import { useState } from "react";
 import { router } from "expo-router";
 
 import { Search, LayoutGrid, SlidersHorizontal, X } from "lucide-react-native";
-import VerticalSelector from "../VerticalSelector";
-import { outfitsTypes } from "../../../lib/outfitsTypes";
+import HorizontalSelector from "../../../common/HorizontalSelector";
+import { clothingTypeOptions, shoesTypeOptions, accessoryTypeOptions } from "../../../../assets/constants/types/types";
 
-const SearchBarOutfits = ({
-  displayMode,
-  onDisplayPress,
-  selectedCategory,
-  setSelectedCategory,
-  filters,
-}) => {
-  const [searchMode, setSearchMode] = useState(false);
-  const [searchText, setSearchText] = useState("");
+const SearchBarWardrobe = ({ displayMode, onDisplayPress, selectedCategory, setSelectedCategory, filters, searchText, setSearchText }) => {
+  const [searchMode, setSearchMode] = useState(false);  
+
 
   return (
     <SafeAreaView style={{ backgroundColor: "white" }}>
@@ -39,9 +42,12 @@ const SearchBarOutfits = ({
               <TouchableOpacity onPress={() => onDisplayPress(!displayMode)}>
                 <LayoutGrid className="text-black" size={30} />
               </TouchableOpacity>
-
               <View className="flex-row gap-4">
-                
+                <TouchableOpacity onPress={() => 
+                router.replace({ pathname: "/filterClothes", params: filters })
+              }>
+                  <SlidersHorizontal className="text-black" size={30} />
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => setSearchMode(true)}>
                   <Search className="text-black" size={30} />
                 </TouchableOpacity>
@@ -51,8 +57,8 @@ const SearchBarOutfits = ({
         </View>
         <View className=" border-t border-[#d8d8d8] bg-gray-100">
           {searchMode ? null : (
-            <VerticalSelector
-              options={outfitsTypes}
+            <HorizontalSelector
+              options={[...clothingTypeOptions.map(item => item.label), ...shoesTypeOptions.map(item => item.label), ...accessoryTypeOptions.map(item => item.label)]}
               setValue={setSelectedCategory}
               value={selectedCategory}
             />
@@ -63,4 +69,4 @@ const SearchBarOutfits = ({
   );
 };
 
-export default SearchBarOutfits;
+export default SearchBarWardrobe;

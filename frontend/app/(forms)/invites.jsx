@@ -46,7 +46,6 @@ const invites = () => {
 
       // Pobierz oferty wymiany
       const offers = await fetchOffers(token);
-      console.log("Offers fetched:", JSON.stringify(offers));
       setTradeOffers(offers || []);
     } catch (error) {
       console.error("Błąd ładowania zaproszeń:", error);
@@ -106,6 +105,13 @@ const invites = () => {
 
   const renderInviteItem = ({ item }) => (
     <View className="flex-row items-center justify-between p-3 bg-white rounded-xl border border-gray-200 mb-2">
+      <View className="w-16 h-16 bg-gray-100 rounded-full overflow-hidden">
+        <Image
+          source={item.fromUserAvatar ? {uri: item.fromUserAvatar} : require("../../assets/images/profile/profilePlaceholder.png")}
+          className="w-full h-full"
+          resizeMode="cover" 
+        />
+      </View>                
       <View>
         <Text className="text-base font-semibold"> {item.fromUsername}</Text>
       </View>
@@ -135,8 +141,6 @@ const invites = () => {
   );
 
   const renderClothItem = (cloth) => {
-
-    console.log("Rendering cloth:", JSON.stringify(cloth));
 
     const parts = cloth.picture.split("images-server:80");
     const photo = ipAddressNginx + parts[1];
