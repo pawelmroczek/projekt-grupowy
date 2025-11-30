@@ -70,16 +70,13 @@ const useDirtyClothes = () => {
     }
     const dirtyHousehold = (await getClothesHousehold(token) || []).filter(
       (item) => !item.clean
-    ).map(addSimulatedCareSymbols); // Dodaj symulowane symbole prania
-
-    if(dirtyHousehold.length != 0) {
-      setDirtyClothes(dirtyHousehold);
-      return;
-    }
+    ).filter((item) => !item.isMine);
     const dirty = (clothes || [])
       .filter((item) => !item.clean)
-      .map(addSimulatedCareSymbols); // Dodaj symulowane symbole prania
-      
+      .filter((item) => !item.isLoaned);
+    
+    dirty.push(...dirtyHousehold);
+    dirty.map(addSimulatedCareSymbols);
     setDirtyClothes(dirty);
   };
 
