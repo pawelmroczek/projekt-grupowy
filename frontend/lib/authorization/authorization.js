@@ -16,6 +16,8 @@ export const loginUser = async (email, password) => {
     });
     const response = await data.json();
 
+    console.log(response);
+    let information = "";
     if (response.token){
       return {
         status: "success",
@@ -23,10 +25,16 @@ export const loginUser = async (email, password) => {
       };
     }else{
       if (response.message == "Bad credentials"){
-        information = "Błędne hasło"
+        information = "Błędne hasło";
+      }
+      else if (response.message == "User not found"){
+        information = "Nie istnieje użytkownik o podanym adresie email";
+      }
+      else if (response.message == "User is disabled"){
+        information = "Konto nie zostało aktywowane. Sprawdź swoją skrzynkę pocztową.";
       }
       else{
-        information = "Nie istnieje użytkownik o podanym adresie email"
+        information = "";
       }
       return {
         status: "error",
