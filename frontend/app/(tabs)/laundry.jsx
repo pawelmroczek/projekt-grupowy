@@ -1,7 +1,7 @@
 import { View, Text, SafeAreaView, ScrollView } from "react-native";
 import React, { use, useContext, useEffect, useState } from "react";
 import WardrobeStatus from "../../components/features/laundry/WardrobeStatus";
-import PlanLaundryButton from "../../components/features/laundry/PlanLaundryButton";
+import AddToLaundryButton from "../../components/features/laundry/AddToLaundryButton";
 import LaundryHistory from "../../components/features/laundry/LaundryHistory";
 import DirtyClothes from "../../components/features/laundry/DirtyClothes";
 import MakeLaundryButton from "../../components/features/laundry/MakeLaundryButton";
@@ -78,7 +78,7 @@ const Laundry = () => {
             setOptions={setOptions}
           />
           {/* <DebugCareSymbols /> */}
-          <PlanLaundryButton />
+          <AddToLaundryButton />
           <DirtyClothes />
           <MakeLaundryButton suggestedLaundry={laundryPlan} />
           <LaundryHistory laundries={laundries} />
