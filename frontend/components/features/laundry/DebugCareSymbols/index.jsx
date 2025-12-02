@@ -3,7 +3,7 @@ import { View, Text, ScrollView } from "react-native";
 
 import { getSymbolDescription } from "../../../../lib/careSymbols";
 import { TokenContext } from "../../../../lib/TokenContext";
-import useDirtyClothes from "../../../../lib/useDirtyClothes";
+import useDirtyClothes from "../../../../lib/clothes/useDirtyClothes";
 
 export default function DebugCareSymbols() {
   const { clothes } = useContext(TokenContext);

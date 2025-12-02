@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
-import { getClothes } from "./clothes/clothes";
-import { TokenContext } from "./TokenContext";
-import { getClothesHousehold } from "./clothes/clothes";
+import { getClothes } from "./clothes";
+import { TokenContext } from "../TokenContext";
+import { getClothesHousehold } from "./clothes";
 
 // Funkcja do symulacji symboli prania na podstawie typu i koloru ubrania
 const addSimulatedCareSymbols = (item) => {

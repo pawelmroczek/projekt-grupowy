@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, FlatList } from "react-native";
 import { BarChart } from "react-native-chart-kit";
-import useDirtyClothes from "../../../../lib/useDirtyClothes";
+import useDirtyClothes from "../../../../lib/clothes/useDirtyClothes";
 import { getColorGroup } from "../../../../assets/constants/colors/colors";
 
 

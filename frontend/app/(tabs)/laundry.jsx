@@ -12,7 +12,7 @@ import { fetchLaundries } from "../../lib/laundry/fetchLaundries";
 import planLaundry from "../../lib/laundry/planLaundry";
 import { fetchLaundyPreferences } from "../../lib/laundry/fetchLaundyPreferences";
 import { TokenContext } from "../../lib/TokenContext";
-import useDirtyClothes from "../../lib/useDirtyClothes";
+import useDirtyClothes from "../../lib/clothes/useDirtyClothes";
 
 {
   /*
