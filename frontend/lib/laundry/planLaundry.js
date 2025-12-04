@@ -154,53 +154,80 @@ const planLaundry = (allClothes, laundryHistory, outfits, options) => {
   const laundryPlan = [];
 
   for (const [groupKey, items] of Object.entries(groups)) {
-    // sortuj po priorytecie by w miarę sensownie układać
-    const sorted = items.sort((a, b) => b.priority - a.priority);
+    // sortuj po priorytecie malejąco
+    const sorted = [...items].sort((a, b) => b.priority - a.priority);
 
-    // zbuduj listę kompatybilnych elementów zaczynając od najwyższego priorytetu
-    const load = [];
+    const loads = [];
+
+    //Wstawiaj kolejno elementy: do pierwszego kompatybilnego ładunku,
+    //jeśli brak — twórz nowy ładunek.
     for (const candidate of sorted) {
-      // jeśli load jest pusty — weź candidate
-      if (load.length === 0) {
-        load.push(candidate);
-        continue;
+      let bestLoadIndex = -1;
+      let bestLoadScore = -Infinity;
+
+      for (let i = 0; i < loads.length; i++) {
+        const load = loads[i];
+        const compatibleWithAll = load.every((existing) =>
+          canWashTogether(existing, candidate)
+        );
+        if (compatibleWithAll) {
+          // preferuj "większe" ładunki (żeby wypełniać już istniejące)
+          const loadScore = load.reduce((s, it) => s + (it.priority || 0), 0);
+          if (loadScore > bestLoadScore) {
+            bestLoadScore = loadScore;
+            bestLoadIndex = i;
+          }
+        }
       }
-      // sprawdź czy candidate kompatybilny ze wszystkimi w load
-      const compatibleWithAll = load.every((existing) =>
-        canWashTogether(existing, candidate)
-      );
-      if (compatibleWithAll) {
-        load.push(candidate);
-        // jesli kompatybilny — dodaj go do ładunku
-        // jeśli niekompatybilny utworzymy dla niego osobny (mały) ładunek
-        // Zamiast tworzyć od razu nowy plan, zbieramy takie "odrzucone" i dodamy je później jako osobne ładunki
+
+      if (bestLoadIndex >= 0) {
+        loads[bestLoadIndex].push(candidate);
+      } else {
+        loads.push([candidate]);
       }
     }
 
-    //Dalsza część w 
+    // Spróbuj przenieść elementy z ładunków "małych" do innych, aby zredukować singli.
+    for (let i = loads.length - 1; i >= 0; i--) {
+      const load = loads[i];
+      if (load.length >= minItemsPerLoad) continue; // tylko małe ładunki próbujemy rozwiązać
 
-    // Zbieramy też elementy, które nie zmieściły się do głównego load (niekompatybilne)
-    const leftovers = sorted.filter((i) => !load.includes(i));
+      // spróbuj przenieść każdy element do innego ładunku
+      for (let j = 0; j < load.length; j++) {
+        const item = load[j];
+        let placed = false;
+        for (let k = 0; k < loads.length; k++) {
+          if (k === i) continue;
+          const target = loads[k];
+          const ok = target.every((existing) =>
+            canWashTogether(existing, item)
+          );
+          if (ok) {
+            target.push(item);
+            placed = true;
+            break;
+          }
+        }
+        if (placed) {
+          // oznacz do usunięcia (ustaw null)
+          load[j] = null;
+        }
+      }
+      // odfiltrowanie usuniętych (przeniesionych)
+      loads[i] = load.filter((x) => x !== null);
+    }
 
-    // Dodaj główny load jeśli ma cokolwiek
-    if (load.length >= minItemsPerLoad) {
+    // Usuń ładunki nie spełniające minimalnej liczby elementów
+    const finalLoads = loads.filter((l) => l.length >= minItemsPerLoad);
+
+    // 3) Dodaj powstałe ładunki do laundryPlan (każdy ładunek -> osobny entry)
+    for (const load of finalLoads) {
       laundryPlan.push({
-        washGroup: groupKey,
+        washGroup: load.length === 1 ? `${groupKey}_separate` : groupKey,
         colorGroup: load[0].colorGroup,
         washTemperature: getWashTemperature(load[0].pictogramIds),
         clothes: load,
         washInstructions: getWashInstructions(load, careSymbolOptions),
-      });
-    }
-
-    // Dla każdego leftover stwórz osobny ładunek
-    for (const single of leftovers) {
-      laundryPlan.push({
-        washGroup: `${groupKey}_separate`,
-        colorGroup: single.colorGroup,
-        washTemperature: getWashTemperature(single.pictogramIds),
-        clothes: [single],
-        washInstructions: getWashInstructions([single], careSymbolOptions),
       });
     }
   }
