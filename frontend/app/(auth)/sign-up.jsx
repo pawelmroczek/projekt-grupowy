@@ -8,6 +8,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Linking,
 } from "react-native";
 import React, { useState, useRef, useContext } from "react";
 import InitialBackground from "../../components/common/InitialBackground";
@@ -167,7 +168,27 @@ const SignUp = () => {
                 icon={<CircleX color={"rgb(185 28 28)"} />}
                 error={error}
               />
-              <View className="items-center w-full mt-5 flex-row justify-center">
+              <View className="items-center w-full mt-2 mb-5">
+                <Text className="text-sm font-pregular text-center">
+                  Rejestrując się akceptujesz{" "}
+                </Text>
+                <Text
+                  className="text-primary-200 underline"
+                  onPress={() => {
+                    // Otwórz link do polityki prywatności
+                    const url =
+                      "https://www.fashionbuddy.online/polityka-prywatnosci";
+                    if (Platform.OS === "web") {
+                      window.open(url, "_blank");
+                    } else {
+                      Linking.openURL(url);
+                    }
+                  }}
+                >
+                  politykę prywatności
+                </Text>
+              </View>
+              <View className="items-center w-full mt-3 flex-row justify-center">
                 <Text className=" text-base font-pregular mr-2 ">
                   Masz już konto?
                 </Text>
