@@ -1,6 +1,5 @@
 import { View, Text, SafeAreaView, ScrollView } from "react-native";
 import React, { use, useContext, useEffect, useState } from "react";
-import WardrobeStatus from "../../components/features/laundry/WardrobeStatus";
 import AddToLaundryButton from "../../components/features/laundry/AddToLaundryButton";
 import LaundryHistory from "../../components/features/laundry/LaundryHistory";
 import DirtyClothes from "../../components/features/laundry/DirtyClothes";

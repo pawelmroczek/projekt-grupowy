@@ -8,10 +8,15 @@ export const getWashTemperature = (careSymbols) => {
     return 40; // domyślna temperatura
   }
 
-  // Znajdź symbol temperatury
-  const tempSymbols = careSymbols.filter((symbol) =>
-    SYMBOL_CATEGORIES.TEMPERATURE.includes(LAUNDRY_ICONS_NAMES.indexOf(symbol))
+  // Konwertuj indeksy na nazwy symboli
+  const symbolNames = careSymbols.map((index) => LAUNDRY_ICONS_NAMES[index]);
+
+  // Znajdź symbole temperatury
+  const tempSymbols = symbolNames.filter((symbolName) =>
+    SYMBOL_CATEGORIES.TEMPERATURE.includes(symbolName)
   );
+
+  
 
   if (tempSymbols.length === 0) return 40; // domyślna temperatura
 
